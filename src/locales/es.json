@@ -423,13 +423,15 @@
     "backToDashboard": "Volver al panel",
     "noPlatforms": "Añade primero tus plataformas para encontrarlas aquí:",
     "saveFailed": "No se pudo guardar; tus datos siguen en pantalla. Comprueba tu conexión e inténtalo de nuevo. ({{message}})",
-    "commissionHint": "Importe que la plataforma se quedó en el día.",
+    "commissionHint": "Indique el porcentaje o el importe: el otro se calcula a partir de la facturación.",
     "workedTime": "Tiempo de trabajo",
     "workedTimeMissing": "indique el inicio y el fin",
     "startHour": "Hora de inicio",
     "startMinute": "Minutos de inicio",
     "endHour": "Hora de fin",
-    "endMinute": "Minutos de fin"
+    "endMinute": "Minutos de fin",
+    "commissionRate": "Porcentaje",
+    "commissionAmount": "Importe"
   },
   "payout": {
     "estimated": "Estimado",

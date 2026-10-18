@@ -423,13 +423,15 @@
     "backToDashboard": "Retour au tableau de bord",
     "noPlatforms": "Ajoutez d'abord vos plateformes pour les retrouver ici :",
     "saveFailed": "L'enregistrement a échoué, vos saisies sont conservées à l'écran. Vérifiez votre connexion et réessayez. ({{message}})",
-    "commissionHint": "Montant prélevé par la plateforme sur la journée.",
+    "commissionHint": "Saisissez le taux ou le montant : l'autre se calcule à partir du chiffre d'affaires.",
     "workedTime": "Temps de travail",
     "workedTimeMissing": "renseignez le début et la fin",
     "startHour": "Heure de début",
     "startMinute": "Minutes de début",
     "endHour": "Heure de fin",
-    "endMinute": "Minutes de fin"
+    "endMinute": "Minutes de fin",
+    "commissionRate": "Taux",
+    "commissionAmount": "Montant"
   },
   "payout": {
     "estimated": "Estimé",

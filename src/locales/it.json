@@ -423,13 +423,15 @@
     "backToDashboard": "Torna al cruscotto",
     "noPlatforms": "Aggiungi prima le tue piattaforme per ritrovarle qui:",
     "saveFailed": "Salvataggio non riuscito; i dati restano sullo schermo. Controlla la connessione e riprova. ({{message}})",
-    "commissionHint": "Importo trattenuto dalla piattaforma nella giornata.",
+    "commissionHint": "Inserisci la percentuale o l'importo: l'altro si calcola dal fatturato.",
     "workedTime": "Tempo di lavoro",
     "workedTimeMissing": "inserisci inizio e fine",
     "startHour": "Ora di inizio",
     "startMinute": "Minuti di inizio",
     "endHour": "Ora di fine",
-    "endMinute": "Minuti di fine"
+    "endMinute": "Minuti di fine",
+    "commissionRate": "Percentuale",
+    "commissionAmount": "Importo"
   },
   "payout": {
     "estimated": "Stimato",

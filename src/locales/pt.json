@@ -423,13 +423,15 @@
     "backToDashboard": "Voltar ao painel",
     "noPlatforms": "Adicione primeiro as suas plataformas para as encontrar aqui:",
     "saveFailed": "Não foi possível guardar; os seus dados continuam no ecrã. Verifique a ligação e tente novamente. ({{message}})",
-    "commissionHint": "Montante retido pela plataforma no dia.",
+    "commissionHint": "Indique a taxa ou o montante: o outro é calculado a partir da faturação.",
     "workedTime": "Tempo de trabalho",
     "workedTimeMissing": "indique o início e o fim",
     "startHour": "Hora de início",
     "startMinute": "Minutos de início",
     "endHour": "Hora de fim",
-    "endMinute": "Minutos de fim"
+    "endMinute": "Minutos de fim",
+    "commissionRate": "Taxa",
+    "commissionAmount": "Montante"
   },
   "payout": {
     "estimated": "Estimado",

@@ -423,13 +423,15 @@
     "backToDashboard": "Zurück zur Übersicht",
     "noPlatforms": "Fügen Sie zuerst Ihre Plattformen hinzu, um sie hier zu finden:",
     "saveFailed": "Speichern fehlgeschlagen; Ihre Eingaben bleiben erhalten. Prüfen Sie die Verbindung und versuchen Sie es erneut. ({{message}})",
-    "commissionHint": "Betrag, den die Plattform für den Tag einbehalten hat.",
+    "commissionHint": "Geben Sie den Satz oder den Betrag ein: der andere Wert wird aus dem Umsatz berechnet.",
     "workedTime": "Arbeitszeit",
     "workedTimeMissing": "Beginn und Ende eingeben",
     "startHour": "Startstunde",
     "startMinute": "Startminuten",
     "endHour": "Endstunde",
-    "endMinute": "Endminuten"
+    "endMinute": "Endminuten",
+    "commissionRate": "Satz",
+    "commissionAmount": "Betrag"
   },
   "payout": {
     "estimated": "Geschätzt",

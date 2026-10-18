@@ -43,7 +43,7 @@ async function enterDay(p, date, gross) {
   await p.getByLabel('Heure de début').selectOption('08');
   await p.getByLabel('Heure de fin').selectOption('18');
   await p.getByLabel(/Chiffre d'affaires de la journée/).fill(String(gross));
-  await p.getByLabel(/Commission de la plateforme/).fill(String(gross / 5));
+  await p.getByRole('group', { name: 'Commission de la plateforme' }).getByLabel(/Montant/).fill(String(gross / 5));
   await p.getByRole('button', { name: /Terminer ma journée|Mettre à jour/ }).click();
   await p.getByText('Journée enregistrée').waitFor();
 }

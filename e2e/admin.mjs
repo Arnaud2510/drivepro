@@ -105,7 +105,7 @@ const d = new Date(); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - 
 const lastWeek = d.toISOString().slice(0, 10);
 await a.goto(`${APP}/app/day/${lastWeek}`);
 await a.getByLabel(/Chiffre d'affaires de la journée/).fill('120');
-await a.getByLabel(/Commission de la plateforme/).fill('24');
+await a.getByRole('group', { name: 'Commission de la plateforme' }).getByLabel(/Montant/).fill('24');
 await a.getByRole('button', { name: 'Terminer ma journée' }).click();
 await a.getByText('Journée enregistrée').waitFor();
 await a.goto(APP + '/app/notifications');

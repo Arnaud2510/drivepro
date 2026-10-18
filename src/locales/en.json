@@ -423,13 +423,15 @@
     "backToDashboard": "Back to dashboard",
     "noPlatforms": "Add your platforms first to find them here:",
     "saveFailed": "Saving failed; your entries are still on screen. Check your connection and try again. ({{message}})",
-    "commissionHint": "Amount the platform took for the day.",
+    "commissionHint": "Enter the rate or the amount: the other is worked out from the turnover.",
     "workedTime": "Working time",
     "workedTimeMissing": "enter start and end",
     "startHour": "Start hour",
     "startMinute": "Start minutes",
     "endHour": "End hour",
-    "endMinute": "End minutes"
+    "endMinute": "End minutes",
+    "commissionRate": "Rate",
+    "commissionAmount": "Amount"
   },
   "payout": {
     "estimated": "Estimated",

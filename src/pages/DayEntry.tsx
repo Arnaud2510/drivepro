@@ -9,6 +9,7 @@ import { computeDay, computeEarning, dayHours, fixedShareForDay } from '../lib/f
 import { useFormat, useToday } from '../components/hooks';
 import { Badge, Button, Card, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, TimeSelect, useMoney } from '../components/ui';
 import { useCatalog } from '../data/catalog';
+import { roundHalfAway } from '../lib/money';
 import { useConfirm } from '../components/confirm';
 
 const blankEarning = (platformId: string | null): Earning => ({
@@ -36,7 +37,7 @@ export function DayEntry() {
   const { data, profile, upsert, remove } = useStore();
   const { categories } = useCatalog();
   const ask = useConfirm();
-  const { currency, fmt } = useMoney();
+  const { currency } = useMoney();
   const f = useFormat();
   const date = params.date ?? today;
   const existing = data.days.find((d) => d.date === date);
@@ -59,6 +60,8 @@ export function DayEntry() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  // Commission rate typed by the driver, per earning line. The amount stays the stored value.
+  const [rates, setRates] = useState<Record<string, number | null>>({});
   const [newExp, setNewExp] = useState({ category: 'fuel', amount: null as number | null, description: '' });
 
   // Re-initialise when the date in the URL changes
@@ -66,6 +69,7 @@ export function DayEntry() {
     // The day we just saved becomes `existing`: keep the form and its confirmation.
     if (existing && existing.id === day.id) return;
     setDay(existing ? load(existing) : fresh());
+    setRates({});
     setSaved(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, existing?.id]);
@@ -74,6 +78,38 @@ export function DayEntry() {
   // Hours always come from start, end and break.
   const setTime = (patch: Partial<WorkDay>) => set({ ...patch, hoursOverride: null });
   const hours = dayHours({ ...day, hoursOverride: null });
+  const platformOf = (e: Earning) => data.platforms.find((p) => p.id === e.platformId);
+  // Rate that drives the amount: the one typed today, otherwise the platform's usual rate while no amount is entered.
+  const rateOf = (e: Earning) => (e.id in rates ? rates[e.id] : e.commission == null ? platformOf(e)?.commissionPct ?? null : null);
+  const commissionAt = (gross: number | null, rate: number | null) => (gross == null || rate == null ? null : roundHalfAway((gross * rate) / 100));
+  const shownRate = (e: Earning) => {
+    const r = rateOf(e);
+    if (r != null) return r;
+    return e.commission != null && e.gross ? Math.round((e.commission / e.gross) * 10000) / 100 : null;
+  };
+  const setGross = (e: Earning, gross: number | null) => {
+    const rate = rateOf(e);
+    if (rate == null) return setEarning(e.id, { gross });
+    setRates((x) => ({ ...x, [e.id]: rate }));
+    setEarning(e.id, { gross, commission: commissionAt(gross, rate) });
+  };
+  const setRate = (e: Earning, rate: number | null) => {
+    setRates((x) => ({ ...x, [e.id]: rate }));
+    setEarning(e.id, { commission: commissionAt(e.gross, rate) });
+  };
+  // A new platform starts again from its usual rate.
+  const setPlatform = (e: Earning, platformId: string | null) => {
+    const rate = data.platforms.find((p) => p.id === platformId)?.commissionPct ?? null;
+    setRates((x) => ({ ...x, [e.id]: rate }));
+    setEarning(e.id, { platformId, commission: rate == null ? null : commissionAt(e.gross, rate) });
+  };
+  const setCommission = (e: Earning, commission: number | null) => {
+    setRates((x) => {
+      const { [e.id]: _, ...rest } = x;
+      return rest;
+    });
+    setEarning(e.id, { commission });
+  };
   const setEarning = (id: string, patch: Partial<Earning>) => setDay((d) => ({ ...d, earnings: d.earnings.map((e) => (e.id === id ? { ...e, ...patch } : e)) }));
   const dayExpenses = data.expenses.filter((e) => e.date === date);
   const vehicle = data.vehicles.find((v) => v.id === day.vehicleId);
@@ -98,6 +134,12 @@ export function DayEntry() {
     setSaveError(null);
     try {
       await upsert('days', day);
+      // The last rate typed becomes the platform's usual rate, so the next day starts with it.
+      for (const e of day.earnings) {
+        const pf = platformOf(e);
+        const rate = rates[e.id];
+        if (pf && rate != null && rate !== pf.commissionPct) await upsert('platforms', { ...pf, commissionPct: rate });
+      }
       setSaved(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
@@ -199,14 +241,13 @@ export function DayEntry() {
         <div className="space-y-4">
           {day.earnings.map((e, idx) => {
             const r = result.earnings[idx];
-            const pf = data.platforms.find((p) => p.id === e.platformId);
             return (
               <fieldset key={e.id} className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
                 <legend className="sr-only">{f.platformName(e.platformId)}</legend>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="col-span-2 flex items-end gap-2">
                     <div className="flex-1">
-                      <Select label={t('day.platform')} value={e.platformId ?? ''} onChange={(ev) => setEarning(e.id, { platformId: ev.target.value || null })}>
+                      <Select label={t('day.platform')} value={e.platformId ?? ''} onChange={(ev) => setPlatform(e, ev.target.value || null)}>
                         {data.platforms.filter((p) => p.active || p.id === e.platformId).map((p) => (
                           <option key={p.id} value={p.id}>{p.name}</option>
                         ))}
@@ -219,14 +260,15 @@ export function DayEntry() {
                       </Button>
                     )}
                   </div>
-                  <MoneyInput label={t('day.gross')} currency={currency} value={e.gross} onChange={(v) => setEarning(e.id, { gross: v })} />
-                  <MoneyInput
-                    label={t('day.commission')}
-                    currency={currency}
-                    value={e.commission}
-                    onChange={(v) => setEarning(e.id, { commission: v })}
-                    hint={e.commission == null && r?.commissionSource === 'estimated' ? t('day.commissionEstimate', { pct: pf?.commissionPct, amount: fmt(r.commission) }) : t('day.commissionHint')}
-                  />
+                  <div className="col-span-2">
+                    <MoneyInput label={t('day.gross')} currency={currency} value={e.gross} onChange={(v) => setGross(e, v)} />
+                  </div>
+                  <div role="group" aria-labelledby={`${e.id}-commission`} className="col-span-2 grid grid-cols-2 gap-3">
+                    <p id={`${e.id}-commission`} className="col-span-2 -mb-1 text-sm font-semibold text-slate-800">{t('day.commission')}</p>
+                    <NumberInput label={t('day.commissionRate')} suffix="%" max={100} value={shownRate(e)} onChange={(v) => setRate(e, v)} />
+                    <MoneyInput label={t('day.commissionAmount')} currency={currency} value={e.commission} onChange={(v) => setCommission(e, v)} />
+                    <p className="col-span-2 -mt-1 text-xs text-slate-500">{t('day.commissionHint')}</p>
+                  </div>
                 </div>
                 {r && (
                   <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
