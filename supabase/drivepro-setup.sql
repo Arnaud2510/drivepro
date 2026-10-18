@@ -847,3 +847,15 @@ end $$;
 insert into public.platform_countries (platform_id, country_code) values
   ('uber','PT'),('bolt','PT'),('freenow','PT'),('uber_eats','PT'),('glovo','PT'),('uber','FR'),('bolt','FR'),('heetch','FR'),('freenow','FR'),('uber_eats','FR'),('deliveroo','FR'),('uber','DE'),('bolt','DE'),('freenow','DE'),('uber_eats','DE'),('wolt','DE'),('uber','BE'),('bolt','BE'),('heetch','BE'),('deliveroo','BE'),('uber','ES'),('bolt','ES'),('cabify','ES'),('freenow','ES'),('glovo','ES'),('uber','IT'),('freenow','IT'),('glovo','IT'),('deliveroo','IT'),('yango','CI'),('uber','CI'),('heetch','CI'),('gozem','CI'),('glovo','CI'),('yango','CM'),('gozem','CM'),('heetch','CM'),('yango','ML'),('yango','BF'),('yango','SN'),('heetch','SN'),('uber','SN'),('yango','GN')
 on conflict do nothing;
+
+-- ===== supabase/migrations/20261018150000_security_hardening.sql =====
+-- Security hardening suggested by the Supabase advisor.
+
+-- Pin search_path on the remaining plpgsql helpers.
+alter function public.set_updated_at() set search_path = public;
+alter function public.guard_member_update() set search_path = public;
+alter function public.check_earning_owner() set search_path = public;
+
+-- Trigger functions are not part of the API: triggers still fire, but nobody can call them via /rpc.
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+revoke execute on function public.audit_reference_change() from public, anon, authenticated;
