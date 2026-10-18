@@ -95,7 +95,8 @@
     "fileTooLarge": "Fichier trop volumineux (10 Mo maximum).",
     "uploadFailed": "L'envoi du justificatif a échoué.",
     "actionFailed": "L'enregistrement n'a pas abouti : {{message}}",
-    "suspended": "Ce compte est suspendu. Contactez le support."
+    "suspended": "Ce compte est suspendu. Contactez le support.",
+    "tooManyEmails": "Trop d'e-mails envoyés en peu de temps. Réessayez dans une heure."
   },
   "auth": {
     "signIn": "Connexion",
@@ -106,7 +107,7 @@
     "haveAccount": "J'ai déjà un compte",
     "passwordHint": "8 caractères minimum.",
     "consent": "J'accepte le traitement de mes données selon la",
-    "checkEmail": "Vérifiez votre boîte e-mail pour confirmer votre compte.",
+    "checkEmail": "Un e-mail de confirmation a été envoyé à {{email}}. Ouvrez-le et cliquez sur le lien (pensez à regarder dans les spams). Si l'adresse est fausse, recommencez l'inscription.",
     "resetTitle": "Réinitialiser le mot de passe",
     "sendReset": "Envoyer le lien",
     "resetSent": "Si un compte existe pour cette adresse, un lien de réinitialisation vient d'être envoyé.",
@@ -116,7 +117,8 @@
     "continueLocalHint": "Vos données seront enregistrées uniquement dans ce navigateur, sans sauvegarde en ligne.",
     "openDemo": "Ouvrir la démonstration",
     "demoHint": "La démonstration utilise des données fictives, séparées de vos données.",
-    "moreProvidersSoon": "Connexion Google, Apple et par téléphone : prévue, pas encore disponible."
+    "moreProvidersSoon": "Connexion Google, Apple et par téléphone : prévue, pas encore disponible.",
+    "didYouMean": "Vouliez-vous dire"
   },
   "landing": {
     "badge": "Pour les chauffeurs VTC, TVDE, taxi et moto-taxi",

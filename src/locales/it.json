@@ -95,7 +95,8 @@
     "fileTooLarge": "File troppo grande (massimo 10 MB).",
     "uploadFailed": "Caricamento della ricevuta non riuscito.",
     "actionFailed": "Impossibile salvare la modifica: {{message}}",
-    "suspended": "Questo account è sospeso. Contatta l'assistenza."
+    "suspended": "Questo account è sospeso. Contatta l'assistenza.",
+    "tooManyEmails": "Troppe e-mail inviate in poco tempo. Riprova tra un'ora."
   },
   "auth": {
     "signIn": "Accedi",
@@ -106,7 +107,7 @@
     "haveAccount": "Ho già un account",
     "passwordHint": "Almeno 8 caratteri.",
     "consent": "Accetto il trattamento dei miei dati secondo l'",
-    "checkEmail": "Controlla la tua e-mail per confermare l'account.",
+    "checkEmail": "Un'e-mail di conferma è stata inviata a {{email}}. Aprila e clicca sul link (controlla anche lo spam). Se l'indirizzo è sbagliato, registrati di nuovo.",
     "resetTitle": "Reimposta la password",
     "sendReset": "Invia il link",
     "resetSent": "Se esiste un account con questo indirizzo, è stato inviato un link di reimpostazione.",
@@ -116,7 +117,8 @@
     "continueLocalHint": "I tuoi dati saranno salvati solo in questo browser, senza backup online.",
     "openDemo": "Apri la demo",
     "demoHint": "La demo usa dati fittizi, separati dai tuoi.",
-    "moreProvidersSoon": "Accesso con Google, Apple e telefono: previsto, non ancora disponibile."
+    "moreProvidersSoon": "Accesso con Google, Apple e telefono: previsto, non ancora disponibile.",
+    "didYouMean": "Intendevi"
   },
   "landing": {
     "badge": "Per autisti NCC, TVDE, taxi e moto-taxi",

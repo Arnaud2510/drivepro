@@ -95,7 +95,8 @@
     "fileTooLarge": "Datei zu groß (max. 10 MB).",
     "uploadFailed": "Hochladen des Belegs fehlgeschlagen.",
     "actionFailed": "Die Änderung konnte nicht gespeichert werden: {{message}}",
-    "suspended": "Dieses Konto ist gesperrt. Bitte wenden Sie sich an den Support."
+    "suspended": "Dieses Konto ist gesperrt. Bitte wenden Sie sich an den Support.",
+    "tooManyEmails": "Zu viele E-Mails in kurzer Zeit. Versuchen Sie es in einer Stunde erneut."
   },
   "auth": {
     "signIn": "Anmelden",
@@ -106,7 +107,7 @@
     "haveAccount": "Ich habe bereits ein Konto",
     "passwordHint": "Mindestens 8 Zeichen.",
     "consent": "Ich stimme der Verarbeitung meiner Daten gemäß der",
-    "checkEmail": "Prüfen Sie Ihr Postfach, um Ihr Konto zu bestätigen.",
+    "checkEmail": "Eine Bestätigungs-E-Mail wurde an {{email}} gesendet. Öffnen Sie sie und klicken Sie auf den Link (prüfen Sie auch den Spam-Ordner). Ist die Adresse falsch, registrieren Sie sich erneut.",
     "resetTitle": "Passwort zurücksetzen",
     "sendReset": "Link senden",
     "resetSent": "Falls ein Konto mit dieser Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.",
@@ -116,7 +117,8 @@
     "continueLocalHint": "Ihre Daten werden nur in diesem Browser gespeichert, ohne Online-Sicherung.",
     "openDemo": "Demo öffnen",
     "demoHint": "Die Demo verwendet fiktive Daten, getrennt von Ihren eigenen.",
-    "moreProvidersSoon": "Anmeldung mit Google, Apple und Telefon: geplant, noch nicht verfügbar."
+    "moreProvidersSoon": "Anmeldung mit Google, Apple und Telefon: geplant, noch nicht verfügbar.",
+    "didYouMean": "Meinten Sie"
   },
   "landing": {
     "badge": "Für Fahrdienst-, Taxi- und Motorradtaxi-Fahrer",

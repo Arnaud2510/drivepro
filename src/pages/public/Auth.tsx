@@ -6,6 +6,7 @@ import { Button, Checkbox, Input, Notice } from '../../components/ui';
 import { supabase, isSupabaseConfigured } from '../../data/supabaseRepo';
 import { useStore } from '../../data/store';
 import { takeReturn } from '../../lib/returnTo';
+import { suggestEmail } from '../../lib/emailTypos';
 
 const emailSchema = z.string().trim().email();
 const passwordSchema = z.string().min(8);
@@ -18,6 +19,33 @@ function AuthCard({ title, children }: { title: string; children: React.ReactNod
         {children}
       </div>
     </div>
+  );
+}
+
+/** E-mail field that offers a fix when the domain looks misspelt (gmall.com → gmail.com). */
+function EmailField({ value, onChange, error, autoComplete }: { value: string; onChange: (v: string) => void; error?: string | null; autoComplete?: string }) {
+  const { t } = useTranslation();
+  const fix = suggestEmail(value);
+  return (
+    <Input
+      label={t('auth.email')}
+      type="email"
+      autoComplete={autoComplete ?? 'email'}
+      value={value}
+      error={error}
+      onChange={(e) => onChange(e.target.value)}
+      hint={
+        fix && (
+          <span className="text-sm text-warn">
+            {t('auth.didYouMean')}{' '}
+            <button type="button" className="font-semibold underline" onClick={() => onChange(fix)}>
+              {fix}
+            </button>{' '}
+            ?
+          </span>
+        )
+      }
+    />
   );
 }
 
@@ -82,7 +110,7 @@ export function Login() {
       {(loc.state as { demo?: boolean })?.demo && <Notice>{t('auth.demoHint')}</Notice>}
       {isSupabaseConfigured && (
         <form onSubmit={submit} className="space-y-4" noValidate>
-          <Input label={t('auth.email')} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <EmailField value={email} onChange={setEmail} />
           <Input label={t('auth.password')} type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           {error && <Notice tone="loss">{error}</Notice>}
           <Button type="submit" loading={loading} className="w-full">
@@ -128,7 +156,7 @@ export function Signup() {
       options: { emailRedirectTo: `${location.origin}/onboarding` },
     });
     setLoading(false);
-    if (error) return setError(error.status === 429 ? t('errors.tooManyAttempts') : t('errors.signupFailed'));
+    if (error) return setError(error.status === 429 ? t('errors.tooManyEmails') : t('errors.signupFailed'));
     if (data.session) nav('/onboarding');
     else setDone(true);
   }
@@ -136,11 +164,11 @@ export function Signup() {
   return (
     <AuthCard title={t('auth.createAccount')}>
       {done ? (
-        <Notice tone="gain">{t('auth.checkEmail')}</Notice>
+        <Notice tone="gain">{t('auth.checkEmail', { email: email.trim() })}</Notice>
       ) : (
         isSupabaseConfigured && (
           <form onSubmit={submit} className="space-y-4" noValidate>
-            <Input label={t('auth.email')} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <EmailField value={email} onChange={setEmail} />
             <Input label={t('auth.password')} type="password" autoComplete="new-password" hint={t('auth.passwordHint')} value={password} onChange={(e) => setPassword(e.target.value)} />
             <Checkbox
               checked={consent}
@@ -191,12 +219,13 @@ export function ResetPassword() {
             e.preventDefault();
             if (!emailSchema.safeParse(email).success) return setError(t('errors.email'));
             setLoading(true);
-            await supabase!.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${location.origin}/update-password` });
+            const { error: err } = await supabase!.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${location.origin}/update-password` });
             setLoading(false);
+            if (err?.status === 429) return setError(t('errors.tooManyEmails'));
             setSent(true); // same message whether or not the account exists
           }}
         >
-          <Input label={t('auth.email')} type="email" value={email} error={error} onChange={(e) => setEmail(e.target.value)} />
+          <EmailField value={email} onChange={setEmail} error={error} />
           <Button type="submit" loading={loading} className="w-full">
             {t('auth.sendReset')}
           </Button>

@@ -95,7 +95,8 @@
     "fileTooLarge": "File too large (10 MB maximum).",
     "uploadFailed": "Receipt upload failed.",
     "actionFailed": "Your change could not be saved: {{message}}",
-    "suspended": "This account is suspended. Please contact support."
+    "suspended": "This account is suspended. Please contact support.",
+    "tooManyEmails": "Too many e-mails sent in a short time. Try again in an hour."
   },
   "auth": {
     "signIn": "Sign in",
@@ -106,7 +107,7 @@
     "haveAccount": "I already have an account",
     "passwordHint": "At least 8 characters.",
     "consent": "I agree to the processing of my data under the",
-    "checkEmail": "Check your inbox to confirm your account.",
+    "checkEmail": "A confirmation e-mail was sent to {{email}}. Open it and click the link (check your spam folder too). If the address is wrong, sign up again.",
     "resetTitle": "Reset password",
     "sendReset": "Send link",
     "resetSent": "If an account exists for this address, a reset link has just been sent.",
@@ -116,7 +117,8 @@
     "continueLocalHint": "Your data will be stored only in this browser, with no online backup.",
     "openDemo": "Open the demo",
     "demoHint": "The demo uses fictitious data, kept separate from your own.",
-    "moreProvidersSoon": "Google, Apple and phone sign-in: planned, not available yet."
+    "moreProvidersSoon": "Google, Apple and phone sign-in: planned, not available yet.",
+    "didYouMean": "Did you mean"
   },
   "landing": {
     "badge": "For ride-hailing, TVDE, taxi and moto-taxi drivers",

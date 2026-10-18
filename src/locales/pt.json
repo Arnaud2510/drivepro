@@ -95,7 +95,8 @@
     "fileTooLarge": "Ficheiro demasiado grande (máximo 10 MB).",
     "uploadFailed": "O envio do comprovativo falhou.",
     "actionFailed": "Não foi possível guardar a alteração: {{message}}",
-    "suspended": "Esta conta está suspensa. Contacte o suporte."
+    "suspended": "Esta conta está suspensa. Contacte o suporte.",
+    "tooManyEmails": "Demasiados e-mails enviados em pouco tempo. Tente novamente dentro de uma hora."
   },
   "auth": {
     "signIn": "Iniciar sessão",
@@ -106,7 +107,7 @@
     "haveAccount": "Já tenho conta",
     "passwordHint": "Mínimo de 8 caracteres.",
     "consent": "Aceito o tratamento dos meus dados de acordo com a",
-    "checkEmail": "Verifique o seu e-mail para confirmar a conta.",
+    "checkEmail": "Foi enviado um e-mail de confirmação para {{email}}. Abra-o e clique na ligação (veja também o spam). Se o endereço estiver errado, registe-se de novo.",
     "resetTitle": "Repor a palavra-passe",
     "sendReset": "Enviar ligação",
     "resetSent": "Se existir uma conta com este endereço, foi enviada uma ligação de reposição.",
@@ -116,7 +117,8 @@
     "continueLocalHint": "Os seus dados serão guardados apenas neste navegador, sem cópia de segurança online.",
     "openDemo": "Abrir a demonstração",
     "demoHint": "A demonstração usa dados fictícios, separados dos seus.",
-    "moreProvidersSoon": "Início de sessão com Google, Apple e telefone: previsto, ainda indisponível."
+    "moreProvidersSoon": "Início de sessão com Google, Apple e telefone: previsto, ainda indisponível.",
+    "didYouMean": "Queria dizer"
   },
   "landing": {
     "badge": "Para motoristas TVDE, VTC, táxi e mototáxi",
