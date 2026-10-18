@@ -25,3 +25,14 @@ export function defaultProfile(id: string, countryCode = 'FR'): Profile {
     onboarded: false,
   };
 }
+
+/**
+ * Completes a stored profile with defaults. A server-side profile row is created empty at
+ * sign-up (no country, UTC), so until onboarding is finished the browser/country defaults win.
+ */
+export function normalizeProfile(p: Profile): Profile {
+  if (!p.onboarded) return { ...defaultProfile(p.id), displayName: p.displayName ?? '' };
+  const base = defaultProfile(p.id, p.countryCode || 'FR');
+  const set = Object.fromEntries(Object.entries(p).filter(([, v]) => v !== null && v !== undefined));
+  return { ...base, ...set, notificationPrefs: { ...base.notificationPrefs, ...(p.notificationPrefs ?? {}) } } as Profile;
+}

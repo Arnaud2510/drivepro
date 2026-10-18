@@ -7,6 +7,7 @@ import { SupabaseRepository, supabase } from './supabaseRepo';
 import { emptyData, type EntityKind, type EntityMap, type Repository } from './repository';
 import { buildDemoData } from './demo';
 export { defaultProfile } from './defaults';
+import { normalizeProfile } from './defaults';
 import { computeAllDays, type DataSet, type DayResult } from '../lib/finance/engine';
 
 type Mode = 'supabase' | 'local' | 'demo' | null;
@@ -46,6 +47,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       setError(null);
       const d = await r.loadAll();
+      if (d.profile) d.profile = normalizeProfile(d.profile);
       setData(d);
       if (d.profile) await i18n.changeLanguage(d.profile.language);
     } catch (e) {
