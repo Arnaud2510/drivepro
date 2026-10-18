@@ -16,7 +16,8 @@
     "fleet": "Fleet",
     "admin": "Admin",
     "more": "More",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "notifications": "Notifications"
   },
   "public": {
     "nav": {
@@ -72,7 +73,9 @@
     "saved": "Saved",
     "search": "Search",
     "sortBy": "Sort by",
-    "operatingDisclaimer": "Operating profit is a management indicator computed from your entries. It is neither an accounting result nor an official tax figure."
+    "operatingDisclaimer": "Operating profit is a management indicator computed from your entries. It is neither an accounting result nor an official tax figure.",
+    "loading": "Loading…",
+    "close": "Close"
   },
   "errors": {
     "required": "Required field.",
@@ -88,7 +91,9 @@
     "loadFailed": "Could not load your data: {{message}}",
     "endBeforeStart": "The end date is before the start date.",
     "fileTooLarge": "File too large (10 MB maximum).",
-    "uploadFailed": "Receipt upload failed."
+    "uploadFailed": "Receipt upload failed.",
+    "actionFailed": "Your change could not be saved: {{message}}",
+    "suspended": "This account is suspended. Please contact support."
   },
   "auth": {
     "signIn": "Sign in",
@@ -190,11 +195,11 @@
       },
       "alerts": {
         "title": "Alerts",
-        "text": "In-app alerts: goal, unusual expense, maintenance, due dates. Push and e-mail notifications coming."
+        "text": "Notification centre, weekly and monthly summaries, daily reminder by push notification."
       },
       "fleet": {
         "title": "Fleet management",
-        "text": "Data model and access rules ready; manager interface in development."
+        "text": "Invitations, driver consent, consolidated dashboard, vehicle profitability and export."
       }
     }
   },
@@ -414,7 +419,8 @@
     "confirmDelete": "Delete this day? Expenses entered on this date are kept.",
     "savedTitle": "Day saved",
     "backToDashboard": "Back to dashboard",
-    "noPlatforms": "Add your platforms first to find them here:"
+    "noPlatforms": "Add your platforms first to find them here:",
+    "saveFailed": "Saving failed; your entries are still on screen. Check your connection and try again. ({{message}})"
   },
   "payout": {
     "estimated": "Estimated",
@@ -461,7 +467,10 @@
     "documentsExpiry": "Documents due",
     "monthlyFixed": "Fixed costs / month",
     "fixedCostsHint": "Insurance, loan or lease instalments, taxes: add them in Expenses › Fixed costs and link them to the vehicle.",
-    "twoWheelsHint": "For a motorbike or scooter, often between 2 and 5 L/100 km."
+    "twoWheelsHint": "For a motorbike or scooter, often between 2 and 5 L/100 km.",
+    "indicative": "Published indicative price: {{price}} — source: {{source}}, as of {{date}}.",
+    "indicativeSource": "See source",
+    "useIndicative": "Use this price"
   },
   "vehicleTypes": {
     "car": "Car",
@@ -722,7 +731,7 @@
   "alerts": {
     "title": "Alerts",
     "prefs": "Alerts",
-    "inAppOnly": "Alerts are shown in the app. Push and e-mail notifications are not available yet.",
+    "inAppOnly": "These alerts appear in the app and in the notification centre. The daily reminder can also be sent as a push notification.",
     "dailyReminder": "You have not entered today's day yet.",
     "dailyGoalReached": "Well done, daily goal reached!",
     "monthlyGoalBehind": "At this pace, {{gap}} would be missing to reach your monthly goal.",
@@ -747,25 +756,200 @@
   "fleet": {
     "title": "Fleet management",
     "subtitle": "Several drivers, several vehicles, consolidated reports.",
-    "status": "The manager interface is not available yet.",
-    "readyTitle": "Already in place on the server",
-    "r1": "Organisations and roles (owner, manager, driver).",
-    "r2": "Explicit, revocable driver consent before any data sharing.",
-    "r3": "Access rules (RLS): a manager only sees consenting drivers of their fleet, read-only.",
-    "nextTitle": "Next steps",
-    "n1": "Driver invitations",
-    "n2": "Consolidated dashboard",
-    "n3": "Fleet vehicle profitability comparison",
-    "n4": "Fleet reports"
+    "needsAccount": "Fleet management requires a signed-in account: several drivers' data must be shared securely.",
+    "createTitle": "Create a fleet",
+    "createText": "Managing several drivers or vehicles? Create a fleet, then invite your drivers.",
+    "name": "Fleet name",
+    "create": "Create",
+    "createAnother": "Create another fleet",
+    "tabDashboard": "Dashboard",
+    "tabMembers": "Drivers & access",
+    "roles": {
+      "owner": "Owner",
+      "manager": "Manager",
+      "driver": "Driver"
+    },
+    "role": "Role",
+    "driver": "Driver",
+    "actions": "Actions",
+    "dataSharing": "Data sharing",
+    "lastMonth": "Last month",
+    "lastActivity": "Last activity",
+    "activeDrivers_one": "{{count}} active driver",
+    "activeDrivers_other": "{{count}} active drivers",
+    "byDriver": "By driver",
+    "profitByDriver": "Profit by driver",
+    "vehicles": "Vehicle profitability",
+    "notSharing_one": "{{count}} driver has not allowed data sharing and is not included in the figures.",
+    "notSharing_other": "{{count}} drivers have not allowed data sharing and are not included in the figures.",
+    "noSharedData": "No shared data yet",
+    "noSharedDataText": "Invite your drivers. Their figures will appear here once they agree to share them.",
+    "otherCurrencies": "Some drivers work in {{currencies}}: they are shown separately and not added to the {{currency}} totals (no automatic conversion).",
+    "method": "Each driver is computed with their own settings (fixed costs, fuel mode). Managers have read-only access.",
+    "invite": "Invite a driver",
+    "createInvite": "Create invitation",
+    "inviteHint": "A personal invitation link is created. Send it to the driver (SMS, WhatsApp, e-mail): they must sign in with this e-mail address. Valid for 14 days.",
+    "inviteCreated": "Invitation created. Copy the link and send it:",
+    "inviteLink": "Invitation link",
+    "copy": "Copy",
+    "members_one": "{{count}} member",
+    "members_other": "{{count}} members",
+    "sharing": "Sharing since {{date}}",
+    "notSharingBadge": "Not shared",
+    "makeManager": "Make manager",
+    "makeDriver": "Make driver",
+    "remove": "Remove from fleet",
+    "confirmRemove": "Remove {{name}} from the fleet? You will no longer have access to their data.",
+    "consentExplain": "Only the driver can allow or withdraw data sharing. Without their consent you only see their name and e-mail.",
+    "invites": "Invitations",
+    "revoke": "Revoke",
+    "inviteStatus": {
+      "pending": "Pending",
+      "expired": "Expired",
+      "accepted": "Accepted"
+    },
+    "myFleets": "Fleets I belong to",
+    "shareMyData": "Share my income, expenses and kilometres with the managers of “{{org}}”",
+    "shareHint": "Read-only. You can withdraw this permission at any time.",
+    "sharingSince": "Sharing since {{date}}.",
+    "leave": "Leave fleet",
+    "confirmLeave": "Leave “{{org}}”? Managers will no longer have access to your data.",
+    "joinTitle": "Join a fleet",
+    "joinText": "You are invited to join “{{org}}” as {{role}}.",
+    "accept": "Join",
+    "inviteInvalid": {
+      "not_found": "This invitation does not exist or was revoked.",
+      "used": "This invitation has already been used.",
+      "expired": "This invitation has expired. Ask your manager for a new one.",
+      "wrong_email": "This invitation was sent to {{email}}, but you are signed in as {{current}}."
+    }
   },
   "admin": {
     "title": "Administration",
-    "status": "The editing console (countries, currencies, platforms, translations, subscriptions) is in development. Tables and access rights are ready.",
     "needsAccount": "Administration requires a signed-in account with the administrator role, granted server-side.",
     "denied": "Access denied: your account does not have the administrator role.",
-    "stats": "Aggregated statistics",
-    "countries": "Configured countries",
-    "platforms": "Platform catalogue",
-    "noTariffs": "No official commission rate or fuel price is stored. Any indicative value added must be dated and sourced."
+    "subtitle": "Reference data, accounts and aggregated statistics. Every action is logged.",
+    "tabs": {
+      "overview": "Overview",
+      "users": "Users",
+      "reference": "Reference data",
+      "translations": "Translations",
+      "audit": "Audit log"
+    },
+    "kpi": {
+      "users": "Accounts",
+      "onboarded_one": "{{count}} set up",
+      "onboarded_other": "{{count}} set up",
+      "active7": "Active (7 days)",
+      "active30_one": "{{count}} active over 30 days",
+      "active30_other": "{{count}} active over 30 days",
+      "sessions30": "Days entered (30 days)",
+      "orgs": "Fleets",
+      "push_one": "{{count}} push device",
+      "push_other": "{{count}} push devices"
+    },
+    "byCountry": "Accounts by country",
+    "byLanguage": "Accounts by language",
+    "byPlan": "Active subscriptions",
+    "planNote": "Accounts without a subscription are on the Free plan.",
+    "organizations": "Fleets",
+    "members": "Members",
+    "sharing": "Sharing",
+    "aggregatedOnly": "Administrators only see aggregated statistics, never a driver's financial data.",
+    "usersPrivacy": "This list contains no financial data. A driver's finances cannot be accessed from the administration.",
+    "createdAt": "Signed up",
+    "lastSignIn": "Last sign-in",
+    "plan": "Plan",
+    "status": "Status",
+    "suspended": "Suspended",
+    "notOnboarded": "Not set up",
+    "grantAdmin": "Make admin",
+    "revokeAdmin": "Remove admin",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "confirmSuspend": "Suspend {{email}}? They will no longer be able to sign in; their data is kept.",
+    "confirmReactivate": "Reactivate {{email}}?",
+    "pageOf": "{{from}}–{{to}} of {{total}}",
+    "table": "Table",
+    "tables": {
+      "countries": "Countries",
+      "currencies": "Currencies",
+      "cities": "Cities",
+      "transport_platforms": "Platforms",
+      "platform_countries": "Platforms per country",
+      "expense_categories": "Expense categories",
+      "fuel_prices": "Fuel prices",
+      "energy_prices": "Electricity prices",
+      "subscription_plans": "Subscription plans",
+      "app_settings": "General settings"
+    },
+    "hints": {
+      "countries": "For a new country, also add its name in the Translations tab (key countries.CODE) and its currency if missing.",
+      "sourced": "Every indicative price or rate must be dated and sourced. It is never applied automatically: the driver chooses to use it.",
+      "categories": "For a new category, add its label in the Translations tab (key categories.ID)."
+    },
+    "required": "“{{field}}” is required.",
+    "invalid": "Invalid value for “{{field}}”.",
+    "invalidJson": "Invalid JSON for “{{field}}”.",
+    "rowCount_one": "{{count}} row",
+    "rowCount_other": "{{count}} rows",
+    "translationsHint": "Replace an interface text without redeploying, or add the label of a new country or category.",
+    "searchKey": "Search a key or text",
+    "newKey": "Create key “{{key}}”",
+    "defaultText": "Default text",
+    "override": "Custom text ({{lang}})",
+    "activeOverrides_one": "{{count}} custom text",
+    "activeOverrides_other": "{{count}} custom texts",
+    "overrideReload": "Users will see the new text the next time the app loads.",
+    "action": "Action",
+    "target": "Target",
+    "actor": "Author",
+    "searchUsers": "e-mail or name"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "bellLabel_one": "Notifications: {{count}} unread",
+    "bellLabel_other": "Notifications: {{count}} unread",
+    "unread_one": "{{count}} unread",
+    "unread_other": "{{count}} unread",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "new": "New",
+    "now": "Now",
+    "empty": "No notifications",
+    "emptyText": "Alerts and weekly and monthly summaries will appear here.",
+    "weeklySummary_one": "Week of {{from}} to {{to}}: profit {{profit}} over {{count}} working day.",
+    "weeklySummary_other": "Week of {{from}} to {{to}}: profit {{profit}} over {{count}} working days.",
+    "monthlySummary_one": "{{month}} review: profit {{profit}}, turnover {{revenue}}, {{count}} working day.",
+    "monthlySummary_other": "{{month}} review: profit {{profit}}, turnover {{revenue}}, {{count}} working days.",
+    "delta": "{{pct}} % vs previous period",
+    "goalPct": "{{pct}} % of the monthly goal",
+    "kinds": {
+      "dailyReminder": "Reminder",
+      "unusualExpense": "Unusual expense",
+      "dailyGoalReached": "Goal reached",
+      "monthlyGoalBehind": "Monthly goal",
+      "hourlyDecline": "Hourly profitability",
+      "maintenanceDue": "Maintenance",
+      "documentExpiry": "Due date",
+      "weeklySummary": "Weekly summary",
+      "monthlySummary": "Monthly summary"
+    },
+    "pushTitle": "Reminders on this phone",
+    "pushIntro": "Get an evening reminder if you have not entered your day yet, even with the app closed.",
+    "pushNeedsAccount": "Push reminders require a signed-in account.",
+    "pushState": {
+      "unsupported": "This browser does not support push notifications.",
+      "not_configured": "Push notifications are not configured on this server yet.",
+      "denied": "Notifications are blocked in the browser settings.",
+      "off": "Reminders are off on this device.",
+      "on": "Reminders are on for this device."
+    },
+    "enablePush": "Turn on reminders",
+    "disablePush": "Turn off on this device",
+    "reminderTime": "Reminder time",
+    "reminderHint": "Local time ({{tz}}). The reminder is only sent if the day has not been entered yet.",
+    "pushFailed": "Could not turn on reminders: {{message}}",
+    "prefsHint": "Choose which alerts you receive in your"
   }
 }

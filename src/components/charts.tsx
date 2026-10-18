@@ -1,6 +1,13 @@
 import type { ReactNode } from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, ReferenceLine, Cell } from 'recharts';
 import { useMoney } from './ui';
+import { formatMoney } from '../lib/money';
+
+/** Formatter in the profile currency, or in an explicit one (e.g. a fleet's currency). */
+function useFmt(currency?: string) {
+  const { fmt, locale } = useMoney();
+  return currency ? (v: number | null | undefined, sign = false) => (v == null ? '—' : formatMoney(v, currency, locale, { sign })) : fmt;
+}
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +16,11 @@ export const SERIES = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#
 export const GAIN = '#15803d';
 export const LOSS = '#b91c1c';
 const AXIS = { fontSize: 12, fill: '#52514e' };
+/** Discreet animations, disabled when the system asks for reduced motion. */
+const ANIMATE = typeof window === 'undefined' || !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-function MoneyTooltip({ active, payload, label }: { active?: boolean; payload?: { name: string; value: number; color: string }[]; label?: string }) {
-  const { fmt } = useMoney();
+function MoneyTooltip({ active, payload, label, currency }: { active?: boolean; payload?: { name: string; value: number; color: string }[]; label?: string; currency?: string }) {
+  const fmt = useFmt(currency);
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-xl bg-white px-3 py-2 text-xs shadow-lg ring-1 ring-slate-200">
@@ -81,8 +90,8 @@ export function RevenueCostChart({ data }: { data: { label: string; revenue: num
           <YAxis tick={AXIS} tickLine={false} axisLine={false} width={56} tickFormatter={(v) => fmt(v).replace(/[,.]00(?=\D*$)/, '')} />
           <Tooltip content={<MoneyTooltip />} cursor={{ fill: '#f1f5f9' }} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Bar dataKey="revenue" name={t('dashboard.revenue')} fill={SERIES[0]} radius={[4, 4, 0, 0]} maxBarSize={28} />
-          <Bar dataKey="costs" name={t('dashboard.totalCosts')} fill={SERIES[1]} radius={[4, 4, 0, 0]} maxBarSize={28} />
+          <Bar isAnimationActive={ANIMATE} animationDuration={500} dataKey="revenue" name={t('dashboard.revenue')} fill={SERIES[0]} radius={[4, 4, 0, 0]} maxBarSize={28} />
+          <Bar isAnimationActive={ANIMATE} animationDuration={500} dataKey="costs" name={t('dashboard.totalCosts')} fill={SERIES[1]} radius={[4, 4, 0, 0]} maxBarSize={28} />
         </BarChart>
       </ResponsiveContainer>
     </ChartFrame>
@@ -90,9 +99,9 @@ export function RevenueCostChart({ data }: { data: { label: string; revenue: num
 }
 
 /** Profit by period: polarity shown by bar direction, sign in the tooltip/table, and colour. */
-export function ProfitBars({ data, goal }: { data: { label: string; profit: number }[]; goal?: number | null }) {
+export function ProfitBars({ data, goal, currency }: { data: { label: string; profit: number }[]; goal?: number | null; currency?: string }) {
   const { t } = useTranslation();
-  const { fmt } = useMoney();
+  const fmt = useFmt(currency);
   return (
     <ChartFrame table={{ head: [t('common.period'), t('dashboard.profit')], rows: data.map((d) => [d.label, fmt(d.profit, true)]) }}>
       <ResponsiveContainer>
@@ -100,10 +109,10 @@ export function ProfitBars({ data, goal }: { data: { label: string; profit: numb
           <CartesianGrid vertical={false} stroke="#e5e7eb" />
           <XAxis dataKey="label" tick={AXIS} tickLine={false} axisLine={false} />
           <YAxis tick={AXIS} tickLine={false} axisLine={false} width={56} tickFormatter={(v) => fmt(v).replace(/[,.]00(?=\D*$)/, '')} />
-          <Tooltip content={<MoneyTooltip />} cursor={{ fill: '#f1f5f9' }} />
+          <Tooltip content={<MoneyTooltip currency={currency} />} cursor={{ fill: '#f1f5f9' }} />
           <ReferenceLine y={0} stroke="#94a3b8" />
           {goal ? <ReferenceLine y={goal} stroke={SERIES[6]} strokeDasharray="4 4" label={{ value: t('goals.goal'), fontSize: 11, fill: '#52514e', position: 'insideTopRight' }} /> : null}
-          <Bar dataKey="profit" name={t('dashboard.profit')} radius={[4, 4, 0, 0]} maxBarSize={32}>
+          <Bar isAnimationActive={ANIMATE} animationDuration={500} dataKey="profit" name={t('dashboard.profit')} radius={[4, 4, 0, 0]} maxBarSize={32}>
             {data.map((d, i) => (
               <Cell key={i} fill={d.profit >= 0 ? GAIN : LOSS} />
             ))}
@@ -124,7 +133,7 @@ export function RateLine({ data, name, format }: { data: { label: string; value:
           <XAxis dataKey="label" tick={AXIS} tickLine={false} axisLine={false} />
           <YAxis tick={AXIS} tickLine={false} axisLine={false} width={56} tickFormatter={(v) => format(v)} />
           <Tooltip formatter={(v: number) => format(v)} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-          <Line type="monotone" dataKey="value" name={name} stroke={SERIES[0]} strokeWidth={2} dot={{ r: 4 }} connectNulls />
+          <Line isAnimationActive={ANIMATE} animationDuration={500} type="monotone" dataKey="value" name={name} stroke={SERIES[0]} strokeWidth={2} dot={{ r: 4 }} connectNulls />
         </LineChart>
       </ResponsiveContainer>
     </ChartFrame>

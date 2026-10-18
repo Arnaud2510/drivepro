@@ -8,7 +8,7 @@ import type { Earning, EnergyMode, Expense, WorkDay } from '../domain/types';
 import { computeDay, fixedShareForDay } from '../lib/finance/engine';
 import { useFormat, useToday } from '../components/hooks';
 import { Badge, Button, Card, Checkbox, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, Toggle, useMoney } from '../components/ui';
-import { EXPENSE_CATEGORIES } from '../config/catalog';
+import { useCatalog } from '../data/catalog';
 
 const blankEarning = (platformId: string | null): Earning => ({
   id: newId(), platformId, label: '', grossKnown: true, gross: null, commission: null, otherFees: 0,
@@ -21,6 +21,7 @@ export function DayEntry() {
   const nav = useNavigate();
   const today = useToday();
   const { data, profile, upsert, remove } = useStore();
+  const { categories } = useCatalog();
   const { currency, fmt } = useMoney();
   const f = useFormat();
   const date = params.date ?? today;
@@ -42,10 +43,13 @@ export function DayEntry() {
   const [day, setDay] = useState<WorkDay>(() => existing ?? fresh());
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [newExp, setNewExp] = useState({ category: 'fuel', amount: null as number | null, description: '' });
 
   // Re-initialise when the date in the URL changes
   useEffect(() => {
+    // The day we just saved becomes `existing`: keep the form and its confirmation.
+    if (existing && existing.id === day.id) return;
     setDay(existing ?? fresh());
     setSaved(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,11 +77,14 @@ export function DayEntry() {
 
   async function save() {
     setSaving(true);
+    setSaveError(null);
     try {
       await upsert('days', day);
       if (vehicle && day.odoEnd && (vehicle.odometer ?? 0) < day.odoEnd) await upsert('vehicles', { ...vehicle, odometer: day.odoEnd });
       setSaved(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      setSaveError((e as Error).message);
     } finally {
       setSaving(false);
     }
@@ -87,7 +94,7 @@ export function DayEntry() {
     if (!newExp.amount) return;
     const e: Expense = {
       id: newId(), date, category: newExp.category, amount: newExp.amount, description: newExp.description,
-      vehicleId: day.vehicleId, paymentMethod: 'cash', kind: EXPENSE_CATEGORIES.find((c) => c.id === newExp.category)?.defaultKind ?? 'daily', receiptPath: null,
+      vehicleId: day.vehicleId, paymentMethod: 'cash', kind: categories.find((c) => c.id === newExp.category)?.defaultKind ?? 'daily', receiptPath: null,
     };
     await upsert('expenses', e);
     setNewExp({ ...newExp, amount: null, description: '' });
@@ -309,7 +316,7 @@ export function DayEntry() {
         )}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Select label={t('expenses.category')} value={newExp.category} onChange={(e) => setNewExp({ ...newExp, category: e.target.value })}>
-            {EXPENSE_CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <option key={c.id} value={c.id}>{f.category(c.id)}</option>
             ))}
           </Select>
@@ -350,6 +357,11 @@ export function DayEntry() {
               <li key={i}><Badge tone={issueTone(i)}>{t(`issues.${i}`)}</Badge></li>
             ))}
           </ul>
+        )}
+        {saveError && (
+          <div className="mt-3">
+            <Notice tone="loss">{t('day.saveFailed', { message: saveError })}</Notice>
+          </div>
         )}
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="success" loading={saving} onClick={save} className="flex-1 sm:flex-none">

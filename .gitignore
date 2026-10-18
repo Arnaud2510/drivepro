@@ -3,3 +3,5 @@ dist
 .env
 .env.local
 *.log
+e2e/screenshots
+*.tsbuildinfo

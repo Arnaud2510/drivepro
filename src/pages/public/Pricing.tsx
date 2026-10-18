@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
-import { PLANS } from '../../config/catalog';
+import { useCatalog } from '../../data/catalog';
 import { Notice, cx } from '../../components/ui';
 
 export function Pricing() {
   const { t } = useTranslation();
+  const { plans } = useCatalog();
   return (
     <div className="mx-auto max-w-6xl px-4 py-14">
       <h1 className="text-center text-4xl font-extrabold text-brand-900">{t('pricing.title')}</h1>
@@ -14,7 +15,7 @@ export function Pricing() {
         <Notice>{t('pricing.devNotice')}</Notice>
       </div>
       <div className="mt-10 grid gap-5 md:grid-cols-3">
-        {PLANS.map((p) => (
+        {plans.map((p) => (
           <article key={p.id} className={cx('flex flex-col rounded-3xl bg-white p-6 ring-1', p.id === 'pro' ? 'ring-2 ring-brand-700' : 'ring-slate-200')}>
             <h2 className="text-xl font-bold text-brand-900">{t(`pricing.plans.${p.id}.name`)}</h2>
             <p className="mt-1 text-sm text-slate-600">{t(`pricing.plans.${p.id}.tagline`)}</p>
@@ -23,7 +24,7 @@ export function Pricing() {
               {p.features.map((f) => (
                 <li key={f} className="flex gap-2">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-gain" aria-hidden />
-                  {t(`pricing.features.${f}`)}
+                  {t(`pricing.features.${f}`, { defaultValue: f })}
                 </li>
               ))}
             </ul>

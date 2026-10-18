@@ -11,8 +11,8 @@ const FEATURES = [
   { icon: Scale, k: 'compare', status: 'ready' },
   { icon: FileText, k: 'reports', status: 'ready' },
   { icon: Globe2, k: 'international', status: 'ready' },
-  { icon: Bell, k: 'alerts', status: 'partial' },
-  { icon: Users, k: 'fleet', status: 'dev' },
+  { icon: Bell, k: 'alerts', status: 'ready' },
+  { icon: Users, k: 'fleet', status: 'ready' },
 ] as const;
 
 export function Features() {

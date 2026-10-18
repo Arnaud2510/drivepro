@@ -16,7 +16,8 @@
     "fleet": "Flotte",
     "admin": "Verwaltung",
     "more": "Mehr",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "notifications": "Benachrichtigungen"
   },
   "public": {
     "nav": {
@@ -72,7 +73,9 @@
     "saved": "Gespeichert",
     "search": "Suchen",
     "sortBy": "Sortieren nach",
-    "operatingDisclaimer": "Der Betriebsgewinn ist eine Kennzahl, die aus Ihren Eingaben berechnet wird. Er ist weder ein buchhalterisches noch ein steuerliches Ergebnis."
+    "operatingDisclaimer": "Der Betriebsgewinn ist eine Kennzahl, die aus Ihren Eingaben berechnet wird. Er ist weder ein buchhalterisches noch ein steuerliches Ergebnis.",
+    "loading": "Wird geladen …",
+    "close": "Schließen"
   },
   "errors": {
     "required": "Pflichtfeld.",
@@ -88,7 +91,9 @@
     "loadFailed": "Ihre Daten konnten nicht geladen werden: {{message}}",
     "endBeforeStart": "Das Enddatum liegt vor dem Startdatum.",
     "fileTooLarge": "Datei zu groß (max. 10 MB).",
-    "uploadFailed": "Hochladen des Belegs fehlgeschlagen."
+    "uploadFailed": "Hochladen des Belegs fehlgeschlagen.",
+    "actionFailed": "Die Änderung konnte nicht gespeichert werden: {{message}}",
+    "suspended": "Dieses Konto ist gesperrt. Bitte wenden Sie sich an den Support."
   },
   "auth": {
     "signIn": "Anmelden",
@@ -190,11 +195,11 @@
       },
       "alerts": {
         "title": "Hinweise",
-        "text": "Hinweise in der App: Ziel, ungewöhnliche Ausgabe, Wartung, Fristen. Push- und E-Mail-Benachrichtigungen folgen."
+        "text": "Benachrichtigungszentrale, Wochen- und Monatsübersichten, tägliche Erinnerung per Push-Benachrichtigung."
       },
       "fleet": {
         "title": "Flottenverwaltung",
-        "text": "Datenmodell und Zugriffsregeln sind bereit; Oberfläche für Manager in Entwicklung."
+        "text": "Einladungen, Zustimmung der Fahrer, konsolidierte Übersicht, Fahrzeugrentabilität und Export."
       }
     }
   },
@@ -414,7 +419,8 @@
     "confirmDelete": "Diesen Tag löschen? Die an diesem Datum erfassten Ausgaben bleiben erhalten.",
     "savedTitle": "Tag gespeichert",
     "backToDashboard": "Zurück zur Übersicht",
-    "noPlatforms": "Fügen Sie zuerst Ihre Plattformen hinzu, um sie hier zu finden:"
+    "noPlatforms": "Fügen Sie zuerst Ihre Plattformen hinzu, um sie hier zu finden:",
+    "saveFailed": "Speichern fehlgeschlagen; Ihre Eingaben bleiben erhalten. Prüfen Sie die Verbindung und versuchen Sie es erneut. ({{message}})"
   },
   "payout": {
     "estimated": "Geschätzt",
@@ -461,7 +467,10 @@
     "documentsExpiry": "Dokumente fällig",
     "monthlyFixed": "Fixkosten / Monat",
     "fixedCostsHint": "Versicherung, Kredit- oder Leasingraten, Steuern: unter Ausgaben › Fixkosten erfassen und dem Fahrzeug zuordnen.",
-    "twoWheelsHint": "Bei Motorrad oder Roller meist zwischen 2 und 5 L/100 km."
+    "twoWheelsHint": "Bei Motorrad oder Roller meist zwischen 2 und 5 L/100 km.",
+    "indicative": "Veröffentlichter Richtpreis: {{price}} – Quelle: {{source}}, Stand {{date}}.",
+    "indicativeSource": "Quelle ansehen",
+    "useIndicative": "Diesen Preis übernehmen"
   },
   "vehicleTypes": {
     "car": "Auto",
@@ -722,7 +731,7 @@
   "alerts": {
     "title": "Hinweise",
     "prefs": "Hinweise",
-    "inAppOnly": "Hinweise werden in der App angezeigt. Push- und E-Mail-Benachrichtigungen sind noch nicht verfügbar.",
+    "inAppOnly": "Diese Hinweise erscheinen in der App und in der Benachrichtigungszentrale. Die tägliche Erinnerung kann auch per Push gesendet werden.",
     "dailyReminder": "Sie haben den heutigen Tag noch nicht erfasst.",
     "dailyGoalReached": "Glückwunsch, Tagesziel erreicht!",
     "monthlyGoalBehind": "Bei diesem Tempo würden {{gap}} zum Monatsziel fehlen.",
@@ -747,25 +756,200 @@
   "fleet": {
     "title": "Flottenverwaltung",
     "subtitle": "Mehrere Fahrer, mehrere Fahrzeuge, konsolidierte Berichte.",
-    "status": "Die Manager-Oberfläche ist noch nicht verfügbar.",
-    "readyTitle": "Serverseitig bereits vorhanden",
-    "r1": "Organisationen und Rollen (Eigentümer, Manager, Fahrer).",
-    "r2": "Ausdrückliche, widerrufliche Zustimmung des Fahrers vor jeder Datenfreigabe.",
-    "r3": "Zugriffsregeln (RLS): Ein Manager sieht nur zustimmende Fahrer seiner Flotte, nur lesend.",
-    "nextTitle": "Nächste Schritte",
-    "n1": "Fahrer einladen",
-    "n2": "Konsolidierte Übersicht",
-    "n3": "Rentabilitätsvergleich der Flottenfahrzeuge",
-    "n4": "Flottenberichte"
+    "needsAccount": "Die Flottenverwaltung erfordert ein angemeldetes Konto: Die Daten mehrerer Fahrer müssen sicher geteilt werden.",
+    "createTitle": "Flotte erstellen",
+    "createText": "Sie verwalten mehrere Fahrer oder Fahrzeuge? Erstellen Sie eine Flotte und laden Sie Ihre Fahrer ein.",
+    "name": "Name der Flotte",
+    "create": "Erstellen",
+    "createAnother": "Weitere Flotte erstellen",
+    "tabDashboard": "Übersicht",
+    "tabMembers": "Fahrer und Zugriffe",
+    "roles": {
+      "owner": "Eigentümer",
+      "manager": "Manager",
+      "driver": "Fahrer"
+    },
+    "role": "Rolle",
+    "driver": "Fahrer",
+    "actions": "Aktionen",
+    "dataSharing": "Datenfreigabe",
+    "lastMonth": "Letzter Monat",
+    "lastActivity": "Letzte Aktivität",
+    "activeDrivers_one": "{{count}} aktiver Fahrer",
+    "activeDrivers_other": "{{count}} aktive Fahrer",
+    "byDriver": "Nach Fahrer",
+    "profitByDriver": "Gewinn nach Fahrer",
+    "vehicles": "Fahrzeugrentabilität",
+    "notSharing_one": "{{count}} Fahrer hat die Datenfreigabe nicht erlaubt und ist in den Zahlen nicht enthalten.",
+    "notSharing_other": "{{count}} Fahrer haben die Datenfreigabe nicht erlaubt und sind in den Zahlen nicht enthalten.",
+    "noSharedData": "Noch keine geteilten Daten",
+    "noSharedDataText": "Laden Sie Ihre Fahrer ein. Ihre Zahlen erscheinen hier, sobald sie der Freigabe zustimmen.",
+    "otherCurrencies": "Einige Fahrer arbeiten in {{currencies}}: Sie werden separat angezeigt und nicht zu den Summen in {{currency}} addiert (keine automatische Umrechnung).",
+    "method": "Jeder Fahrer wird mit seinen eigenen Einstellungen berechnet (Fixkosten, Kraftstoffmodus). Manager haben nur Lesezugriff.",
+    "invite": "Fahrer einladen",
+    "createInvite": "Einladung erstellen",
+    "inviteHint": "Es wird ein persönlicher Einladungslink erstellt. Senden Sie ihn dem Fahrer (SMS, WhatsApp, E-Mail): Er muss sich mit dieser E-Mail-Adresse anmelden. 14 Tage gültig.",
+    "inviteCreated": "Einladung erstellt. Kopieren Sie den Link und senden Sie ihn:",
+    "inviteLink": "Einladungslink",
+    "copy": "Kopieren",
+    "members_one": "{{count}} Mitglied",
+    "members_other": "{{count}} Mitglieder",
+    "sharing": "Freigabe seit {{date}}",
+    "notSharingBadge": "Nicht freigegeben",
+    "makeManager": "Zum Manager machen",
+    "makeDriver": "Wieder Fahrer",
+    "remove": "Aus der Flotte entfernen",
+    "confirmRemove": "{{name}} aus der Flotte entfernen? Sie haben dann keinen Zugriff mehr auf die Daten.",
+    "consentExplain": "Nur der Fahrer kann die Freigabe seiner Daten erlauben oder widerrufen. Ohne Zustimmung sehen Sie nur Name und E-Mail.",
+    "invites": "Einladungen",
+    "revoke": "Widerrufen",
+    "inviteStatus": {
+      "pending": "Ausstehend",
+      "expired": "Abgelaufen",
+      "accepted": "Angenommen"
+    },
+    "myFleets": "Flotten, denen ich angehöre",
+    "shareMyData": "Meine Einnahmen, Ausgaben und Kilometer mit den Managern von „{{org}}“ teilen",
+    "shareHint": "Nur lesend. Sie können diese Erlaubnis jederzeit widerrufen.",
+    "sharingSince": "Freigabe aktiv seit {{date}}.",
+    "leave": "Flotte verlassen",
+    "confirmLeave": "„{{org}}“ verlassen? Die Manager haben dann keinen Zugriff mehr auf Ihre Daten.",
+    "joinTitle": "Einer Flotte beitreten",
+    "joinText": "Sie sind eingeladen, „{{org}}“ als {{role}} beizutreten.",
+    "accept": "Beitreten",
+    "inviteInvalid": {
+      "not_found": "Diese Einladung existiert nicht oder wurde widerrufen.",
+      "used": "Diese Einladung wurde bereits verwendet.",
+      "expired": "Diese Einladung ist abgelaufen. Bitten Sie Ihren Manager um eine neue.",
+      "wrong_email": "Diese Einladung wurde an {{email}} gesendet, Sie sind jedoch als {{current}} angemeldet."
+    }
   },
   "admin": {
     "title": "Verwaltung",
-    "status": "Die Bearbeitungskonsole (Länder, Währungen, Plattformen, Übersetzungen, Abonnements) ist in Entwicklung. Tabellen und Zugriffsrechte sind bereit.",
     "needsAccount": "Die Verwaltung erfordert ein angemeldetes Konto mit Administratorrolle, die serverseitig vergeben wird.",
     "denied": "Zugriff verweigert: Ihr Konto hat keine Administratorrolle.",
-    "stats": "Aggregierte Statistiken",
-    "countries": "Eingerichtete Länder",
-    "platforms": "Plattformkatalog",
-    "noTariffs": "Es sind keine offiziellen Provisionssätze oder Kraftstoffpreise gespeichert. Jeder hinzugefügte Richtwert muss datiert und mit Quelle versehen sein."
+    "subtitle": "Stammdaten, Konten und aggregierte Statistiken. Jede Aktion wird protokolliert.",
+    "tabs": {
+      "overview": "Überblick",
+      "users": "Benutzer",
+      "reference": "Stammdaten",
+      "translations": "Übersetzungen",
+      "audit": "Protokoll"
+    },
+    "kpi": {
+      "users": "Konten",
+      "onboarded_one": "{{count}} eingerichtet",
+      "onboarded_other": "{{count}} eingerichtet",
+      "active7": "Aktiv (7 Tage)",
+      "active30_one": "{{count}} aktiv in 30 Tagen",
+      "active30_other": "{{count}} aktiv in 30 Tagen",
+      "sessions30": "Erfasste Tage (30 Tage)",
+      "orgs": "Flotten",
+      "push_one": "{{count}} Push-Gerät",
+      "push_other": "{{count}} Push-Geräte"
+    },
+    "byCountry": "Konten nach Land",
+    "byLanguage": "Konten nach Sprache",
+    "byPlan": "Aktive Abonnements",
+    "planNote": "Konten ohne Abonnement nutzen den kostenlosen Plan.",
+    "organizations": "Flotten",
+    "members": "Mitglieder",
+    "sharing": "Mit Freigabe",
+    "aggregatedOnly": "Administratoren sehen nur aggregierte Statistiken, niemals die Finanzdaten eines Fahrers.",
+    "usersPrivacy": "Diese Liste enthält keine Finanzdaten. Die Finanzen eines Fahrers sind über die Verwaltung nicht einsehbar.",
+    "createdAt": "Registriert",
+    "lastSignIn": "Letzte Anmeldung",
+    "plan": "Plan",
+    "status": "Status",
+    "suspended": "Gesperrt",
+    "notOnboarded": "Nicht eingerichtet",
+    "grantAdmin": "Zum Admin machen",
+    "revokeAdmin": "Admin entziehen",
+    "suspend": "Sperren",
+    "reactivate": "Reaktivieren",
+    "confirmSuspend": "{{email}} sperren? Die Person kann sich nicht mehr anmelden; ihre Daten bleiben erhalten.",
+    "confirmReactivate": "{{email}} reaktivieren?",
+    "pageOf": "{{from}}–{{to}} von {{total}}",
+    "table": "Tabelle",
+    "tables": {
+      "countries": "Länder",
+      "currencies": "Währungen",
+      "cities": "Städte",
+      "transport_platforms": "Plattformen",
+      "platform_countries": "Plattformen pro Land",
+      "expense_categories": "Ausgabenkategorien",
+      "fuel_prices": "Kraftstoffpreise",
+      "energy_prices": "Strompreise",
+      "subscription_plans": "Abonnementpläne",
+      "app_settings": "Allgemeine Einstellungen"
+    },
+    "hints": {
+      "countries": "Für ein neues Land fügen Sie auch den Namen im Reiter Übersetzungen (Schlüssel countries.CODE) und ggf. die Währung hinzu.",
+      "sourced": "Jeder Richtpreis oder -satz muss datiert und mit Quelle versehen sein. Er wird nie automatisch angewendet: Der Fahrer entscheidet.",
+      "categories": "Für eine neue Kategorie fügen Sie ihre Bezeichnung im Reiter Übersetzungen hinzu (Schlüssel categories.ID)."
+    },
+    "required": "„{{field}}“ ist ein Pflichtfeld.",
+    "invalid": "Ungültiger Wert für „{{field}}“.",
+    "invalidJson": "Ungültiges JSON für „{{field}}“.",
+    "rowCount_one": "{{count}} Zeile",
+    "rowCount_other": "{{count}} Zeilen",
+    "translationsHint": "Ersetzen Sie einen Oberflächentext ohne neues Deployment oder fügen Sie die Bezeichnung eines neuen Landes oder einer Kategorie hinzu.",
+    "searchKey": "Schlüssel oder Text suchen",
+    "newKey": "Schlüssel „{{key}}“ anlegen",
+    "defaultText": "Standardtext",
+    "override": "Eigener Text ({{lang}})",
+    "activeOverrides_one": "{{count}} eigener Text",
+    "activeOverrides_other": "{{count}} eigene Texte",
+    "overrideReload": "Benutzer sehen den neuen Text beim nächsten Laden der App.",
+    "action": "Aktion",
+    "target": "Ziel",
+    "actor": "Urheber",
+    "searchUsers": "E-Mail oder Name"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "bellLabel_one": "Benachrichtigungen: {{count}} ungelesen",
+    "bellLabel_other": "Benachrichtigungen: {{count}} ungelesen",
+    "unread_one": "{{count}} ungelesen",
+    "unread_other": "{{count}} ungelesen",
+    "markAllRead": "Alle als gelesen markieren",
+    "markRead": "Als gelesen markieren",
+    "new": "Neu",
+    "now": "Jetzt",
+    "empty": "Keine Benachrichtigungen",
+    "emptyText": "Hier erscheinen Hinweise sowie Wochen- und Monatsübersichten.",
+    "weeklySummary_one": "Woche vom {{from}} bis {{to}}: Gewinn {{profit}} an {{count}} Arbeitstag.",
+    "weeklySummary_other": "Woche vom {{from}} bis {{to}}: Gewinn {{profit}} an {{count}} Arbeitstagen.",
+    "monthlySummary_one": "Bilanz {{month}}: Gewinn {{profit}}, Umsatz {{revenue}}, {{count}} Arbeitstag.",
+    "monthlySummary_other": "Bilanz {{month}}: Gewinn {{profit}}, Umsatz {{revenue}}, {{count}} Arbeitstage.",
+    "delta": "{{pct}} % gegenüber dem Vorzeitraum",
+    "goalPct": "{{pct}} % des Monatsziels",
+    "kinds": {
+      "dailyReminder": "Erinnerung",
+      "unusualExpense": "Ungewöhnliche Ausgabe",
+      "dailyGoalReached": "Ziel erreicht",
+      "monthlyGoalBehind": "Monatsziel",
+      "hourlyDecline": "Stundenrentabilität",
+      "maintenanceDue": "Wartung",
+      "documentExpiry": "Frist",
+      "weeklySummary": "Wochenübersicht",
+      "monthlySummary": "Monatsübersicht"
+    },
+    "pushTitle": "Erinnerungen auf diesem Telefon",
+    "pushIntro": "Erhalten Sie abends eine Erinnerung, wenn Sie Ihren Tag noch nicht erfasst haben – auch bei geschlossener App.",
+    "pushNeedsAccount": "Push-Erinnerungen erfordern ein angemeldetes Konto.",
+    "pushState": {
+      "unsupported": "Dieser Browser unterstützt keine Push-Benachrichtigungen.",
+      "not_configured": "Push-Benachrichtigungen sind auf diesem Server noch nicht eingerichtet.",
+      "denied": "Benachrichtigungen sind in den Browsereinstellungen blockiert.",
+      "off": "Erinnerungen auf diesem Gerät ausgeschaltet.",
+      "on": "Erinnerungen auf diesem Gerät eingeschaltet."
+    },
+    "enablePush": "Erinnerungen einschalten",
+    "disablePush": "Auf diesem Gerät ausschalten",
+    "reminderTime": "Uhrzeit der Erinnerung",
+    "reminderHint": "Ortszeit ({{tz}}). Die Erinnerung wird nur gesendet, wenn der Tag noch nicht erfasst ist.",
+    "pushFailed": "Erinnerungen konnten nicht eingeschaltet werden: {{message}}",
+    "prefsHint": "Wählen Sie die Hinweisarten in Ihrem"
   }
 }

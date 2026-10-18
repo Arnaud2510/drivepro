@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useStore } from './data/store';
+import { rememberReturn } from './lib/returnTo';
 import { AppLayout, MorePage } from './components/Layout';
 import { PublicLayout } from './components/PublicLayout';
 import { Landing } from './pages/public/Landing';
@@ -22,7 +23,8 @@ import { Compare } from './pages/Compare';
 import { Goals } from './pages/Goals';
 import { Reports } from './pages/Reports';
 import { Profile } from './pages/Profile';
-import { Fleet } from './pages/Fleet';
+import { Fleet, JoinFleet } from './pages/Fleet';
+import { NotificationsPage } from './pages/Notifications';
 import { Admin } from './pages/Admin';
 
 function Guard({ children, onboarding }: { children: ReactNode; onboarding?: boolean }) {
@@ -34,8 +36,15 @@ function Guard({ children, onboarding }: { children: ReactNode; onboarding?: boo
         <Loader2 className="h-8 w-8 animate-spin text-brand-800" />
       </div>
     );
-  if (!mode) return <Navigate to="/login" state={{ from: loc.pathname }} replace />;
-  if (!onboarding && !profile?.onboarded) return <Navigate to="/onboarding" replace />;
+  // Come back to the requested page (e.g. a fleet invitation link) after sign-in / sign-up / onboarding.
+  if (!mode) {
+    if (loc.pathname !== '/app') rememberReturn(loc.pathname);
+    return <Navigate to="/login" state={{ from: loc.pathname }} replace />;
+  }
+  if (!onboarding && !profile?.onboarded) {
+    if (loc.pathname !== '/app') rememberReturn(loc.pathname);
+    return <Navigate to="/onboarding" replace />;
+  }
   return <>{children}</>;
 }
 
@@ -68,6 +77,8 @@ export function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="profile" element={<Profile />} />
         <Route path="fleet" element={<Fleet />} />
+        <Route path="fleet/join/:token" element={<JoinFleet />} />
+        <Route path="notifications" element={<NotificationsPage />} />
         <Route path="admin" element={<Admin />} />
         <Route path="more" element={<MorePage />} />
       </Route>

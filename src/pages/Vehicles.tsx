@@ -8,6 +8,8 @@ import { FUEL_TYPES, VEHICLE_TYPES } from '../config/catalog';
 import { Badge, Button, Card, EmptyState, Input, Money, MoneyInput, NumberInput, PageHeader, Select, useMoney } from '../components/ui';
 import { compareVehicles } from '../lib/finance/engine';
 import { useFormat } from '../components/hooks';
+import { useCatalog } from '../data/catalog';
+import { formatDate } from '../lib/dates';
 
 const blank = (): Vehicle => ({
   id: newId(), name: '', make: '', model: '', year: null, type: 'car', fuelType: 'petrol', consumption: null, energyPrice: null,
@@ -17,13 +19,17 @@ const blank = (): Vehicle => ({
 
 export function VehicleForm({ initial, onDone }: { initial: Vehicle; onDone: () => void }) {
   const { t } = useTranslation();
-  const { upsert } = useStore();
+  const { upsert, profile, locale } = useStore();
   const { currency } = useMoney();
+  const { indicativePrice } = useCatalog();
   const [v, setV] = useState(initial);
   const [error, setError] = useState<string | null>(null);
   const set = (p: Partial<Vehicle>) => setV((x) => ({ ...x, ...p }));
   const ev = v.fuelType === 'electric';
   const twoWheels = v.type === 'moto' || v.type === 'scooter';
+  // A dated, sourced reference price published by an administrator — never applied automatically.
+  const ref = profile ? indicativePrice(profile.countryCode, v.fuelType === 'hybrid' ? 'petrol' : v.fuelType) : undefined;
+  const refUsable = ref && ref.currency === currency;
   return (
     <form
       className="grid grid-cols-2 gap-3 sm:grid-cols-4"
@@ -49,6 +55,21 @@ export function VehicleForm({ initial, onDone }: { initial: Vehicle; onDone: () 
       <NumberInput label={t('vehicles.odometer')} suffix="km" value={v.odometer} onChange={(x) => set({ odometer: x })} />
       <NumberInput label={t('vehicles.consumption')} suffix={ev ? 'kWh/100 km' : 'L/100 km'} value={v.consumption} onChange={(x) => set({ consumption: x })} hint={twoWheels ? t('vehicles.twoWheelsHint') : undefined} />
       <NumberInput label={ev ? t('vehicles.kwhPrice') : t('vehicles.fuelPrice')} suffix={`${currency}/${ev ? 'kWh' : 'L'}`} value={v.energyPrice} onChange={(x) => set({ energyPrice: x })} hint={t('vehicles.priceHint')} />
+      {refUsable && (
+        <div className="col-span-2 rounded-xl bg-brand-50 p-3 text-sm text-brand-900 sm:col-span-4">
+          {t('vehicles.indicative', { price: `${ref.price} ${ref.currency}/${ev ? 'kWh' : 'L'}`, source: ref.source, date: formatDate(ref.validFrom, locale) })}{' '}
+          {ref.sourceUrl && (
+            <a href={ref.sourceUrl} target="_blank" rel="noreferrer" className="underline">
+              {t('vehicles.indicativeSource')}
+            </a>
+          )}{' '}
+          {v.energyPrice !== ref.price && (
+            <button type="button" className="font-semibold underline" onClick={() => set({ energyPrice: ref.price })}>
+              {t('vehicles.useIndicative')}
+            </button>
+          )}
+        </div>
+      )}
       {!ev && <NumberInput label={t('vehicles.tank')} suffix="L" value={v.tankCapacity} onChange={(x) => set({ tankCapacity: x })} />}
       <Select label={t('vehicles.financing')} value={v.financing} onChange={(e) => set({ financing: e.target.value as Financing })}>
         {(['owned', 'loan', 'lease', 'rental', 'other'] as const).map((x) => <option key={x} value={x}>{t(`financing.${x}`)}</option>)}

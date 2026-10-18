@@ -10,7 +10,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --noEmit",
-    "test:db": "node supabase/tests/rls.mjs"
+    "test:db": "node supabase/tests/rls.mjs",
+    "e2e:fleet": "node e2e/fleet.mjs",
+    "e2e:admin": "node e2e/admin.mjs",
+    "e2e:push": "node e2e/push.mjs",
+    "e2e:sw": "node e2e/service-worker.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.2",
@@ -31,10 +35,13 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "http_ece": "^1.2.0",
+    "playwright": "^1.49.1",
     "supabase": "^2.33.9",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.6.3",
     "vite": "^6.0.3",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "web-push": "^3.6.7"
   }
 }

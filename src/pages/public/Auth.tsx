@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Button, Checkbox, Input, Notice } from '../../components/ui';
 import { supabase, isSupabaseConfigured } from '../../data/supabaseRepo';
 import { useStore } from '../../data/store';
+import { takeReturn } from '../../lib/returnTo';
 
 const emailSchema = z.string().trim().email();
 const passwordSchema = z.string().min(8);
@@ -71,8 +72,9 @@ export function Login() {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setLoading(false);
     // Generic message: do not reveal whether the account exists.
-    if (error) setError(error.status === 429 ? t('errors.tooManyAttempts') : t('errors.badCredentials'));
-    else nav((loc.state as { from?: string })?.from ?? '/app');
+    if (error)
+      setError(error.status === 429 ? t('errors.tooManyAttempts') : error.code === 'user_banned' || /banned/i.test(error.message) ? t('errors.suspended') : t('errors.badCredentials'));
+    else nav(takeReturn());
   }
 
   return (

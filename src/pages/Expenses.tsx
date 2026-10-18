@@ -5,7 +5,8 @@ import { Paperclip, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useStore } from '../data/store';
 import { newId } from '../data/repository';
 import type { Expense, FixedCost, PaymentMethod } from '../domain/types';
-import { EXPENSE_CATEGORIES, FIXED_COST_CATEGORIES } from '../config/catalog';
+import { FIXED_COST_CATEGORIES } from '../config/catalog';
+import { useCatalog } from '../data/catalog';
 import { Badge, Button, Card, EmptyState, Input, Money, MoneyInput, Notice, PageHeader, Select, Toggle, useMoney } from '../components/ui';
 import { useFormat, useToday } from '../components/hooks';
 import { isEnergyCategory } from '../domain/types';
@@ -13,6 +14,7 @@ import { isEnergyCategory } from '../domain/types';
 function ExpenseForm({ initial, onDone }: { initial: Expense; onDone: () => void }) {
   const { t } = useTranslation();
   const { upsert, data, mode, uploadReceipt } = useStore();
+  const { categories } = useCatalog();
   const { currency } = useMoney();
   const f = useFormat();
   const [x, setX] = useState(initial);
@@ -33,9 +35,9 @@ function ExpenseForm({ initial, onDone }: { initial: Expense; onDone: () => void
       <Select
         label={t('expenses.category')}
         value={x.category}
-        onChange={(e) => set({ category: e.target.value, kind: EXPENSE_CATEGORIES.find((c) => c.id === e.target.value)?.defaultKind ?? x.kind })}
+        onChange={(e) => set({ category: e.target.value, kind: categories.find((c) => c.id === e.target.value)?.defaultKind ?? x.kind })}
       >
-        {EXPENSE_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{f.category(c.id)}</option>)}
+        {categories.map((c) => <option key={c.id} value={c.id}>{f.category(c.id)}</option>)}
       </Select>
       <MoneyInput label={t('expenses.amount')} currency={currency} value={x.amount || null} onChange={(v) => set({ amount: v ?? 0 })} />
       <Select label={t('expenses.kind')} value={x.kind} onChange={(e) => set({ kind: e.target.value as Expense['kind'] })}>
@@ -131,6 +133,7 @@ export function Expenses() {
   const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const { data, remove, profile } = useStore();
+  const { categories } = useCatalog();
   const today = useToday();
   const f = useFormat();
   const [tab, setTab] = useState<'expenses' | 'fixed'>(params.get('tab') === 'fixed' ? 'fixed' : 'expenses');
@@ -179,7 +182,7 @@ export function Expenses() {
           <div className="max-w-xs">
             <Select label={t('common.filter')} value={cat} onChange={(e) => setCat(e.target.value)}>
               <option value="">{t('common.allCategories')}</option>
-              {EXPENSE_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{f.category(c.id)}</option>)}
+              {categories.map((c) => <option key={c.id} value={c.id}>{f.category(c.id)}</option>)}
             </Select>
           </div>
           {list.length === 0 ? (

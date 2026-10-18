@@ -22,6 +22,11 @@ interface Store {
   dataset: DataSet | null;
   locale: string;
   error: string | null;
+  /** Platform administrator (decided server-side). */
+  isAdmin: boolean;
+  /** Last failed write (shown as a banner); cleared on the next success or dismissal. */
+  actionError: string | null;
+  clearActionError: () => void;
   startLocal: () => Promise<void>;
   startDemo: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -42,6 +47,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<UserData>(emptyData());
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  /** Runs a write; failures are surfaced to the user and re-thrown so forms stay open. */
+  const guarded = useCallback(async <T,>(fn: () => Promise<T>): Promise<T> => {
+    try {
+      const r = await fn();
+      setActionError(null);
+      return r;
+    } catch (e) {
+      setActionError((e as Error).message || String(e));
+      throw e;
+    }
+  }, []);
 
   const load = useCallback(async (r: Repository) => {
     try {
@@ -50,6 +68,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (d.profile) d.profile = normalizeProfile(d.profile);
       setData(d);
       if (d.profile) await i18n.changeLanguage(d.profile.language);
+      if (r.mode === 'supabase' && supabase) {
+        const { data: admin } = await supabase.rpc('is_admin');
+        setIsAdmin(!!admin);
+      } else setIsAdmin(false);
     } catch (e) {
       setError((e as Error).message);
     }
@@ -128,17 +150,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const saveProfile = useCallback(
     async (p: Profile) => {
       if (!repo) return;
-      await repo.saveProfile(p);
+      await guarded(() => repo.saveProfile(p));
       setData((d) => ({ ...d, profile: p }));
       if (i18n.language !== p.language) await i18n.changeLanguage(p.language);
     },
-    [repo],
+    [repo, guarded],
   );
 
   const upsert = useCallback(
     async <K extends EntityKind>(kind: K, e: EntityMap[K]) => {
       if (!repo) return;
-      await repo.upsert(kind, e);
+      await guarded(() => repo.upsert(kind, e));
       setData((d) => {
         const list = d[kind] as unknown as EntityMap[K][];
         const i = list.findIndex((x) => x.id === e.id);
@@ -146,16 +168,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return { ...d, [kind]: next };
       });
     },
-    [repo],
+    [repo, guarded],
   );
 
   const remove = useCallback(
     async (kind: EntityKind, id: string) => {
       if (!repo) return;
-      await repo.remove(kind, id);
+      await guarded(() => repo.remove(kind, id));
       setData((d) => ({ ...d, [kind]: (d[kind] as { id: string }[]).filter((x) => x.id !== id) }));
     },
-    [repo],
+    [repo, guarded],
   );
 
   const deleteAccount = useCallback(async () => {
@@ -191,6 +213,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dataset,
     locale,
     error,
+    isAdmin,
+    actionError,
+    clearActionError: () => setActionError(null),
     startLocal,
     startDemo,
     signOut,

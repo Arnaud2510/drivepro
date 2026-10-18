@@ -8,11 +8,11 @@ import { Card, Money, Notice, PageHeader, Stat, Badge, useMoney } from '../compo
 import { BreakdownBars, Progress, RevenueCostChart } from '../components/charts';
 import { computePeriod, projectMonth } from '../lib/finance/engine';
 import { addDays, monthStart } from '../lib/dates';
-import { computeAlerts } from '../lib/alerts';
+import { useNotificationText, useNotifications } from '../data/notifications';
 
 export function Dashboard() {
   const { t } = useTranslation();
-  const { profile, dataset, results, data, error } = useStore();
+  const { profile, dataset, results, error } = useStore();
   const today = useToday();
   const f = useFormat();
   const { fmt } = useMoney();
@@ -20,7 +20,10 @@ export function Dashboard() {
   const todayR = results.find((r) => r.date === today);
   const month = useMemo(() => (dataset ? computePeriod(dataset, monthStart(today), today) : null), [dataset, today]);
   const projection = useMemo(() => (dataset ? projectMonth(dataset, today, 'pace', profile?.monthlyGoal ?? null) : null), [dataset, today, profile]);
-  const alerts = useMemo(() => (profile ? computeAlerts(profile, data, results, today, projection) : []), [profile, data, results, today, projection]);
+  const { current } = useNotifications();
+  const text = useNotificationText();
+  // Summaries and the entry reminder live in the notification centre / today card.
+  const alerts = current.filter((a) => a.kind !== 'dailyReminder' && !a.kind.endsWith('Summary'));
 
   const last7 = useMemo(() => {
     const out = [];
@@ -59,20 +62,11 @@ export function Dashboard() {
       />
       {error && <Notice tone="loss">{t('errors.loadFailed', { message: error })}</Notice>}
 
-      {alerts.some((a) => a.kind !== 'dailyReminder') && (
+      {alerts.length > 0 && (
         <ul className="space-y-2" aria-label={t('alerts.title')}>
-          {alerts.filter((a) => a.kind !== 'dailyReminder').slice(0, 4).map((a, i) => (
-            <li key={i}>
-              <Notice tone={a.tone}>
-                {t(`alerts.${a.kind}`, {
-                  ...a.params,
-                  gap: typeof a.params.gap === 'number' ? fmt(a.params.gap) : undefined,
-                  amount: typeof a.params.amount === 'number' ? fmt(a.params.amount) : undefined,
-                  category: a.params.category ? f.category(String(a.params.category)) : undefined,
-                  doc: a.params.doc ? t(`alerts.docs.${a.params.doc}`) : undefined,
-                  date: a.params.date ? f.date(String(a.params.date)) : undefined,
-                })}
-              </Notice>
+          {alerts.slice(0, 4).map((a) => (
+            <li key={a.key}>
+              <Notice tone={a.tone}>{text(a)}</Notice>
             </li>
           ))}
         </ul>

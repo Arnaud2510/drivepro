@@ -46,6 +46,8 @@ export interface Profile {
   taxProvisionPct: number | null;
   taxNote: string;
   notificationPrefs: Record<AlertKind, boolean>;
+  /** Local time (HH:MM) of the daily entry reminder sent by push. */
+  reminderTime: string;
   onboarded: boolean;
 }
 

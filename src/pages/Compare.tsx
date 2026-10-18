@@ -50,7 +50,7 @@ export function Compare() {
                     <XAxis type="number" tick={{ fontSize: 12 }} tickFormatter={(v) => f.perHour(v)} />
                     <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 12 }} />
                     <Tooltip formatter={(v: number) => f.perHour(v)} />
-                    <Bar dataKey="v" name={t('dashboard.perHour')} radius={[0, 4, 4, 0]} maxBarSize={28}>
+                    <Bar isAnimationActive={false} dataKey="v" name={t('dashboard.perHour')} radius={[0, 4, 4, 0]} maxBarSize={28}>
                       {sufficient.map((r, i) => <Cell key={i} fill={(r.profitPerHour ?? 0) >= 0 ? GAIN : LOSS} />)}
                     </Bar>
                   </BarChart>

@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import { useStore, defaultProfile } from '../data/store';
 import { newId } from '../data/repository';
-import { ACTIVITIES, COUNTRIES, CURRENCIES, FUEL_TYPES, LANGUAGES, PLATFORM_CATALOG, VEHICLE_TYPES, countryByCode } from '../config/catalog';
+import { ACTIVITIES, CURRENCIES, FUEL_TYPES, LANGUAGES, VEHICLE_TYPES } from '../config/catalog';
+import { useCatalog } from '../data/catalog';
 import type { FuelType, Lang, Profile, Vehicle, VehicleType } from '../domain/types';
 import { Button, Input, MoneyInput, Notice, NumberInput, Select, cx } from '../components/ui';
 import { Logo } from '../components/Logo';
 import { ModeBanner } from '../components/Layout';
+import { takeReturn } from '../lib/returnTo';
 
 const STEPS = ['profile', 'activity', 'platforms', 'vehicle', 'finance'] as const;
 
@@ -16,6 +18,7 @@ export function Onboarding() {
   const { t, i18n } = useTranslation();
   const nav = useNavigate();
   const { profile: existing, session, saveProfile, upsert, data } = useStore();
+  const { countries: COUNTRIES, platforms: PLATFORM_CATALOG, countryByCode } = useCatalog();
   const [step, setStep] = useState(0);
   const [p, setP] = useState<Profile>(() => existing ?? { ...defaultProfile(session?.user.id ?? 'local'), language: i18n.language.slice(0, 2) as Lang });
   const [selected, setSelected] = useState<Record<string, number | null>>({});
@@ -44,7 +47,7 @@ export function Onboarding() {
         await upsert('vehicles', v);
       }
       await saveProfile({ ...p, onboarded: true });
-      nav('/app');
+      nav(takeReturn());
     } finally {
       setSaving(false);
     }
@@ -85,7 +88,7 @@ export function Onboarding() {
               >
                 {COUNTRIES.map((c) => (
                   <option key={c.code} value={c.code}>
-                    {t(`countries.${c.code}`)}
+                    {t(`countries.${c.code}`, { defaultValue: c.code })}
                   </option>
                 ))}
               </Select>
@@ -139,7 +142,7 @@ export function Onboarding() {
               <h2 className="text-xl font-bold text-brand-900">{t('onboarding.platformsQ')}</h2>
               <Notice>{t('onboarding.platformsNotice')}</Notice>
               {[
-                { title: t('onboarding.suggested', { country: t(`countries.${p.countryCode}`) }), list: PLATFORM_CATALOG.filter((c) => suggested.includes(c.id)) },
+                { title: t('onboarding.suggested', { country: t(`countries.${p.countryCode}`, { defaultValue: p.countryCode }) }), list: PLATFORM_CATALOG.filter((c) => suggested.includes(c.id)) },
                 { title: t('onboarding.otherPlatforms'), list: others },
               ].map((g) => (
                 <div key={g.title}>

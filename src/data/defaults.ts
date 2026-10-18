@@ -22,6 +22,7 @@ export function defaultProfile(id: string, countryCode = 'FR'): Profile {
     taxProvisionPct: null,
     taxNote: '',
     notificationPrefs: Object.fromEntries(ALERT_KINDS.map((k) => [k, true])) as Profile['notificationPrefs'],
+    reminderTime: '20:00',
     onboarded: false,
   };
 }

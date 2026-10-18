@@ -35,6 +35,51 @@ function fromRow<T>(row: Record<string, unknown>): T {
   return o as T;
 }
 
+/** PostgREST caps responses (1000 rows by default on Supabase): read every page. */
+async function fetchAll(sb: SupabaseClient, table: string, userId: string, order?: string): Promise<Record<string, unknown>[]> {
+  const PAGE = 1000;
+  const out: Record<string, unknown>[] = [];
+  for (let from = 0; ; from += PAGE) {
+    let q = sb.from(table).select('*').eq('user_id', userId);
+    q = q.order(order ?? 'id').order('id').range(from, from + PAGE - 1);
+    const { data, error } = await q;
+    if (error) throw new Error(error.message);
+    out.push(...(data as Record<string, unknown>[]));
+    if (!data || data.length < PAGE) return out;
+  }
+}
+
+/**
+ * Loads one user's data. Used for the signed-in driver and, through RLS, for drivers who
+ * consented to share their data with a fleet manager.
+ */
+export async function loadUserData(sb: SupabaseClient, userId: string): Promise<UserData> {
+  const [profile, vehicles, platforms, days, earnings, expenses, fixedCosts] = await Promise.all([
+    sb.from('user_profiles').select('*').eq('id', userId).maybeSingle(),
+    fetchAll(sb, 'vehicles', userId),
+    fetchAll(sb, 'user_platforms', userId),
+    fetchAll(sb, 'work_sessions', userId, 'date'),
+    fetchAll(sb, 'platform_earnings', userId),
+    fetchAll(sb, 'expenses', userId, 'date'),
+    fetchAll(sb, 'monthly_fixed_costs', userId),
+  ]);
+  if (profile.error) throw new Error(profile.error.message);
+  const bySession = new Map<string, Earning[]>();
+  for (const r of earnings) {
+    const sid = r.work_session_id as string;
+    bySession.set(sid, [...(bySession.get(sid) ?? []), fromRow<Earning>(r)]);
+  }
+  const p = profile.data as Record<string, unknown> | null;
+  return {
+    profile: p ? fromRow<Profile>(p) : null,
+    vehicles: vehicles.map((r) => fromRow(r)),
+    platforms: platforms.map((r) => fromRow(r)),
+    days: days.map((r) => ({ ...fromRow<WorkDay>(r), earnings: bySession.get(r.id as string) ?? [] })),
+    expenses: expenses.map((r) => fromRow(r)),
+    fixedCosts: fixedCosts.map((r) => fromRow(r)),
+  };
+}
+
 export class SupabaseRepository implements Repository {
   readonly mode = 'supabase' as const;
   constructor(private sb: SupabaseClient, private userId: string) {}
@@ -45,31 +90,7 @@ export class SupabaseRepository implements Repository {
   }
 
   async loadAll(): Promise<UserData> {
-    const q = (t: string) => this.sb.from(t).select('*').eq('user_id', this.userId);
-    const [profile, vehicles, platforms, days, earnings, expenses, fixedCosts] = await Promise.all([
-      this.sb.from('user_profiles').select('*').eq('id', this.userId).maybeSingle(),
-      q('vehicles'),
-      q('user_platforms'),
-      q('work_sessions').order('date'),
-      q('platform_earnings'),
-      q('expenses').order('date'),
-      q('monthly_fixed_costs'),
-    ]);
-    const earningRows = this.check(earnings) as Record<string, unknown>[];
-    const bySession = new Map<string, Earning[]>();
-    for (const r of earningRows) {
-      const sid = r.work_session_id as string;
-      bySession.set(sid, [...(bySession.get(sid) ?? []), fromRow<Earning>(r)]);
-    }
-    const p = this.check(profile) as Record<string, unknown> | null;
-    return {
-      profile: p ? fromRow<Profile>(p) : null,
-      vehicles: (this.check(vehicles) as Record<string, unknown>[]).map((r) => fromRow(r)),
-      platforms: (this.check(platforms) as Record<string, unknown>[]).map((r) => fromRow(r)),
-      days: (this.check(days) as Record<string, unknown>[]).map((r) => ({ ...fromRow<WorkDay>(r), earnings: bySession.get(r.id as string) ?? [] })),
-      expenses: (this.check(expenses) as Record<string, unknown>[]).map((r) => fromRow(r)),
-      fixedCosts: (this.check(fixedCosts) as Record<string, unknown>[]).map((r) => fromRow(r)),
-    };
+    return loadUserData(this.sb, this.userId);
   }
 
   async saveProfile(p: Profile) {

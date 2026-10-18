@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download, Trash2 } from 'lucide-react';
 import { useStore } from '../data/store';
-import { ALERT_KINDS, COUNTRIES, CURRENCIES, LANGUAGES, countryByCode } from '../config/catalog';
+import { ALERT_KINDS, CURRENCIES, LANGUAGES } from '../config/catalog';
+import { useCatalog } from '../data/catalog';
 import type { FixedCostMethod, Lang, Profile as P } from '../domain/types';
 import { Button, Card, Checkbox, Input, Notice, NumberInput, PageHeader, Select } from '../components/ui';
 import { download } from '../lib/csv';
@@ -12,6 +13,7 @@ export function Profile() {
   const { t } = useTranslation();
   const { profile, saveProfile, data, mode, session, deleteAccount } = useStore();
   const today = useToday();
+  const { countries, countryByCode } = useCatalog();
   const [p, setP] = useState<P | null>(profile);
   const [saved, setSaved] = useState(false);
   if (!p || !profile) return null;
@@ -36,7 +38,7 @@ export function Profile() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Input label={t('profile.displayName')} value={p.displayName} onChange={(e) => set({ displayName: e.target.value })} />
             <Select label={t('profile.country')} value={p.countryCode} onChange={(e) => set({ countryCode: e.target.value, timezone: countryByCode(e.target.value)?.timezone ?? p.timezone })}>
-              {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{t(`countries.${c.code}`)}</option>)}
+              {countries.map((c) => <option key={c.code} value={c.code}>{t(`countries.${c.code}`, { defaultValue: c.code })}</option>)}
             </Select>
             <Input label={t('profile.city')} value={p.city} onChange={(e) => set({ city: e.target.value })} />
           </div>

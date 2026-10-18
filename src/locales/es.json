@@ -16,7 +16,8 @@
     "fleet": "Flota",
     "admin": "Administración",
     "more": "Más",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "notifications": "Notificaciones"
   },
   "public": {
     "nav": {
@@ -72,7 +73,9 @@
     "saved": "Guardado",
     "search": "Buscar",
     "sortBy": "Ordenar por",
-    "operatingDisclaimer": "El beneficio operativo es un indicador de gestión calculado a partir de tus datos. No es un resultado contable ni fiscal oficial."
+    "operatingDisclaimer": "El beneficio operativo es un indicador de gestión calculado a partir de tus datos. No es un resultado contable ni fiscal oficial.",
+    "loading": "Cargando…",
+    "close": "Cerrar"
   },
   "errors": {
     "required": "Campo obligatorio.",
@@ -88,7 +91,9 @@
     "loadFailed": "No se pudieron cargar tus datos: {{message}}",
     "endBeforeStart": "La fecha de fin es anterior a la de inicio.",
     "fileTooLarge": "Archivo demasiado grande (10 MB máximo).",
-    "uploadFailed": "No se pudo subir el justificante."
+    "uploadFailed": "No se pudo subir el justificante.",
+    "actionFailed": "No se pudo guardar el cambio: {{message}}",
+    "suspended": "Esta cuenta está suspendida. Contacta con el soporte."
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -190,11 +195,11 @@
       },
       "alerts": {
         "title": "Alertas",
-        "text": "Alertas en la aplicación: objetivo, gasto inusual, mantenimiento, vencimientos. Notificaciones push y correo próximamente."
+        "text": "Centro de notificaciones, resúmenes semanales y mensuales, recordatorio diario por notificación push."
       },
       "fleet": {
         "title": "Gestión de flota",
-        "text": "Modelo de datos y reglas de acceso listos; interfaz del gestor en desarrollo."
+        "text": "Invitaciones, consentimiento del conductor, panel consolidado, rentabilidad de los vehículos y exportación."
       }
     }
   },
@@ -414,7 +419,8 @@
     "confirmDelete": "¿Eliminar esta jornada? Los gastos registrados en esta fecha se conservan.",
     "savedTitle": "Jornada guardada",
     "backToDashboard": "Volver al panel",
-    "noPlatforms": "Añade primero tus plataformas para encontrarlas aquí:"
+    "noPlatforms": "Añade primero tus plataformas para encontrarlas aquí:",
+    "saveFailed": "No se pudo guardar; tus datos siguen en pantalla. Comprueba tu conexión e inténtalo de nuevo. ({{message}})"
   },
   "payout": {
     "estimated": "Estimado",
@@ -461,7 +467,10 @@
     "documentsExpiry": "Vencimiento de documentos",
     "monthlyFixed": "Costes fijos / mes",
     "fixedCostsHint": "Seguro, cuotas de crédito o leasing, impuestos: añádelos en Gastos › Costes fijos asociándolos al vehículo.",
-    "twoWheelsHint": "Para una moto o scooter, suele estar entre 2 y 5 L/100 km."
+    "twoWheelsHint": "Para una moto o scooter, suele estar entre 2 y 5 L/100 km.",
+    "indicative": "Precio orientativo publicado: {{price}} — fuente: {{source}}, a {{date}}.",
+    "indicativeSource": "Ver la fuente",
+    "useIndicative": "Usar este precio"
   },
   "vehicleTypes": {
     "car": "Coche",
@@ -722,7 +731,7 @@
   "alerts": {
     "title": "Alertas",
     "prefs": "Alertas",
-    "inAppOnly": "Las alertas se muestran en la aplicación. Las notificaciones push y por correo aún no están disponibles.",
+    "inAppOnly": "Estas alertas aparecen en la aplicación y en el centro de notificaciones. El recordatorio diario también puede enviarse por notificación push.",
     "dailyReminder": "Todavía no has registrado tu jornada de hoy.",
     "dailyGoalReached": "¡Enhorabuena, objetivo diario alcanzado!",
     "monthlyGoalBehind": "A este ritmo, faltarían {{gap}} para alcanzar tu objetivo del mes.",
@@ -747,25 +756,200 @@
   "fleet": {
     "title": "Gestión de flota",
     "subtitle": "Varios conductores, varios vehículos, informes consolidados.",
-    "status": "La interfaz del gestor aún no está disponible.",
-    "readyTitle": "Ya disponible en el servidor",
-    "r1": "Organizaciones y roles (propietario, gestor, conductor).",
-    "r2": "Consentimiento explícito y revocable del conductor antes de compartir datos.",
-    "r3": "Reglas de acceso (RLS): un gestor solo ve a los conductores de su flota que han dado su consentimiento, en solo lectura.",
-    "nextTitle": "Próximos pasos",
-    "n1": "Invitación de conductores",
-    "n2": "Panel consolidado",
-    "n3": "Comparación de rentabilidad de los vehículos de la flota",
-    "n4": "Informes de flota"
+    "needsAccount": "La gestión de flota requiere una cuenta conectada: los datos de varios conductores deben compartirse de forma segura.",
+    "createTitle": "Crear una flota",
+    "createText": "¿Gestionas varios conductores o vehículos? Crea una flota e invita a tus conductores.",
+    "name": "Nombre de la flota",
+    "create": "Crear",
+    "createAnother": "Crear otra flota",
+    "tabDashboard": "Panel",
+    "tabMembers": "Conductores y accesos",
+    "roles": {
+      "owner": "Propietario",
+      "manager": "Gestor",
+      "driver": "Conductor"
+    },
+    "role": "Rol",
+    "driver": "Conductor",
+    "actions": "Acciones",
+    "dataSharing": "Compartir datos",
+    "lastMonth": "Mes pasado",
+    "lastActivity": "Última actividad",
+    "activeDrivers_one": "{{count}} conductor activo",
+    "activeDrivers_other": "{{count}} conductores activos",
+    "byDriver": "Por conductor",
+    "profitByDriver": "Beneficio por conductor",
+    "vehicles": "Rentabilidad de los vehículos",
+    "notSharing_one": "{{count}} conductor no ha autorizado compartir sus datos: no aparece en las cifras.",
+    "notSharing_other": "{{count}} conductores no han autorizado compartir sus datos: no aparecen en las cifras.",
+    "noSharedData": "Aún no hay datos compartidos",
+    "noSharedDataText": "Invita a tus conductores. Sus cifras aparecerán aquí cuando acepten compartirlas.",
+    "otherCurrencies": "Algunos conductores trabajan en {{currencies}}: se muestran aparte y no se suman a los totales en {{currency}} (sin conversión automática).",
+    "method": "Cada conductor se calcula con sus propios ajustes (costes fijos, modo de combustible). Los gestores solo tienen acceso de lectura.",
+    "invite": "Invitar a un conductor",
+    "createInvite": "Crear la invitación",
+    "inviteHint": "Se crea un enlace de invitación personal. Envíalo al conductor (SMS, WhatsApp, correo): debe iniciar sesión con esta dirección. Válido 14 días.",
+    "inviteCreated": "Invitación creada. Copia el enlace y envíalo:",
+    "inviteLink": "Enlace de invitación",
+    "copy": "Copiar",
+    "members_one": "{{count}} miembro",
+    "members_other": "{{count}} miembros",
+    "sharing": "Comparte desde el {{date}}",
+    "notSharingBadge": "No compartido",
+    "makeManager": "Nombrar gestor",
+    "makeDriver": "Volver a conductor",
+    "remove": "Retirar de la flota",
+    "confirmRemove": "¿Retirar a {{name}} de la flota? Ya no tendrás acceso a sus datos.",
+    "consentExplain": "Solo el conductor puede autorizar o retirar el acceso a sus datos. Sin su consentimiento solo ves su nombre y su correo.",
+    "invites": "Invitaciones",
+    "revoke": "Revocar",
+    "inviteStatus": {
+      "pending": "Pendiente",
+      "expired": "Caducada",
+      "accepted": "Aceptada"
+    },
+    "myFleets": "Flotas de las que formo parte",
+    "shareMyData": "Compartir mis ingresos, gastos y kilómetros con los gestores de «{{org}}»",
+    "shareHint": "Solo lectura. Puedes retirar esta autorización en cualquier momento.",
+    "sharingSince": "Compartido desde el {{date}}.",
+    "leave": "Salir de la flota",
+    "confirmLeave": "¿Salir de «{{org}}»? Los gestores ya no tendrán acceso a tus datos.",
+    "joinTitle": "Unirse a una flota",
+    "joinText": "Te invitan a unirte a «{{org}}» como {{role}}.",
+    "accept": "Unirme",
+    "inviteInvalid": {
+      "not_found": "Esta invitación no existe o fue revocada.",
+      "used": "Esta invitación ya se ha utilizado.",
+      "expired": "Esta invitación ha caducado. Pide una nueva a tu gestor.",
+      "wrong_email": "Esta invitación se envió a {{email}}, pero has iniciado sesión como {{current}}."
+    }
   },
   "admin": {
     "title": "Administración",
-    "status": "La consola de edición (países, monedas, plataformas, traducciones, suscripciones) está en desarrollo. Las tablas y los permisos están listos.",
     "needsAccount": "La administración requiere una cuenta conectada con rol de administrador, asignado en el servidor.",
     "denied": "Acceso denegado: tu cuenta no tiene el rol de administrador.",
-    "stats": "Estadísticas agregadas",
-    "countries": "Países configurados",
-    "platforms": "Catálogo de plataformas",
-    "noTariffs": "No se almacena ninguna comisión ni precio de combustible oficial. Todo valor orientativo añadido debe estar fechado y tener fuente."
+    "subtitle": "Referencias, cuentas y estadísticas agregadas. Todas las acciones quedan registradas.",
+    "tabs": {
+      "overview": "Resumen",
+      "users": "Usuarios",
+      "reference": "Referencias",
+      "translations": "Traducciones",
+      "audit": "Registro"
+    },
+    "kpi": {
+      "users": "Cuentas",
+      "onboarded_one": "{{count}} configurada",
+      "onboarded_other": "{{count}} configuradas",
+      "active7": "Activos (7 días)",
+      "active30_one": "{{count}} activo en 30 días",
+      "active30_other": "{{count}} activos en 30 días",
+      "sessions30": "Jornadas registradas (30 días)",
+      "orgs": "Flotas",
+      "push_one": "{{count}} dispositivo push",
+      "push_other": "{{count}} dispositivos push"
+    },
+    "byCountry": "Cuentas por país",
+    "byLanguage": "Cuentas por idioma",
+    "byPlan": "Suscripciones activas",
+    "planNote": "Las cuentas sin suscripción están en el plan Gratis.",
+    "organizations": "Flotas",
+    "members": "Miembros",
+    "sharing": "Comparten",
+    "aggregatedOnly": "Los administradores solo ven estadísticas agregadas, nunca los datos financieros de un conductor.",
+    "usersPrivacy": "Esta lista no contiene datos financieros. Desde la administración no se puede acceder a las finanzas de un conductor.",
+    "createdAt": "Alta",
+    "lastSignIn": "Último acceso",
+    "plan": "Plan",
+    "status": "Estado",
+    "suspended": "Suspendido",
+    "notOnboarded": "Sin configurar",
+    "grantAdmin": "Hacer admin",
+    "revokeAdmin": "Quitar admin",
+    "suspend": "Suspender",
+    "reactivate": "Reactivar",
+    "confirmSuspend": "¿Suspender a {{email}}? No podrá iniciar sesión; sus datos se conservan.",
+    "confirmReactivate": "¿Reactivar a {{email}}?",
+    "pageOf": "{{from}}–{{to}} de {{total}}",
+    "table": "Tabla",
+    "tables": {
+      "countries": "Países",
+      "currencies": "Monedas",
+      "cities": "Ciudades",
+      "transport_platforms": "Plataformas",
+      "platform_countries": "Plataformas por país",
+      "expense_categories": "Categorías de gastos",
+      "fuel_prices": "Precios del combustible",
+      "energy_prices": "Precios de la electricidad",
+      "subscription_plans": "Planes de suscripción",
+      "app_settings": "Ajustes generales"
+    },
+    "hints": {
+      "countries": "Para un país nuevo, añade también su nombre en la pestaña Traducciones (clave countries.CÓDIGO) y su moneda si no existe.",
+      "sourced": "Todo precio o tasa orientativa debe tener fecha y fuente. Nunca se aplica automáticamente: el conductor decide usarlo.",
+      "categories": "Para una categoría nueva, añade su etiqueta en la pestaña Traducciones (clave categories.ID)."
+    },
+    "required": "El campo «{{field}}» es obligatorio.",
+    "invalid": "Valor no válido para «{{field}}».",
+    "invalidJson": "JSON no válido para «{{field}}».",
+    "rowCount_one": "{{count}} fila",
+    "rowCount_other": "{{count}} filas",
+    "translationsHint": "Sustituye un texto de la interfaz sin volver a desplegar, o añade la etiqueta de un país o una categoría nuevos.",
+    "searchKey": "Buscar una clave o un texto",
+    "newKey": "Crear la clave «{{key}}»",
+    "defaultText": "Texto por defecto",
+    "override": "Texto personalizado ({{lang}})",
+    "activeOverrides_one": "{{count}} texto personalizado",
+    "activeOverrides_other": "{{count}} textos personalizados",
+    "overrideReload": "Los usuarios verán el nuevo texto la próxima vez que se cargue la aplicación.",
+    "action": "Acción",
+    "target": "Objetivo",
+    "actor": "Autor",
+    "searchUsers": "correo o nombre"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "bellLabel_one": "Notificaciones: {{count}} sin leer",
+    "bellLabel_other": "Notificaciones: {{count}} sin leer",
+    "unread_one": "{{count}} sin leer",
+    "unread_other": "{{count}} sin leer",
+    "markAllRead": "Marcar todo como leído",
+    "markRead": "Marcar como leído",
+    "new": "Nuevo",
+    "now": "Ahora",
+    "empty": "Ninguna notificación",
+    "emptyText": "Aquí aparecerán las alertas y los resúmenes semanales y mensuales.",
+    "weeklySummary_one": "Semana del {{from}} al {{to}}: beneficio {{profit}} en {{count}} día trabajado.",
+    "weeklySummary_other": "Semana del {{from}} al {{to}}: beneficio {{profit}} en {{count}} días trabajados.",
+    "monthlySummary_one": "Balance de {{month}}: beneficio {{profit}}, facturación {{revenue}}, {{count}} día trabajado.",
+    "monthlySummary_other": "Balance de {{month}}: beneficio {{profit}}, facturación {{revenue}}, {{count}} días trabajados.",
+    "delta": "{{pct}} % respecto al periodo anterior",
+    "goalPct": "{{pct}} % del objetivo mensual",
+    "kinds": {
+      "dailyReminder": "Recordatorio",
+      "unusualExpense": "Gasto inusual",
+      "dailyGoalReached": "Objetivo alcanzado",
+      "monthlyGoalBehind": "Objetivo del mes",
+      "hourlyDecline": "Rentabilidad por hora",
+      "maintenanceDue": "Mantenimiento",
+      "documentExpiry": "Vencimiento",
+      "weeklySummary": "Resumen semanal",
+      "monthlySummary": "Resumen mensual"
+    },
+    "pushTitle": "Recordatorios en este teléfono",
+    "pushIntro": "Recibe cada tarde un recordatorio si aún no has registrado tu jornada, incluso con la aplicación cerrada.",
+    "pushNeedsAccount": "Los recordatorios push requieren una cuenta conectada.",
+    "pushState": {
+      "unsupported": "Este navegador no admite notificaciones push.",
+      "not_configured": "Las notificaciones push aún no están configuradas en este servidor.",
+      "denied": "Notificaciones bloqueadas en los ajustes del navegador.",
+      "off": "Recordatorios desactivados en este dispositivo.",
+      "on": "Recordatorios activados en este dispositivo."
+    },
+    "enablePush": "Activar recordatorios",
+    "disablePush": "Desactivar en este dispositivo",
+    "reminderTime": "Hora del recordatorio",
+    "reminderHint": "Hora local ({{tz}}). El recordatorio solo se envía si la jornada aún no está registrada.",
+    "pushFailed": "No se pudieron activar los recordatorios: {{message}}",
+    "prefsHint": "Elige los tipos de alertas en tu"
   }
 }

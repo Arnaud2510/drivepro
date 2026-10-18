@@ -4,7 +4,7 @@ import { Layers, Pencil, Plus, Archive } from 'lucide-react';
 import { useStore } from '../data/store';
 import { newId } from '../data/repository';
 import type { UserPlatform } from '../domain/types';
-import { PLATFORM_CATALOG, countryByCode } from '../config/catalog';
+import { useCatalog } from '../data/catalog';
 import { Badge, Button, Card, EmptyState, Input, Notice, NumberInput, PageHeader, Select } from '../components/ui';
 
 const blank = (): UserPlatform => ({ id: newId(), name: '', catalogId: null, commissionPct: null, notes: '', active: true });
@@ -14,6 +14,7 @@ export function Platforms() {
   const { data, upsert, profile } = useStore();
   const [editing, setEditing] = useState<UserPlatform | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { platforms: PLATFORM_CATALOG, countryByCode } = useCatalog();
   const suggested = countryByCode(profile?.countryCode ?? '')?.suggestedPlatforms ?? [];
 
   return (
