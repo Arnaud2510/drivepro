@@ -9,6 +9,8 @@ import { addDays, monthEnd, monthStart, weekStart } from '../lib/dates';
 import { toMajor, currencyDigits } from '../lib/money';
 import { toCSV, download } from '../lib/csv';
 import { APP_NAME } from '../components/Logo';
+import { IS_PREVIEW } from '../config/env';
+import { Notice } from '../components/ui';
 
 type Kind = 'day' | 'week' | 'month' | 'year' | 'custom';
 
@@ -75,11 +77,16 @@ export function Reports() {
         subtitle={`${f.date(from)} → ${f.date(to)}`}
         actions={
           <>
-            <Button variant="secondary" onClick={exportCSV}><Download className="h-4 w-4" aria-hidden /> CSV / Excel</Button>
-            <Button variant="secondary" onClick={() => window.print()}><Printer className="h-4 w-4" aria-hidden /> {t('reports.pdf')}</Button>
+            {!IS_PREVIEW && (
+              <>
+                <Button variant="secondary" onClick={exportCSV}><Download className="h-4 w-4" aria-hidden /> CSV / Excel</Button>
+                <Button variant="secondary" onClick={() => window.print()}><Printer className="h-4 w-4" aria-hidden /> {t('reports.pdf')}</Button>
+              </>
+            )}
           </>
         }
       />
+      {IS_PREVIEW && <Notice>{t('preview.exportsDisabled')}</Notice>}
       <Card className="no-print">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Select label={t('reports.kind')} value={kind} onChange={(e) => setKind(e.target.value as Kind)}>

@@ -75,7 +75,9 @@
     "sortBy": "Ordina per",
     "operatingDisclaimer": "L'utile operativo è un indicatore di gestione calcolato dai tuoi inserimenti. Non è un risultato contabile né fiscale ufficiale.",
     "loading": "Caricamento…",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "confirm": "Conferma",
+    "typeToConfirm": "Digita {{word}} per confermare"
   },
   "errors": {
     "required": "Campo obbligatorio.",
@@ -303,7 +305,7 @@
     "exportData": "Esporta i miei dati",
     "deleteAccount": "Elimina il mio account",
     "deleteLocal": "Cancella i dati di questo dispositivo",
-    "deleteConfirm": "L'operazione è irreversibile. Digita DELETE per confermare."
+    "deleteConfirm": "L'operazione è irreversibile."
   },
   "settings": {
     "title": "Lingua, valuta e calcoli",
@@ -951,5 +953,9 @@
     "reminderHint": "Ora locale ({{tz}}). Il promemoria viene inviato solo se la giornata non è ancora stata inserita.",
     "pushFailed": "Impossibile attivare i promemoria: {{message}}",
     "prefsHint": "Scegli i tipi di avvisi nel tuo"
+  },
+  "preview": {
+    "banner": "Anteprima beta: i tuoi dati restano in questo browser. Account, flotta, amministrazione e promemoria push richiedono la versione ospitata.",
+    "exportsDisabled": "In questa anteprima l'host blocca le esportazioni CSV e PDF. Funzionano nella versione pubblicata."
   }
 }

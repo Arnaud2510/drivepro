@@ -8,11 +8,14 @@ import type { FixedCostMethod, Lang, Profile as P } from '../domain/types';
 import { Button, Card, Checkbox, Input, Notice, NumberInput, PageHeader, Select } from '../components/ui';
 import { download } from '../lib/csv';
 import { useToday } from '../components/hooks';
+import { useConfirm } from '../components/confirm';
+import { IS_PREVIEW } from '../config/env';
 
 export function Profile() {
   const { t } = useTranslation();
   const { profile, saveProfile, data, mode, session, deleteAccount } = useStore();
   const today = useToday();
+  const ask = useConfirm();
   const { countries, countryByCode } = useCatalog();
   const [p, setP] = useState<P | null>(profile);
   const [saved, setSaved] = useState(false);
@@ -80,13 +83,15 @@ export function Profile() {
       <Card title={t('profile.privacy')}>
         <p className="text-sm text-slate-600">{t('profile.privacyText')}</p>
         <div className="mt-4 flex flex-wrap gap-2">
+          {!IS_PREVIEW && (
           <Button variant="secondary" onClick={() => download(`drivepro-export-${today}.json`, JSON.stringify(data, null, 2), 'application/json')}>
             <Download className="h-4 w-4" aria-hidden /> {t('profile.exportData')}
           </Button>
+          )}
           <Button
             variant="danger"
             onClick={async () => {
-              if (prompt(t('profile.deleteConfirm')) === 'DELETE') await deleteAccount();
+              if (await ask({ message: t('profile.deleteConfirm'), danger: true, requireText: 'DELETE', confirmLabel: mode === 'supabase' ? t('profile.deleteAccount') : t('profile.deleteLocal') })) await deleteAccount();
             }}
           >
             <Trash2 className="h-4 w-4" aria-hidden /> {mode === 'supabase' ? t('profile.deleteAccount') : t('profile.deleteLocal')}

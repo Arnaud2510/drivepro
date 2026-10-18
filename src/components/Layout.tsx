@@ -19,6 +19,7 @@ import {
   Bell,
 } from 'lucide-react';
 import { useNotifications } from '../data/notifications';
+import { IS_PREVIEW } from '../config/env';
 import { useStore } from '../data/store';
 import { cx } from './ui';
 import { Logo } from './Logo';
@@ -43,9 +44,16 @@ const moreNav: { to: string; icon: typeof User; key: string; end?: boolean; admi
   { to: '/app/admin', icon: ShieldCheck, key: 'nav.admin', adminOnly: true },
 ];
 
+export function PreviewBanner() {
+  const { t } = useTranslation();
+  if (!IS_PREVIEW) return null;
+  return <div className="no-print bg-brand-900 px-4 py-2 text-center text-xs text-white">{t('preview.banner')}</div>;
+}
+
 export function ModeBanner() {
   const { mode, signOut } = useStore();
   const { t } = useTranslation();
+  if (IS_PREVIEW && mode !== 'demo') return <PreviewBanner />;
   if (mode === 'demo')
     return (
       <div className="no-print flex flex-wrap items-center justify-center gap-2 bg-warn-bg px-4 py-2 text-center text-sm font-medium text-warn">

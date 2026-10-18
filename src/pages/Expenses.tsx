@@ -7,6 +7,7 @@ import { newId } from '../data/repository';
 import type { Expense, FixedCost, PaymentMethod } from '../domain/types';
 import { FIXED_COST_CATEGORIES } from '../config/catalog';
 import { useCatalog } from '../data/catalog';
+import { useConfirm } from '../components/confirm';
 import { Badge, Button, Card, EmptyState, Input, Money, MoneyInput, Notice, PageHeader, Select, Toggle, useMoney } from '../components/ui';
 import { useFormat, useToday } from '../components/hooks';
 import { isEnergyCategory } from '../domain/types';
@@ -134,6 +135,7 @@ export function Expenses() {
   const [params, setParams] = useSearchParams();
   const { data, remove, profile } = useStore();
   const { categories } = useCatalog();
+  const ask = useConfirm();
   const today = useToday();
   const f = useFormat();
   const [tab, setTab] = useState<'expenses' | 'fixed'>(params.get('tab') === 'fixed' ? 'fixed' : 'expenses');
@@ -203,7 +205,7 @@ export function Expenses() {
                     <div className="flex items-center gap-1">
                       <Money value={x.amount} className="font-semibold" />
                       <Button variant="ghost" aria-label={t('common.edit')} onClick={() => setEditing(x)}><Pencil className="h-4 w-4" /></Button>
-                      <Button variant="ghost" aria-label={t('common.delete')} onClick={() => confirm(t('common.confirmDelete')) && remove('expenses', x.id)}><Trash2 className="h-4 w-4" /></Button>
+                      <Button variant="ghost" aria-label={t('common.delete')} onClick={async () => (await ask({ message: t('common.confirmDelete'), danger: true, confirmLabel: t('common.delete') })) && remove('expenses', x.id)}><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </li>
                 ))}
@@ -237,7 +239,7 @@ export function Expenses() {
                     <div className="flex items-center gap-1">
                       <span className="text-sm font-semibold"><Money value={c.monthlyAmount} />/{t('common.monthShort')}</span>
                       <Button variant="ghost" aria-label={t('common.edit')} onClick={() => setEditingFixed(c)}><Pencil className="h-4 w-4" /></Button>
-                      <Button variant="ghost" aria-label={t('common.delete')} onClick={() => confirm(t('common.confirmDelete')) && remove('fixedCosts', c.id)}><Trash2 className="h-4 w-4" /></Button>
+                      <Button variant="ghost" aria-label={t('common.delete')} onClick={async () => (await ask({ message: t('common.confirmDelete'), danger: true, confirmLabel: t('common.delete') })) && remove('fixedCosts', c.id)}><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </li>
                 ))}

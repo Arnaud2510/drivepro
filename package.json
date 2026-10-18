@@ -14,7 +14,8 @@
     "e2e:fleet": "node e2e/fleet.mjs",
     "e2e:admin": "node e2e/admin.mjs",
     "e2e:push": "node e2e/push.mjs",
-    "e2e:sw": "node e2e/service-worker.mjs"
+    "e2e:sw": "node e2e/service-worker.mjs",
+    "build:preview": "vite build --mode preview --base ./ --outDir dist-preview"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.2",

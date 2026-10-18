@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Logo, APP_NAME } from './Logo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { cx } from './ui';
+import { PreviewBanner } from './Layout';
 
 export function PublicLayout() {
   const { t } = useTranslation();
   const link = ({ isActive }: { isActive: boolean }) => cx('rounded-lg px-3 py-2 text-sm font-medium', isActive ? 'text-brand-900' : 'text-slate-600 hover:text-brand-900');
   return (
     <div className="flex min-h-dvh flex-col bg-white">
+      <PreviewBanner />
       <header className="sticky top-0 z-20 border-b border-slate-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3">
           <Link to="/">

@@ -75,7 +75,9 @@
     "sortBy": "Trier par",
     "operatingDisclaimer": "Le bénéfice opérationnel est un indicateur de gestion calculé à partir de vos saisies. Ce n'est ni un résultat comptable ni un résultat fiscal officiel.",
     "loading": "Chargement…",
-    "close": "Fermer"
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "typeToConfirm": "Tapez {{word}} pour confirmer"
   },
   "errors": {
     "required": "Champ obligatoire.",
@@ -303,7 +305,7 @@
     "exportData": "Exporter mes données",
     "deleteAccount": "Supprimer mon compte",
     "deleteLocal": "Effacer les données de cet appareil",
-    "deleteConfirm": "Cette action est irréversible. Tapez DELETE pour confirmer."
+    "deleteConfirm": "Cette action est irréversible."
   },
   "settings": {
     "title": "Langue, devise et calculs",
@@ -951,5 +953,9 @@
     "reminderHint": "Heure locale ({{tz}}). Le rappel n'est envoyé que si la journée n'est pas encore saisie.",
     "pushFailed": "Impossible d'activer les rappels : {{message}}",
     "prefsHint": "Choisissez les types d'alertes dans votre"
+  },
+  "preview": {
+    "banner": "Version bêta d'aperçu : vos données restent dans ce navigateur. Les comptes, la flotte, l'administration et les rappels push nécessitent la version hébergée.",
+    "exportsDisabled": "Dans cet aperçu, les exports CSV et PDF sont désactivés par l'hébergeur. Ils fonctionnent dans la version déployée."
   }
 }

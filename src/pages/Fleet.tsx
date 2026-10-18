@@ -8,6 +8,7 @@ import { fleetApi, type Invite, type InvitePreview, type Membership, type Roster
 import { Badge, Button, Card, Checkbox, EmptyState, Input, Notice, PageHeader, Select, Stat, Toggle, cx } from '../components/ui';
 import { ProfitBars } from '../components/charts';
 import { useToday } from '../components/hooks';
+import { useConfirm } from '../components/confirm';
 import { CURRENCIES } from '../config/catalog';
 import { computeFleet, type DriverData, type FleetResult } from '../lib/fleet';
 import { normalizeProfile } from '../data/defaults';
@@ -190,6 +191,7 @@ function FleetDashboard({ org, roster }: { org: Membership; roster: RosterEntry[
 
 function FleetMembers({ org, roster, reload }: { org: Membership; roster: RosterEntry[]; reload: () => void }) {
   const { t } = useTranslation();
+  const ask = useConfirm();
   const { session, locale } = useStore();
   const api = useFleetApi();
   const [invites, setInvites] = useState<Invite[]>([]);
@@ -297,7 +299,7 @@ function FleetMembers({ org, roster, reload }: { org: Membership; roster: Roster
                         <Button
                           variant="ghost"
                           aria-label={t('fleet.remove')}
-                          onClick={() => confirm(t('fleet.confirmRemove', { name: m.displayName || m.email })) && guard(() => api!.removeMember(org.organizationId, m.userId))}
+                          onClick={async () => (await ask({ message: t('fleet.confirmRemove', { name: m.displayName || m.email }), danger: true, confirmLabel: t('fleet.remove') })) && guard(() => api!.removeMember(org.organizationId, m.userId))}
                         >
                           <Trash2 className="h-4 w-4" aria-hidden />
                         </Button>
@@ -382,6 +384,7 @@ function CreateFleet({ onCreated }: { onCreated: () => void }) {
 
 export function Fleet() {
   const { t } = useTranslation();
+  const ask = useConfirm();
   const { mode, locale } = useStore();
   const api = useFleetApi();
   const [memberships, setMemberships] = useState<Membership[] | null>(null);
@@ -481,7 +484,7 @@ export function Fleet() {
                     <Button
                       variant="ghost"
                       onClick={async () => {
-                        if (!confirm(t('fleet.confirmLeave', { org: m.organizationName }))) return;
+                        if (!(await ask({ message: t('fleet.confirmLeave', { org: m.organizationName }), danger: true, confirmLabel: t('fleet.leave') }))) return;
                         await api!.leave(m.organizationId);
                         load();
                       }}

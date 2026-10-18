@@ -75,7 +75,9 @@
     "sortBy": "Ordenar por",
     "operatingDisclaimer": "O lucro operacional é um indicador de gestão calculado a partir dos seus registos. Não é um resultado contabilístico nem fiscal oficial.",
     "loading": "A carregar…",
-    "close": "Fechar"
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "typeToConfirm": "Escreva {{word}} para confirmar"
   },
   "errors": {
     "required": "Campo obrigatório.",
@@ -303,7 +305,7 @@
     "exportData": "Exportar os meus dados",
     "deleteAccount": "Eliminar a minha conta",
     "deleteLocal": "Apagar os dados deste dispositivo",
-    "deleteConfirm": "Esta ação é irreversível. Escreva DELETE para confirmar."
+    "deleteConfirm": "Esta ação é irreversível."
   },
   "settings": {
     "title": "Língua, moeda e cálculos",
@@ -951,5 +953,9 @@
     "reminderHint": "Hora local ({{tz}}). O lembrete só é enviado se o dia ainda não estiver registado.",
     "pushFailed": "Não foi possível ativar os lembretes: {{message}}",
     "prefsHint": "Escolha os tipos de alertas no seu"
+  },
+  "preview": {
+    "banner": "Versão beta de pré-visualização: os seus dados ficam neste navegador. Contas, frota, administração e lembretes push requerem a versão alojada.",
+    "exportsDisabled": "Nesta pré-visualização, as exportações CSV e PDF estão bloqueadas pelo alojamento. Funcionam na versão publicada."
   }
 }

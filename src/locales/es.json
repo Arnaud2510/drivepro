@@ -75,7 +75,9 @@
     "sortBy": "Ordenar por",
     "operatingDisclaimer": "El beneficio operativo es un indicador de gestión calculado a partir de tus datos. No es un resultado contable ni fiscal oficial.",
     "loading": "Cargando…",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "typeToConfirm": "Escribe {{word}} para confirmar"
   },
   "errors": {
     "required": "Campo obligatorio.",
@@ -303,7 +305,7 @@
     "exportData": "Exportar mis datos",
     "deleteAccount": "Eliminar mi cuenta",
     "deleteLocal": "Borrar los datos de este dispositivo",
-    "deleteConfirm": "Esta acción es irreversible. Escribe DELETE para confirmar."
+    "deleteConfirm": "Esta acción es irreversible."
   },
   "settings": {
     "title": "Idioma, moneda y cálculos",
@@ -951,5 +953,9 @@
     "reminderHint": "Hora local ({{tz}}). El recordatorio solo se envía si la jornada aún no está registrada.",
     "pushFailed": "No se pudieron activar los recordatorios: {{message}}",
     "prefsHint": "Elige los tipos de alertas en tu"
+  },
+  "preview": {
+    "banner": "Versión beta de vista previa: tus datos se quedan en este navegador. Las cuentas, la flota, la administración y los recordatorios push requieren la versión alojada.",
+    "exportsDisabled": "En esta vista previa, el alojamiento bloquea las exportaciones CSV y PDF. Funcionan en la versión desplegada."
   }
 }

@@ -9,6 +9,7 @@ import { computeDay, fixedShareForDay } from '../lib/finance/engine';
 import { useFormat, useToday } from '../components/hooks';
 import { Badge, Button, Card, Checkbox, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, Toggle, useMoney } from '../components/ui';
 import { useCatalog } from '../data/catalog';
+import { useConfirm } from '../components/confirm';
 
 const blankEarning = (platformId: string | null): Earning => ({
   id: newId(), platformId, label: '', grossKnown: true, gross: null, commission: null, otherFees: 0,
@@ -22,6 +23,7 @@ export function DayEntry() {
   const today = useToday();
   const { data, profile, upsert, remove } = useStore();
   const { categories } = useCatalog();
+  const ask = useConfirm();
   const { currency, fmt } = useMoney();
   const f = useFormat();
   const date = params.date ?? today;
@@ -371,7 +373,7 @@ export function DayEntry() {
             <Button
               variant="secondary"
               onClick={async () => {
-                if (confirm(t('day.confirmDelete'))) {
+                if (await ask({ message: t('day.confirmDelete'), danger: true, confirmLabel: t('common.delete') })) {
                   await remove('days', existing.id);
                   nav('/app/history');
                 }

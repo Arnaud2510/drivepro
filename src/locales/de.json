@@ -75,7 +75,9 @@
     "sortBy": "Sortieren nach",
     "operatingDisclaimer": "Der Betriebsgewinn ist eine Kennzahl, die aus Ihren Eingaben berechnet wird. Er ist weder ein buchhalterisches noch ein steuerliches Ergebnis.",
     "loading": "Wird geladen …",
-    "close": "Schließen"
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "typeToConfirm": "Zur Bestätigung {{word}} eingeben"
   },
   "errors": {
     "required": "Pflichtfeld.",
@@ -303,7 +305,7 @@
     "exportData": "Meine Daten exportieren",
     "deleteAccount": "Mein Konto löschen",
     "deleteLocal": "Daten auf diesem Gerät löschen",
-    "deleteConfirm": "Dies kann nicht rückgängig gemacht werden. Geben Sie DELETE zur Bestätigung ein."
+    "deleteConfirm": "Dies kann nicht rückgängig gemacht werden."
   },
   "settings": {
     "title": "Sprache, Währung und Berechnungen",
@@ -951,5 +953,9 @@
     "reminderHint": "Ortszeit ({{tz}}). Die Erinnerung wird nur gesendet, wenn der Tag noch nicht erfasst ist.",
     "pushFailed": "Erinnerungen konnten nicht eingeschaltet werden: {{message}}",
     "prefsHint": "Wählen Sie die Hinweisarten in Ihrem"
+  },
+  "preview": {
+    "banner": "Beta-Vorschau: Ihre Daten bleiben in diesem Browser. Konten, Flotte, Verwaltung und Push-Erinnerungen erfordern die gehostete Version.",
+    "exportsDisabled": "In dieser Vorschau blockiert der Host CSV- und PDF-Exporte. In der bereitgestellten Version funktionieren sie."
   }
 }

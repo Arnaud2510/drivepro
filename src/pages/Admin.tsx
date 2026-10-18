@@ -7,6 +7,7 @@ import { useStore } from '../data/store';
 import { supabase } from '../data/supabaseRepo';
 import { adminApi, type AdminUser } from '../data/services';
 import { useCatalogReload } from '../data/catalog';
+import { useConfirm } from '../components/confirm';
 import { LANGUAGES } from '../config/catalog';
 import { Badge, Button, Card, Checkbox, Input, Notice, PageHeader, Select, Stat, cx } from '../components/ui';
 import { formatDate } from '../lib/dates';
@@ -132,6 +133,7 @@ function RowForm({ def, row, isNew, onSaved, onCancel }: { def: TableDef; row: R
 
 function ReferenceEditor() {
   const { t } = useTranslation();
+  const ask = useConfirm();
   const reloadCatalog = useCatalogReload();
   const [table, setTable] = useState(TABLES[0].table);
   const def = TABLES.find((d) => d.table === table)!;
@@ -203,7 +205,7 @@ function ReferenceEditor() {
                     variant="ghost"
                     aria-label={t('common.delete')}
                     onClick={async () => {
-                      if (!confirm(t('common.confirmDelete'))) return;
+                      if (!(await ask({ message: t('common.confirmDelete'), danger: true, confirmLabel: t('common.delete') }))) return;
                       try {
                         await adminApi(supabase!).remove(def.table, Object.fromEntries(def.pk.map((k) => [k, r[k]])));
                         after();
@@ -343,6 +345,7 @@ function Translations() {
 
 function Users() {
   const { t } = useTranslation();
+  const ask = useConfirm();
   const { locale, session } = useStore();
   const [q, setQ] = useState('');
   const [page, setPage] = useState(0);
@@ -420,7 +423,7 @@ function Users() {
                         <Button variant="ghost" onClick={() => act(() => adminApi(supabase!).setAdmin(u.id, !u.isAdmin))}>
                           {u.isAdmin ? t('admin.revokeAdmin') : t('admin.grantAdmin')}
                         </Button>
-                        <Button variant="ghost" onClick={() => confirm(t(u.banned ? 'admin.confirmReactivate' : 'admin.confirmSuspend', { email: u.email })) && act(() => adminApi(supabase!).setSuspended(u.id, !u.banned))}>
+                        <Button variant="ghost" onClick={async () => (await ask({ message: t(u.banned ? 'admin.confirmReactivate' : 'admin.confirmSuspend', { email: u.email }), danger: !u.banned })) && act(() => adminApi(supabase!).setSuspended(u.id, !u.banned))}>
                           {u.banned ? t('admin.reactivate') : t('admin.suspend')}
                         </Button>
                       </>

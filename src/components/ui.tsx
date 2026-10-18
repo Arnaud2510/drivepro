@@ -1,4 +1,4 @@
-import { useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { forwardRef, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader2, TrendingDown, TrendingUp, Minus } from 'lucide-react';
 import { formatMoney, currencyDigits, toMajor, parseAmount, parseDecimal } from '../lib/money';
@@ -16,15 +16,13 @@ const variants: Record<Variant, string> = {
   success: 'bg-gain text-white hover:bg-green-800',
 };
 
-export function Button({
-  variant = 'primary',
-  loading,
-  className,
-  children,
-  ...p
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; loading?: boolean }) {
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; loading?: boolean }>(function Button(
+  { variant = 'primary', loading, className, children, ...p },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       {...p}
       disabled={p.disabled || loading}
       className={cx(
@@ -37,7 +35,7 @@ export function Button({
       {children}
     </button>
   );
-}
+});
 
 export function Card({ title, action, children, className }: { title?: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
   return (

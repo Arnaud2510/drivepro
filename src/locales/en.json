@@ -75,7 +75,9 @@
     "sortBy": "Sort by",
     "operatingDisclaimer": "Operating profit is a management indicator computed from your entries. It is neither an accounting result nor an official tax figure.",
     "loading": "Loading…",
-    "close": "Close"
+    "close": "Close",
+    "confirm": "Confirm",
+    "typeToConfirm": "Type {{word}} to confirm"
   },
   "errors": {
     "required": "Required field.",
@@ -303,7 +305,7 @@
     "exportData": "Export my data",
     "deleteAccount": "Delete my account",
     "deleteLocal": "Erase data on this device",
-    "deleteConfirm": "This cannot be undone. Type DELETE to confirm."
+    "deleteConfirm": "This cannot be undone."
   },
   "settings": {
     "title": "Language, currency and calculations",
@@ -951,5 +953,9 @@
     "reminderHint": "Local time ({{tz}}). The reminder is only sent if the day has not been entered yet.",
     "pushFailed": "Could not turn on reminders: {{message}}",
     "prefsHint": "Choose which alerts you receive in your"
+  },
+  "preview": {
+    "banner": "Beta preview: your data stays in this browser. Accounts, fleet, administration and push reminders need the hosted version.",
+    "exportsDisabled": "In this preview, CSV and PDF exports are blocked by the host. They work in the deployed version."
   }
 }
