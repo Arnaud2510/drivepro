@@ -433,7 +433,12 @@
     "endHour": "Hora de fim",
     "endMinute": "Minutos de fim",
     "commissionRate": "Taxa",
-    "commissionAmount": "Montante"
+    "commissionAmount": "Montante",
+    "myPlatforms": "As minhas plataformas",
+    "platformsInCountry": "Disponíveis em {{country}}",
+    "otherPlatforms": "Outras plataformas",
+    "newPlatform": "Adicionar uma nova plataforma…",
+    "newPlatformName": "Nome da nova plataforma"
   },
   "payout": {
     "estimated": "Estimado",

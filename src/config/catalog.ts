@@ -23,11 +23,11 @@ export const COUNTRIES: Country[] = [
   { code: 'BE', region: 'europe', currency: 'EUR', timezone: 'Europe/Brussels', defaultLanguage: 'fr', suggestedPlatforms: ['uber', 'bolt', 'heetch', 'deliveroo'], activities: ['vtc', 'taxi', 'delivery', 'independent'] },
   { code: 'ES', region: 'europe', currency: 'EUR', timezone: 'Europe/Madrid', defaultLanguage: 'es', suggestedPlatforms: ['uber', 'bolt', 'cabify', 'freenow', 'glovo'], activities: ['vtc', 'taxi', 'delivery', 'independent'] },
   { code: 'IT', region: 'europe', currency: 'EUR', timezone: 'Europe/Rome', defaultLanguage: 'it', suggestedPlatforms: ['uber', 'freenow', 'glovo', 'deliveroo'], activities: ['vtc', 'taxi', 'delivery', 'independent'] },
-  { code: 'CI', region: 'africa', currency: 'XOF', timezone: 'Africa/Abidjan', defaultLanguage: 'fr', suggestedPlatforms: ['yango', 'uber', 'heetch', 'gozem', 'glovo'], activities: ['vtc', 'taxi', 'moto_taxi', 'delivery', 'independent'] },
-  { code: 'CM', region: 'africa', currency: 'XAF', timezone: 'Africa/Douala', defaultLanguage: 'fr', suggestedPlatforms: ['yango', 'gozem', 'heetch'], activities: ['taxi', 'moto_taxi', 'vtc', 'delivery', 'independent'] },
+  { code: 'CI', region: 'africa', currency: 'XOF', timezone: 'Africa/Abidjan', defaultLanguage: 'fr', suggestedPlatforms: ['yango', 'uber', 'heetch', 'indrive', 'gozem', 'glovo'], activities: ['vtc', 'taxi', 'moto_taxi', 'delivery', 'independent'] },
+  { code: 'CM', region: 'africa', currency: 'XAF', timezone: 'Africa/Douala', defaultLanguage: 'fr', suggestedPlatforms: ['yango', 'gozem', 'heetch', 'indrive'], activities: ['taxi', 'moto_taxi', 'vtc', 'delivery', 'independent'] },
   { code: 'ML', region: 'africa', currency: 'XOF', timezone: 'Africa/Bamako', defaultLanguage: 'fr', suggestedPlatforms: ['yango'], activities: ['taxi', 'moto_taxi', 'urban_transport', 'delivery', 'independent'] },
   { code: 'BF', region: 'africa', currency: 'XOF', timezone: 'Africa/Ouagadougou', defaultLanguage: 'fr', suggestedPlatforms: ['yango'], activities: ['taxi', 'moto_taxi', 'delivery', 'independent'] },
-  { code: 'SN', region: 'africa', currency: 'XOF', timezone: 'Africa/Dakar', defaultLanguage: 'fr', suggestedPlatforms: ['yango', 'heetch', 'uber'], activities: ['taxi', 'moto_taxi', 'vtc', 'delivery', 'independent'] },
+  { code: 'SN', region: 'africa', currency: 'XOF', timezone: 'Africa/Dakar', defaultLanguage: 'fr', suggestedPlatforms: ['yango', 'heetch', 'uber', 'indrive'], activities: ['taxi', 'moto_taxi', 'vtc', 'delivery', 'independent'] },
   { code: 'GN', region: 'africa', currency: 'GNF', timezone: 'Africa/Conakry', defaultLanguage: 'fr', suggestedPlatforms: ['yango'], activities: ['taxi', 'moto_taxi', 'delivery', 'independent'] },
 ];
 
@@ -50,6 +50,7 @@ export const PLATFORM_CATALOG: { id: string; name: string }[] = [
   { id: 'freenow', name: 'FREENOW' },
   { id: 'cabify', name: 'Cabify' },
   { id: 'gozem', name: 'Gozem' },
+  { id: 'indrive', name: 'inDrive' },
   { id: 'uber_eats', name: 'Uber Eats' },
   { id: 'glovo', name: 'Glovo' },
   { id: 'deliveroo', name: 'Deliveroo' },

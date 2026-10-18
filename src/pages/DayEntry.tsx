@@ -35,7 +35,7 @@ export function DayEntry() {
   const nav = useNavigate();
   const today = useToday();
   const { data, profile, upsert, remove } = useStore();
-  const { categories } = useCatalog();
+  const { categories, platforms: catalogPlatforms, countryByCode } = useCatalog();
   const ask = useConfirm();
   const { currency } = useMoney();
   const f = useFormat();
@@ -97,9 +97,33 @@ export function DayEntry() {
     setRates((x) => ({ ...x, [e.id]: rate }));
     setEarning(e.id, { commission: commissionAt(e.gross, rate) });
   };
+  // Platforms the driver has not added yet: those offered in their country first, then the rest of the catalog.
+  const countrySuggested = countryByCode(profile?.countryCode ?? '')?.suggestedPlatforms ?? [];
+  const notMine = catalogPlatforms.filter((c) => !data.platforms.some((p) => p.catalogId === c.id));
+  const inCountry = notMine.filter((c) => countrySuggested.includes(c.id));
+  const elsewhere = notMine.filter((c) => !countrySuggested.includes(c.id));
+  const [newPlatform, setNewPlatform] = useState<{ earningId: string; name: string } | null>(null);
+
+  const addPlatform = async (e: Earning, name: string, catalogId: string | null) => {
+    const existingPf = data.platforms.find((p) => (catalogId ? p.catalogId === catalogId : p.name.toLowerCase() === name.toLowerCase()));
+    const pf = existingPf ? { ...existingPf, active: true } : { id: newId(), name, catalogId, commissionPct: null, notes: '', active: true };
+    await upsert('platforms', pf);
+    setPlatform(e, pf.id, pf.commissionPct);
+  };
+  const onPlatformSelect = (e: Earning, value: string) => {
+    if (value === '__new') return setNewPlatform({ earningId: e.id, name: '' });
+    setNewPlatform(null);
+    if (value.startsWith('cat:')) {
+      const c = catalogPlatforms.find((x) => x.id === value.slice(4));
+      if (c) void addPlatform(e, c.name, c.id);
+      return;
+    }
+    setPlatform(e, value || null);
+  };
+
   // A new platform starts again from its usual rate.
-  const setPlatform = (e: Earning, platformId: string | null) => {
-    const rate = data.platforms.find((p) => p.id === platformId)?.commissionPct ?? null;
+  const setPlatform = (e: Earning, platformId: string | null, knownRate?: number | null) => {
+    const rate = knownRate !== undefined ? knownRate : data.platforms.find((p) => p.id === platformId)?.commissionPct ?? null;
     setRates((x) => ({ ...x, [e.id]: rate }));
     setEarning(e.id, { platformId, commission: rate == null ? null : commissionAt(e.gross, rate) });
   };
@@ -247,11 +271,28 @@ export function DayEntry() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="col-span-2 flex items-end gap-2">
                     <div className="flex-1">
-                      <Select label={t('day.platform')} value={e.platformId ?? ''} onChange={(ev) => setPlatform(e, ev.target.value || null)}>
-                        {data.platforms.filter((p) => p.active || p.id === e.platformId).map((p) => (
-                          <option key={p.id} value={p.id}>{p.name}</option>
-                        ))}
-                        <option value="">{t('day.directRides')}</option>
+                      <Select label={t('day.platform')} value={newPlatform?.earningId === e.id ? '__new' : e.platformId ?? ''} onChange={(ev) => onPlatformSelect(e, ev.target.value)}>
+                        <optgroup label={t('day.myPlatforms')}>
+                          {data.platforms.filter((p) => p.active || p.id === e.platformId).map((p) => (
+                            <option key={p.id} value={p.id}>{p.name}</option>
+                          ))}
+                          <option value="">{t('day.directRides')}</option>
+                        </optgroup>
+                        {inCountry.length > 0 && (
+                          <optgroup label={t('day.platformsInCountry', { country: t(`countries.${profile?.countryCode}`, { defaultValue: profile?.countryCode }) })}>
+                            {inCountry.map((c) => (
+                              <option key={c.id} value={`cat:${c.id}`}>{c.name}</option>
+                            ))}
+                          </optgroup>
+                        )}
+                        {elsewhere.length > 0 && (
+                          <optgroup label={t('day.otherPlatforms')}>
+                            {elsewhere.map((c) => (
+                              <option key={c.id} value={`cat:${c.id}`}>{c.name}</option>
+                            ))}
+                          </optgroup>
+                        )}
+                        <option value="__new">+ {t('day.newPlatform')}</option>
                       </Select>
                     </div>
                     {day.earnings.length > 1 && (
@@ -260,6 +301,24 @@ export function DayEntry() {
                       </Button>
                     )}
                   </div>
+                  {newPlatform?.earningId === e.id && (
+                    <form
+                      className="col-span-2 space-y-2 rounded-xl bg-white p-3 ring-1 ring-brand-100"
+                      onSubmit={async (ev) => {
+                        ev.preventDefault();
+                        const name = newPlatform.name.trim();
+                        if (!name) return;
+                        await addPlatform(e, name, null);
+                        setNewPlatform(null);
+                      }}
+                    >
+                      <Input label={t('day.newPlatformName')} autoFocus value={newPlatform.name} onChange={(ev) => setNewPlatform({ earningId: e.id, name: ev.target.value })} />
+                      <div className="flex gap-2">
+                        <Button type="submit" className="flex-1" disabled={!newPlatform.name.trim()}>{t('common.add')}</Button>
+                        <Button type="button" variant="ghost" onClick={() => setNewPlatform(null)}>{t('common.cancel')}</Button>
+                      </div>
+                    </form>
+                  )}
                   <div className="col-span-2">
                     <MoneyInput label={t('day.gross')} currency={currency} value={e.gross} onChange={(v) => setGross(e, v)} />
                   </div>

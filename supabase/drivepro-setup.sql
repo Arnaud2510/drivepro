@@ -859,3 +859,11 @@ alter function public.check_earning_owner() set search_path = public;
 -- Trigger functions are not part of the API: triggers still fire, but nobody can call them via /rpc.
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
 revoke execute on function public.audit_reference_change() from public, anon, authenticated;
+
+-- ===== supabase/migrations/20261019000000_platform_indrive.sql =====
+-- inDrive, offered in several West and Central African cities.
+insert into public.transport_platforms (id, name, kind) values ('indrive', 'inDrive', 'ride_hailing')
+  on conflict (id) do nothing;
+insert into public.platform_countries (platform_id, country_code) values
+  ('indrive', 'CI'), ('indrive', 'SN'), ('indrive', 'CM')
+  on conflict do nothing;
