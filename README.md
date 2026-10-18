@@ -45,7 +45,7 @@ npm install
 cp .env.example .env.local   # facultatif : renseigner l'URL et la clé anon Supabase
 npm run dev                  # http://localhost:5173
 npm test                     # moteur financier + traductions
-npm run test:db              # migrations SQL + règles RLS (PostgreSQL embarqué), 60 vérifications
+npm run test:db              # migrations SQL + règles RLS (PostgreSQL embarqué), 63 vérifications
 npm run build
 ```
 
