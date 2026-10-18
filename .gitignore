@@ -6,4 +6,3 @@ dist
 e2e/screenshots
 *.tsbuildinfo
 dist-preview
-drivepro-setup.sql

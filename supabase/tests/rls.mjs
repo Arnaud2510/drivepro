@@ -26,6 +26,8 @@ const as = async (uid, sql, params) => {
   try { return (await db.query(sql, params)).rows; } catch (e) { return 'ERR: ' + e.message; } finally { await db.exec('reset role'); }
 };
 let failed = 0;
+const { setupSql } = await import('../../scripts/build-setup-sql.mjs');
+const setupOnDisk = readFileSync(new URL('../drivepro-setup.sql', import.meta.url), 'utf8');
 const ok = (c, m) => { if (!c) failed++; console.log((c ? 'PASS ' : 'FAIL ') + m); };
 ok((await db.query('select count(*)::int n from user_profiles')).rows[0].n === 3, 'profiles auto-created on signup');
 const V = '11111111-1111-1111-1111-111111111111';
@@ -131,5 +133,6 @@ ok((await as(M, `select admin_stats()`))[0].admin_stats.users >= 4, 'admin_stats
 await as(A, `select delete_my_account()`);
 ok((await db.query(`select count(*)::int n from vehicles where user_id='${A}'`)).rows[0].n === 0 && (await db.query(`select count(*)::int n from auth.users where id='${A}'`)).rows[0].n === 0, 'delete_my_account erases everything');
 
+ok(setupOnDisk === setupSql, 'supabase/drivepro-setup.sql is up to date (npm run db:setup-file)');
 console.log(failed ? `${failed} check(s) failed` : 'All database checks passed');
 process.exit(failed ? 1 : 0);

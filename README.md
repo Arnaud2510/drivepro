@@ -68,7 +68,7 @@ npm run e2e:sw                # le service worker affiche la notification push
 ## Mise en place de Supabase
 
 1. Créez un projet sur supabase.com.
-2. Appliquez les migrations de `supabase/migrations/` dans l'ordre, soit avec `supabase db push`, soit en les collant dans l'éditeur SQL.
+2. Appliquez la base : collez `supabase/drivepro-setup.sql` (toutes les migrations réunies) dans SQL Editor puis Run, ou utilisez `supabase db push`.
 3. Dans Authentication › URL Configuration, ajoutez `https://votre-domaine/update-password` et `https://votre-domaine/onboarding` aux URL de redirection.
 4. Copiez **uniquement** l'URL du projet et la clé `anon` dans `.env.local`. La clé `service_role` ne doit **jamais** se trouver dans le frontend.
 5. Premier administrateur : exécutez côté serveur `insert into platform_admins (user_id) values ('<uuid>');`. Les suivants se nomment depuis Administration › Utilisateurs.
