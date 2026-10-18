@@ -425,7 +425,11 @@
     "saveFailed": "Speichern fehlgeschlagen; Ihre Eingaben bleiben erhalten. Prüfen Sie die Verbindung und versuchen Sie es erneut. ({{message}})",
     "commissionHint": "Betrag, den die Plattform für den Tag einbehalten hat.",
     "workedTime": "Arbeitszeit",
-    "workedTimeMissing": "Beginn und Ende eingeben"
+    "workedTimeMissing": "Beginn und Ende eingeben",
+    "startHour": "Startstunde",
+    "startMinute": "Startminuten",
+    "endHour": "Endstunde",
+    "endMinute": "Endminuten"
   },
   "payout": {
     "estimated": "Geschätzt",

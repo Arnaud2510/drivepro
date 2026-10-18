@@ -425,7 +425,11 @@
     "saveFailed": "Salvataggio non riuscito; i dati restano sullo schermo. Controlla la connessione e riprova. ({{message}})",
     "commissionHint": "Importo trattenuto dalla piattaforma nella giornata.",
     "workedTime": "Tempo di lavoro",
-    "workedTimeMissing": "inserisci inizio e fine"
+    "workedTimeMissing": "inserisci inizio e fine",
+    "startHour": "Ora di inizio",
+    "startMinute": "Minuti di inizio",
+    "endHour": "Ora di fine",
+    "endMinute": "Minuti di fine"
   },
   "payout": {
     "estimated": "Stimato",

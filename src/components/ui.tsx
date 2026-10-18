@@ -103,6 +103,37 @@ export function Select({ label, hint, children, ...p }: SelectHTMLAttributes<HTM
   );
 }
 
+/** Time of day as "HH:MM", picked with an hour list and a minute list (easier than native time inputs on phones). */
+export function TimeSelect({ label, value, onChange, hourLabel, minuteLabel }: { label: ReactNode; value: string | null; onChange: (v: string | null) => void; hourLabel: string; minuteLabel: string }) {
+  const id = useId();
+  const [h, m] = value ? value.split(':') : ['', ''];
+  const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
+  if (m && !minutes.includes(m)) {
+    minutes.push(m);
+    minutes.sort();
+  }
+  return (
+    <div role="group" aria-labelledby={id} className="flex flex-col gap-1">
+      <span id={id} className="text-sm font-medium text-slate-700">{label}</span>
+      <div className="flex items-center gap-1">
+        <select aria-label={hourLabel} value={h} onChange={(e) => onChange(e.target.value ? `${e.target.value}:${m || '00'}` : null)} className={cx(inputCls, 'px-2 text-center')}>
+          <option value="">--</option>
+          {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')).map((x) => (
+            <option key={x} value={x}>{x}</option>
+          ))}
+        </select>
+        <span className="font-semibold text-slate-500" aria-hidden>:</span>
+        <select aria-label={minuteLabel} value={m} disabled={!h} onChange={(e) => onChange(`${h}:${e.target.value}`)} className={cx(inputCls, 'px-2 text-center')}>
+          {!h && <option value="">--</option>}
+          {minutes.map((x) => (
+            <option key={x} value={x}>{x}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
 export function Checkbox({ label, checked, onChange, hint }: { label: ReactNode; checked: boolean; onChange: (v: boolean) => void; hint?: ReactNode }) {
   const id = useId();
   return (

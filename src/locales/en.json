@@ -425,7 +425,11 @@
     "saveFailed": "Saving failed; your entries are still on screen. Check your connection and try again. ({{message}})",
     "commissionHint": "Amount the platform took for the day.",
     "workedTime": "Working time",
-    "workedTimeMissing": "enter start and end"
+    "workedTimeMissing": "enter start and end",
+    "startHour": "Start hour",
+    "startMinute": "Start minutes",
+    "endHour": "End hour",
+    "endMinute": "End minutes"
   },
   "payout": {
     "estimated": "Estimated",

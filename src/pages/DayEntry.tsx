@@ -7,7 +7,7 @@ import { newId } from '../data/repository';
 import type { Earning, Expense, UserPlatform, WorkDay } from '../domain/types';
 import { computeDay, computeEarning, dayHours, fixedShareForDay } from '../lib/finance/engine';
 import { useFormat, useToday } from '../components/hooks';
-import { Badge, Button, Card, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, useMoney } from '../components/ui';
+import { Badge, Button, Card, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, TimeSelect, useMoney } from '../components/ui';
 import { useCatalog } from '../data/catalog';
 import { useConfirm } from '../components/confirm';
 
@@ -177,9 +177,9 @@ export function DayEntry() {
       {!activePlatforms.length && <Notice>{t('day.noPlatforms')} <Link to="/app/platforms" className="underline">{t('nav.platforms')}</Link></Notice>}
 
       <Card title={t('day.general')}>
-        <div className="grid grid-cols-3 gap-3">
-          <Input label={t('day.start')} type="time" value={day.startTime ?? ''} onChange={(e) => setTime({ startTime: e.target.value || null })} />
-          <Input label={t('day.end')} type="time" value={day.endTime ?? ''} onChange={(e) => setTime({ endTime: e.target.value || null })} />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <TimeSelect label={t('day.start')} hourLabel={t('day.startHour')} minuteLabel={t('day.startMinute')} value={day.startTime} onChange={(v) => setTime({ startTime: v })} />
+          <TimeSelect label={t('day.end')} hourLabel={t('day.endHour')} minuteLabel={t('day.endMinute')} value={day.endTime} onChange={(v) => setTime({ endTime: v })} />
           <NumberInput label={t('day.break')} suffix="min" value={day.breakMinutes} onChange={(v) => setTime({ breakMinutes: v ?? 0 })} />
         </div>
         <p className="mt-3 text-sm text-slate-600" aria-live="polite">

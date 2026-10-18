@@ -425,7 +425,11 @@
     "saveFailed": "Não foi possível guardar; os seus dados continuam no ecrã. Verifique a ligação e tente novamente. ({{message}})",
     "commissionHint": "Montante retido pela plataforma no dia.",
     "workedTime": "Tempo de trabalho",
-    "workedTimeMissing": "indique o início e o fim"
+    "workedTimeMissing": "indique o início e o fim",
+    "startHour": "Hora de início",
+    "startMinute": "Minutos de início",
+    "endHour": "Hora de fim",
+    "endMinute": "Minutos de fim"
   },
   "payout": {
     "estimated": "Estimado",

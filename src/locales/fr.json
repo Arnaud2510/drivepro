@@ -425,7 +425,11 @@
     "saveFailed": "L'enregistrement a échoué, vos saisies sont conservées à l'écran. Vérifiez votre connexion et réessayez. ({{message}})",
     "commissionHint": "Montant prélevé par la plateforme sur la journée.",
     "workedTime": "Temps de travail",
-    "workedTimeMissing": "renseignez le début et la fin"
+    "workedTimeMissing": "renseignez le début et la fin",
+    "startHour": "Heure de début",
+    "startMinute": "Minutes de début",
+    "endHour": "Heure de fin",
+    "endMinute": "Minutes de fin"
   },
   "payout": {
     "estimated": "Estimé",
