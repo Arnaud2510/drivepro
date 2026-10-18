@@ -1,0 +1,771 @@
+{
+  "nav": {
+    "main": "Hauptnavigation",
+    "dashboard": "Übersicht",
+    "day": "Mein Tag",
+    "expenses": "Ausgaben",
+    "history": "Verlauf",
+    "stats": "Statistiken",
+    "profile": "Profil",
+    "calendar": "Kalender",
+    "compare": "Vergleich",
+    "goals": "Ziele",
+    "reports": "Berichte",
+    "vehicles": "Fahrzeuge",
+    "platforms": "Plattformen",
+    "fleet": "Flotte",
+    "admin": "Verwaltung",
+    "more": "Mehr",
+    "signOut": "Abmelden"
+  },
+  "public": {
+    "nav": {
+      "features": "Funktionen",
+      "pricing": "Preise",
+      "privacy": "Datenschutz"
+    },
+    "cta": {
+      "start": "Kostenlos starten"
+    }
+  },
+  "mode": {
+    "demoBanner": "Demodaten – das sind nicht Ihre echten Zahlen.",
+    "leaveDemo": "Demo verlassen",
+    "localBanner": "Modus ohne Konto: Ihre Daten bleiben nur in diesem Browser.",
+    "local": "Modus ohne Konto (Daten auf diesem Gerät)",
+    "demo": "Demo",
+    "supabase": "Angemeldetes Konto"
+  },
+  "common": {
+    "add": "Hinzufügen",
+    "all": "Alle",
+    "allCategories": "Alle Kategorien",
+    "allTime": "Gesamter Zeitraum",
+    "archive": "Archivieren",
+    "archived": "Archiviert",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "confirmDelete": "Diesen Eintrag endgültig löschen?",
+    "containsEstimates": "Enthält Schätzungen",
+    "date": "Datum",
+    "delete": "Löschen",
+    "deleted": "(gelöscht)",
+    "edit": "Bearbeiten",
+    "estimated": "Geschätzt",
+    "filter": "Filtern",
+    "hideArchived": "Archivierte ausblenden",
+    "showArchived": "Archivierte anzeigen",
+    "inDevelopment": "In Entwicklung.",
+    "insufficientData": "Unzureichende Daten",
+    "monthShort": "Monat",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "no": "Nein",
+    "yes": "Ja",
+    "noData": "Noch keine Daten.",
+    "noDataPeriod": "In diesem Zeitraum wurde kein Arbeitstag erfasst.",
+    "notComputable": "Nicht berechenbar",
+    "notes": "Notizen",
+    "period": "Zeitraum",
+    "restore": "Wiederherstellen",
+    "save": "Speichern",
+    "saved": "Gespeichert",
+    "search": "Suchen",
+    "sortBy": "Sortieren nach",
+    "operatingDisclaimer": "Der Betriebsgewinn ist eine Kennzahl, die aus Ihren Eingaben berechnet wird. Er ist weder ein buchhalterisches noch ein steuerliches Ergebnis."
+  },
+  "errors": {
+    "required": "Pflichtfeld.",
+    "invalidAmount": "Ungültiger Betrag.",
+    "invalidNumber": "Ungültige Zahl.",
+    "email": "Ungültige E-Mail-Adresse.",
+    "passwordLength": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "consent": "Bitte akzeptieren Sie die Datenschutzerklärung.",
+    "badCredentials": "E-Mail oder Passwort falsch.",
+    "tooManyAttempts": "Zu viele Versuche. Bitte in einigen Minuten erneut versuchen.",
+    "signupFailed": "Die Registrierung ist fehlgeschlagen. Bitte prüfen Sie Ihre Angaben.",
+    "generic": "Ein Fehler ist aufgetreten. Bitte erneut versuchen.",
+    "loadFailed": "Ihre Daten konnten nicht geladen werden: {{message}}",
+    "endBeforeStart": "Das Enddatum liegt vor dem Startdatum.",
+    "fileTooLarge": "Datei zu groß (max. 10 MB).",
+    "uploadFailed": "Hochladen des Belegs fehlgeschlagen."
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgot": "Passwort vergessen?",
+    "createAccount": "Konto erstellen",
+    "haveAccount": "Ich habe bereits ein Konto",
+    "passwordHint": "Mindestens 8 Zeichen.",
+    "consent": "Ich stimme der Verarbeitung meiner Daten gemäß der",
+    "checkEmail": "Prüfen Sie Ihr Postfach, um Ihr Konto zu bestätigen.",
+    "resetTitle": "Passwort zurücksetzen",
+    "sendReset": "Link senden",
+    "resetSent": "Falls ein Konto mit dieser Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.",
+    "newPassword": "Neues Passwort",
+    "noBackend": "Für diese Installation ist kein Server konfiguriert: Die Kontoerstellung ist nicht verfügbar. Sie können die App ohne Konto nutzen.",
+    "continueLocal": "Ohne Konto fortfahren",
+    "continueLocalHint": "Ihre Daten werden nur in diesem Browser gespeichert, ohne Online-Sicherung.",
+    "openDemo": "Demo öffnen",
+    "demoHint": "Die Demo verwendet fiktive Daten, getrennt von Ihren eigenen.",
+    "moreProvidersSoon": "Anmeldung mit Google, Apple und Telefon: geplant, noch nicht verfügbar."
+  },
+  "landing": {
+    "badge": "Für Fahrdienst-, Taxi- und Motorradtaxi-Fahrer",
+    "title": "Wie viel bleibt Ihnen wirklich?",
+    "subtitle": "Erfassen Sie Fahrten, Kilometer und Ausgaben in wenigen Minuten. DrivePro berechnet Ihren echten Nettogewinn pro Tag, pro Stunde und pro Kilometer.",
+    "tryDemo": "Demo ansehen",
+    "questionsTitle": "Die Fragen, die DrivePro beantwortet",
+    "q1": "Wie viel habe ich heute wirklich verdient?",
+    "q2": "Was kostet mich jeder Kilometer?",
+    "q3": "Was verdiene ich wirklich pro Stunde?",
+    "q4": "Welche Plattform bringt mir am meisten?",
+    "q5": "Erreiche ich mein Monatsziel?",
+    "q6": "Wie viel sollte ich für Wartung und Steuern zurücklegen?",
+    "p1": {
+      "title": "Verlässliche Berechnung",
+      "text": "Keine Doppelabzüge: Provisionen, Kraftstoff und Fixkosten werden nur einmal gezählt. Schätzungen sind gekennzeichnet."
+    },
+    "p2": {
+      "title": "International",
+      "text": "Euro, CFA-Franc (XOF, XAF), Guinea-Franc … sechs Sprachen und länderspezifische Einstellungen."
+    },
+    "p3": {
+      "title": "Fürs Smartphone gemacht",
+      "text": "Schnelle Eingabe am Feierabend, auch nach langen Stunden am Steuer."
+    },
+    "p4": {
+      "title": "Private Daten",
+      "text": "Nur Sie sehen Ihre Zahlen. Ein Flottenmanager sieht nur, was Sie freigeben."
+    },
+    "finalTitle": "Nicht raten. Messen.",
+    "finalText": "Beginnen Sie mit dem heutigen Tag: Sie brauchen nur Einnahmen, Kilometer und Ausgaben.",
+    "mock": {
+      "today": "Meine Tätigkeit · Beispiel",
+      "fixedAndMaintenance": "Fixkosten und Wartung",
+      "disclaimer": "Beispielansicht: Zahlen aus dem Testszenario, keine echten Einnahmen."
+    }
+  },
+  "features": {
+    "title": "Funktionen",
+    "subtitle": "Alles, um Ihre echte Rentabilität zu kennen – und was als Nächstes kommt.",
+    "status": {
+      "ready": "Verfügbar",
+      "partial": "Teilweise",
+      "dev": "In Entwicklung"
+    },
+    "items": {
+      "day": {
+        "title": "Mein Tag",
+        "text": "Stunden, Kilometer, mehrere Plattformen, Trinkgeld, Boni und Ausgaben auf einem Bildschirm."
+      },
+      "engine": {
+        "title": "Finanzberechnung",
+        "text": "Betriebsgewinn, Rentabilität pro Stunde und pro km, Marge – mit Unterscheidung zwischen tatsächlich und geschätzt."
+      },
+      "vehicles": {
+        "title": "Autos und Motorräder",
+        "text": "Mehrere Fahrzeuge, Verbrauch in L oder kWh, Fixkosten und Fristen."
+      },
+      "platforms": {
+        "title": "Plattformen",
+        "text": "Uber, Bolt, Yango, lokale Plattformen oder Direktkunden, mit Ihrer eigenen Provision."
+      },
+      "stats": {
+        "title": "Statistiken",
+        "text": "Diagramme über 7 Tage, 30 Tage und 12 Monate, Kostenaufteilung."
+      },
+      "compare": {
+        "title": "Vergleich",
+        "text": "Vergleichen Sie Plattformen und Fahrzeuge pro Stunde und pro Kilometer, nicht nur nach Umsatz."
+      },
+      "reports": {
+        "title": "Berichte",
+        "text": "Tages- bis Jahresberichte, Excel-kompatibler CSV-Export und PDF-Druck."
+      },
+      "international": {
+        "title": "International",
+        "text": "6 Sprachen, EUR, XOF, XAF, GNF und mehr, Zeitzonen."
+      },
+      "alerts": {
+        "title": "Hinweise",
+        "text": "Hinweise in der App: Ziel, ungewöhnliche Ausgabe, Wartung, Fristen. Push- und E-Mail-Benachrichtigungen folgen."
+      },
+      "fleet": {
+        "title": "Flottenverwaltung",
+        "text": "Datenmodell und Zugriffsregeln sind bereit; Oberfläche für Manager in Entwicklung."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Preise",
+    "subtitle": "Kostenlos starten. Wechseln Sie zu Pro oder Flotte, wenn Sie es brauchen.",
+    "devNotice": "Entwicklungsphase: Es sind keine Zahlungen aktiv und alle Funktionen sind zugänglich. Preise werden vor dem kommerziellen Start bekanntgegeben.",
+    "plans": {
+      "free": {
+        "name": "Kostenlos",
+        "tagline": "Das Wesentliche, um den Gewinn zu kennen.",
+        "price": "0"
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Für die tägliche Steuerung Ihrer Tätigkeit.",
+        "price": "Preis folgt"
+      },
+      "fleet": {
+        "name": "Flotte",
+        "tagline": "Für Manager mehrerer Fahrer.",
+        "price": "Auf Anfrage"
+      }
+    },
+    "features": {
+      "days": "Erfassung der Arbeitstage",
+      "profit": "Berechnung des Nettogewinns",
+      "dashboard": "Grundlegende Übersicht",
+      "history90": "Verlauf über 90 Tage",
+      "fullHistory": "Vollständiger Verlauf",
+      "advancedStats": "Erweiterte Statistiken",
+      "reports": "Berichte und Exporte",
+      "compare": "Plattformvergleich",
+      "goals": "Finanzielle Ziele",
+      "multiVehicle": "Erweiterte Fahrzeugverwaltung",
+      "multiDriver": "Mehrere Fahrer",
+      "fleetVehicles": "Mehrere Fahrzeuge",
+      "consolidated": "Konsolidierte Berichte",
+      "access": "Zugriffsverwaltung",
+      "fleetKpi": "Flottenkennzahlen"
+    }
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung",
+    "draft": "Vorläufiges Dokument, vor dem Produktivbetrieb rechtlich zu prüfen.",
+    "data": {
+      "title": "Erhobene Daten",
+      "text": "Profil (Land, Stadt, Sprache, Währung), Fahrzeuge, Arbeitstage, Einnahmen, Ausgaben und die Belege, die Sie hinzufügen. Nichts weiter."
+    },
+    "purpose": {
+      "title": "Zweck",
+      "text": "Berechnung und Anzeige Ihrer Rentabilität. Ihre Daten werden weder verkauft noch für Werbung verwendet."
+    },
+    "access": {
+      "title": "Wer Zugriff hat",
+      "text": "Nur Sie. Ein Flottenmanager hat nur Zugriff, wenn Sie seiner Flotte beitreten und ausdrücklich zustimmen – jederzeit widerruflich. Administratoren sehen nur aggregierte Statistiken."
+    },
+    "rights": {
+      "title": "Ihre Rechte",
+      "text": "Auskunft, Berichtigung, Export und Löschung über die Profilseite. Für Nutzer in Europa gelten diese Rechte gemäß DSGVO."
+    },
+    "retention": {
+      "title": "Speicherdauer",
+      "text": "Ihre Daten werden gespeichert, solange Ihr Konto besteht, und beim Löschen des Kontos endgültig entfernt."
+    }
+  },
+  "onboarding": {
+    "progress": "Fortschritt",
+    "stepOf": "Schritt {{n}} von {{total}}",
+    "steps": {
+      "profile": "Profil",
+      "activity": "Tätigkeit",
+      "platforms": "Plattformen",
+      "vehicle": "Fahrzeug",
+      "finance": "Ziele"
+    },
+    "welcome": "Willkommen! Richten wir Ihren Bereich ein.",
+    "activityQ": "Was ist Ihre Tätigkeit?",
+    "platformsQ": "Welche Plattformen nutzen Sie?",
+    "platformsNotice": "DrivePro ist mit keiner Plattform verbunden: Sie geben Ihre Beträge selbst ein. Die Vorschläge hängen vom Land ab; prüfen Sie, welche Dienste in Ihrer Stadt tatsächlich verfügbar sind.",
+    "suggested": "Häufig genutzt in {{country}}",
+    "otherPlatforms": "Weitere Plattformen",
+    "customPlatform": "Lokale Plattform hinzufügen",
+    "commissionHint": "Optional: Ihre übliche Provision. Sie wird nur verwendet, wenn die tatsächliche Provision unbekannt ist, und der Betrag wird dann als geschätzt gekennzeichnet.",
+    "vehicleQ": "Ihr Hauptfahrzeug",
+    "vehicleExists_one": "Sie haben bereits {{count}} Fahrzeug.",
+    "vehicleExists_other": "Sie haben bereits {{count}} Fahrzeuge.",
+    "skipHint": "Sie können diesen Schritt überspringen und Fahrzeuge später hinzufügen.",
+    "financeQ": "Ihre Ziele",
+    "editLater": "Alle Einstellungen lassen sich jederzeit ändern.",
+    "finish": "Fertig"
+  },
+  "profile": {
+    "title": "Profil und Einstellungen",
+    "identity": "Identität",
+    "displayName": "Name oder Spitzname",
+    "country": "Land der Tätigkeit",
+    "city": "Stadt",
+    "privacy": "Ihre Daten",
+    "privacyText": "Sie können alle Ihre Daten exportieren (JSON-Format) oder endgültig löschen.",
+    "exportData": "Meine Daten exportieren",
+    "deleteAccount": "Mein Konto löschen",
+    "deleteLocal": "Daten auf diesem Gerät löschen",
+    "deleteConfirm": "Dies kann nicht rückgängig gemacht werden. Geben Sie DELETE zur Bestätigung ein."
+  },
+  "settings": {
+    "title": "Sprache, Währung und Berechnungen",
+    "language": "Sprache",
+    "currency": "Währung",
+    "currencyHint": "Alle Beträge werden in dieser Währung erfasst.",
+    "timezone": "Zeitzone",
+    "timezoneHint": "Bestimmt das Datum Ihrer Arbeitstage. Heute: {{today}}.",
+    "plannedWorkDays": "Geplante Arbeitstage pro Monat",
+    "energyMode": "Berechnung von Kraftstoff / Energie",
+    "energyModeHint": "Geschätzt: aus km und Verbrauch. Tatsächlich: aus Ihren erfassten Käufen. Nie beides gleichzeitig.",
+    "fixedMethod": "Verteilung der Fixkosten",
+    "currencyChangeWarning": "Ein Währungswechsel rechnet bestehende Beträge nicht um: Sie werden lediglich in der neuen Währung angezeigt. Es erfolgt keine automatische Umrechnung."
+  },
+  "energyMode": {
+    "estimated": "Geschätzt (km × Verbrauch)",
+    "actual": "Tatsächlich (erfasste Käufe)"
+  },
+  "fixedMethod": {
+    "calendar_day": "Pro Kalendertag",
+    "worked_day": "Pro geplantem Arbeitstag",
+    "separate": "Separat ausgewiesen"
+  },
+  "fixedMethodHelp": {
+    "calendar_day": "Jeder Tag trägt etwa 1/30 der Monatskosten (je nach Monatslänge), ob gearbeitet wurde oder nicht.",
+    "worked_day": "Jeder Arbeitstag trägt Monatskosten ÷ geplante Arbeitstage.",
+    "separate": "Die Tage tragen keine Fixkosten; sie werden auf Monatsebene abgezogen."
+  },
+  "dashboard": {
+    "hello": "Hallo {{name}}",
+    "today": "Heute",
+    "thisMonth": "Dieser Monat",
+    "enterToday": "Meinen Tag erfassen",
+    "editToday": "Meinen Tag bearbeiten",
+    "noDayYet": "Sie haben den heutigen Tag noch nicht erfasst.",
+    "revenue": "Umsatz",
+    "commissions": "Provisionen und Plattformgebühren",
+    "expenses": "Ausgaben",
+    "exclCommission": "Ohne Provisionen",
+    "profit": "Betriebsgewinn",
+    "margin": "Marge",
+    "perHour": "Gewinn / Stunde",
+    "perKm": "Gewinn / km",
+    "costPerKm": "Kosten / km",
+    "distance": "Strecke",
+    "hours": "Stunden",
+    "totalCosts": "Gesamtkosten",
+    "variableExpenses": "Variable Ausgaben",
+    "fixedShare": "Zugerechnete Fixkosten",
+    "workedDays_one": "{{count}} Arbeitstag",
+    "workedDays_other": "{{count}} Arbeitstage",
+    "last7": "Letzte 7 Tage",
+    "whereMoneyGoes": "Wohin ging mein Geld heute?",
+    "whereMoneyGoesMonth": "Wohin geht mein Geld diesen Monat?",
+    "ignoredEnergy": "{{amount}} an Kraftstoffkäufen nicht abgezogen, da die Schätzung verwendet wird (verhindert Doppelabzug).",
+    "quickActions": "Schnellaktionen",
+    "addExpense": "Ausgabe hinzufügen",
+    "myVehicles": "Meine Fahrzeuge",
+    "myHistory": "Mein Verlauf",
+    "myStats": "Meine Statistiken"
+  },
+  "day": {
+    "title": "Mein Tag",
+    "copyLast": "Letzten Tag übernehmen",
+    "general": "Allgemeine Angaben",
+    "start": "Beginn",
+    "end": "Ende",
+    "break": "Pause",
+    "activeHours": "Aktive Stunden",
+    "activeHoursHint": "Optional: ersetzt die Berechnung aus Beginn/Ende/Pause.",
+    "vehicle": "Fahrzeug",
+    "noVehicle": "Kein Fahrzeug",
+    "trips": "Fahrten",
+    "deliveries": "Lieferungen",
+    "odoStart": "Kilometerstand Beginn",
+    "odoEnd": "Kilometerstand Ende",
+    "distanceDirect": "Eingegebene Strecke",
+    "distanceDirectHint": "Falls keine Kilometerstände vorliegen.",
+    "personalKm": "Private km",
+    "computed": "Berechnet",
+    "businessKm": "beruflich",
+    "earnings": "Einnahmen",
+    "addEarning": "Plattform hinzufügen",
+    "platform": "Plattform",
+    "directRides": "Direktfahrten / Privatkunden",
+    "payoutStatus": "Auszahlung",
+    "onlyNetKnown": "Ich kenne nur den ausgezahlten Betrag",
+    "onlyNetKnownHint": "Der Bruttoumsatz ist dann unbekannt und die Provisionen gelten als bereits abgezogen.",
+    "gross": "Bruttofahrpreise",
+    "commission": "Einbehaltene Provision",
+    "commissionEstimate": "Leer: Schätzung zu {{pct}} % = {{amount}}.",
+    "commissionDerived": "Leer: aus der Auszahlung abgeleitet = {{amount}}.",
+    "commissionUnknownHint": "Leer und kein Satz hinterlegt: Provision unbekannt (0).",
+    "otherFees": "Sonstige Plattformgebühren",
+    "netPaid": "Ausgezahlter Betrag",
+    "netPaidHint": "Optional: dient zur Berechnung oder Prüfung der Provision.",
+    "bonus": "Boni / Prämien",
+    "tips": "Trinkgeld",
+    "includedInGross": "Bereits im Brutto enthalten",
+    "lineRevenue": "Umsatz",
+    "lineAfter": "Nach Provisionen",
+    "commissionIsEstimated": "Geschätzte Provision",
+    "energy": "Kraftstoff / Energie",
+    "energyFuel": "Kraftstoff",
+    "energyCharging": "Laden",
+    "energyEstimatedHelp": "Kosten berechnet aus beruflichen km, Verbrauch und Preis des Fahrzeugs. Kraftstoffkäufe des Tages werden nicht doppelt abgezogen.",
+    "energyActualHelp": "Kosten entsprechen den für diesen Tag erfassten Kraftstoff- oder Ladekäufen.",
+    "expenses": "Ausgaben des Tages",
+    "expensesHint": "Monatliche Kosten (Versicherung, Leasing …) gehören zu Ausgaben › Fixkosten, damit sie nie vollständig an einem Tag abgezogen werden.",
+    "summary": "Zusammenfassung",
+    "finish": "Meinen Tag abschließen",
+    "update": "Aktualisieren",
+    "confirmDelete": "Diesen Tag löschen? Die an diesem Datum erfassten Ausgaben bleiben erhalten.",
+    "savedTitle": "Tag gespeichert",
+    "backToDashboard": "Zurück zur Übersicht",
+    "noPlatforms": "Fügen Sie zuerst Ihre Plattformen hinzu, um sie hier zu finden:"
+  },
+  "payout": {
+    "estimated": "Geschätzt",
+    "pending": "Ausstehend",
+    "received": "Erhalten"
+  },
+  "issues": {
+    "odometerInverted": "Kilometerstand Ende kleiner als Beginn",
+    "noDistance": "Kilometer fehlen",
+    "noHours": "Stunden fehlen",
+    "noRevenue": "Keine Einnahmen",
+    "energyEstimateMissing": "Verbrauch oder Kraftstoffpreis fehlt",
+    "commissionUnknown": "Provision unbekannt",
+    "commissionEstimated": "Geschätzte Provision",
+    "grossUnknown": "Brutto unbekannt (Netto erfasst)",
+    "netPaidMismatch": "Auszahlung unstimmig",
+    "energyExpensesIgnored": "Kraftstoffkäufe nicht abgezogen (Schätzung)",
+    "payoutNotReceived": "Auszahlung nicht erhalten"
+  },
+  "vehicles": {
+    "title": "Meine Fahrzeuge",
+    "subtitle": "Autos, Motorräder und Roller: Verbrauch, Kosten und Fristen.",
+    "add": "Fahrzeug hinzufügen",
+    "edit": "Fahrzeug bearbeiten",
+    "empty": "Noch kein Fahrzeug.",
+    "name": "Fahrzeugname",
+    "namePlaceholder": "z. B. Mein Corolla",
+    "type": "Typ",
+    "fuelType": "Antrieb",
+    "make": "Marke",
+    "model": "Modell",
+    "year": "Baujahr",
+    "odometer": "Aktueller Kilometerstand",
+    "consumption": "Durchschnittsverbrauch",
+    "fuelPrice": "Kraftstoffpreis",
+    "kwhPrice": "Preis pro kWh",
+    "priceHint": "Ihr tatsächlicher Preis. Es wird kein offizieller Tarif vorausgefüllt.",
+    "tank": "Tank",
+    "financing": "Finanzierung",
+    "purchasePrice": "Kaufpreis",
+    "maintenanceInterval": "Wartungsintervall",
+    "lastMaintenance": "Letzte Wartung bei",
+    "insuranceExpiry": "Versicherung fällig",
+    "documentsExpiry": "Dokumente fällig",
+    "monthlyFixed": "Fixkosten / Monat",
+    "fixedCostsHint": "Versicherung, Kredit- oder Leasingraten, Steuern: unter Ausgaben › Fixkosten erfassen und dem Fahrzeug zuordnen.",
+    "twoWheelsHint": "Bei Motorrad oder Roller meist zwischen 2 und 5 L/100 km."
+  },
+  "vehicleTypes": {
+    "car": "Auto",
+    "moto": "Motorrad",
+    "scooter": "Roller",
+    "van": "Transporter",
+    "other": "Sonstiges"
+  },
+  "fuelTypes": {
+    "petrol": "Benzin",
+    "diesel": "Diesel",
+    "lpg": "Autogas (LPG)",
+    "hybrid": "Hybrid",
+    "electric": "Elektro",
+    "other": "Sonstiges"
+  },
+  "financing": {
+    "owned": "Eigentum",
+    "loan": "Kredit",
+    "lease": "Leasing",
+    "rental": "Miete",
+    "other": "Sonstiges"
+  },
+  "platforms": {
+    "title": "Meine Plattformen",
+    "subtitle": "Die Dienste, mit denen Sie arbeiten, und Ihre üblichen Provisionen.",
+    "add": "Plattform hinzufügen",
+    "empty": "Keine Plattform eingerichtet.",
+    "noIntegration": "DrivePro ist nicht mit Uber, Bolt, Yango oder anderen Plattformen verbunden: Die Beträge sind die, die Sie eingeben.",
+    "fromCatalog": "Aus der Liste wählen",
+    "custom": "Eigene Plattform",
+    "name": "Name",
+    "commissionPct": "Übliche Provision",
+    "commissionHint": "Wird nur verwendet, um eine nicht erfasste Provision zu schätzen.",
+    "notSet": "nicht angegeben"
+  },
+  "expenses": {
+    "title": "Ausgaben",
+    "subtitle": "Tägliche und gelegentliche Ausgaben sowie monatliche Fixkosten.",
+    "tabExpenses": "Ausgaben",
+    "tabFixed": "Fixkosten",
+    "add": "Ausgabe hinzufügen",
+    "edit": "Ausgabe bearbeiten",
+    "empty": "Noch keine Ausgabe.",
+    "category": "Kategorie",
+    "amount": "Betrag",
+    "description": "Beschreibung",
+    "kind": "Art",
+    "kinds": {
+      "daily": "Täglich",
+      "occasional": "Gelegentlich"
+    },
+    "payment": "Zahlungsart",
+    "receipt": "Beleg (Foto oder PDF)",
+    "receiptHint": "Optional, privat gespeichert.",
+    "receiptAttached": "Beleg angehängt",
+    "receiptNeedsAccount": "Belege hinzufügen erfordert ein angemeldetes Konto (sicherer Speicher).",
+    "energyNotice": "An Tagen mit geschätztem Kraftstoff werden diese Käufe nicht doppelt abgezogen. Im Modus „tatsächlich“ werden sie abgezogen."
+  },
+  "payment": {
+    "cash": "Bargeld",
+    "card": "Karte",
+    "mobile_money": "Mobile Money",
+    "transfer": "Überweisung",
+    "other": "Sonstiges"
+  },
+  "fixed": {
+    "add": "Fixkosten hinzufügen",
+    "empty": "Keine Fixkosten.",
+    "label": "Bezeichnung",
+    "monthly": "Monatlicher Betrag",
+    "allActivity": "Gesamte Tätigkeit",
+    "start": "Beginn",
+    "end": "Ende (optional)",
+    "ongoing": "laufend",
+    "totalMonthly": "Aktuelle monatliche Summe",
+    "explain": "Fixkosten werden nie vollständig an einem einzigen Tag abgezogen. Aktuelle Methode: {{method}} (im Profil änderbar)."
+  },
+  "fixedCategories": {
+    "insurance": "Versicherung",
+    "leasing": "Leasing",
+    "loan": "Kredit",
+    "rental": "Miete",
+    "tax": "Steuern",
+    "licence": "Konzession / Personenbeförderungsschein",
+    "phone": "Telefon und Internet",
+    "accounting": "Buchhaltung",
+    "parking": "Stellplatz",
+    "maintenance_plan": "Wartungsvertrag",
+    "other": "Sonstiges"
+  },
+  "categories": {
+    "fuel": "Kraftstoff",
+    "charging": "Elektrisches Laden",
+    "food": "Essen",
+    "drinks": "Getränke",
+    "cleaning": "Reinigung",
+    "carwash": "Autowäsche",
+    "maintenance": "Wartung",
+    "repair": "Reparatur",
+    "tyres": "Reifen",
+    "parking": "Parken",
+    "tolls": "Maut",
+    "insurance": "Versicherung",
+    "rental": "Miete",
+    "leasing": "Kredit oder Leasing",
+    "phone": "Telefon und Internet",
+    "admin": "Verwaltungskosten",
+    "platform_fees": "Plattformgebühren",
+    "misc": "Sonstiges",
+    "fuelEstimated": "Kraftstoff (geschätzt)",
+    "fixedCosts": "Fixkosten"
+  },
+  "activities": {
+    "vtc": "Fahrdienst (Mietwagen)",
+    "tvde": "TVDE",
+    "taxi": "Taxi",
+    "moto_taxi": "Motorradtaxi",
+    "delivery": "Lieferdienst",
+    "urban_transport": "Stadtverkehr",
+    "independent": "Selbstständiger Transport",
+    "fleet": "Flottenverwaltung",
+    "other": "Sonstiges"
+  },
+  "countries": {
+    "PT": "Portugal",
+    "FR": "Frankreich",
+    "DE": "Deutschland",
+    "BE": "Belgien",
+    "ES": "Spanien",
+    "IT": "Italien",
+    "CI": "Elfenbeinküste",
+    "CM": "Kamerun",
+    "ML": "Mali",
+    "BF": "Burkina Faso",
+    "SN": "Senegal",
+    "GN": "Guinea"
+  },
+  "history": {
+    "title": "Verlauf",
+    "subtitle_one": "{{count}} erfasster Tag",
+    "subtitle_other": "{{count}} erfasste Tage",
+    "status": "Status",
+    "withIssues": "Fehlende oder unstimmige Daten",
+    "withEstimates": "Mit Schätzungen",
+    "empty": "Kein passender Tag.",
+    "incomplete_one": "{{count}} Punkt zu prüfen",
+    "incomplete_other": "{{count}} Punkte zu prüfen"
+  },
+  "calendar": {
+    "title": "Kalender",
+    "monthTotal": "Monatssumme"
+  },
+  "stats": {
+    "title": "Statistiken",
+    "r7d": "7 Tage",
+    "r30d": "30 Tage",
+    "rMonth": "Dieser Monat",
+    "r12m": "12 Monate",
+    "revenueVsCosts": "Einnahmen und Kosten",
+    "monthlyProfit": "Gewinn pro Monat",
+    "hourlyTrend": "Entwicklung des Stundengewinns",
+    "breakdown": "Aufteilung der Ausgaben",
+    "fixedVsVariable": "Fixe und variable Kosten",
+    "variableCosts": "Variable Kosten (Energie und Ausgaben)",
+    "fixedCosts": "Fixkosten",
+    "fixedNote": "Fixkosten verteilt nach Methode: {{method}}."
+  },
+  "charts": {
+    "showTable": "Tabelle anzeigen",
+    "showChart": "Diagramm anzeigen"
+  },
+  "compare": {
+    "title": "Rentabilitätsvergleich",
+    "subtitle": "Die Plattform mit dem höchsten Umsatz ist nicht unbedingt die rentabelste.",
+    "by": "Vergleichen nach",
+    "byPlatform": "Plattform",
+    "byVehicle": "Fahrzeug",
+    "r90": "90 Tage",
+    "chartTitle": "Gewinn pro Stunde",
+    "method": "Rangfolge nach Stundengewinn. Ein Ergebnis wird nur angezeigt, wenn es auf mindestens {{days}} Tagen und {{hours}} Arbeitsstunden beruht.",
+    "prorated": "Einige Tage kombinieren mehrere Plattformen: Stunden, Kilometer und Kosten werden anteilig nach Umsatz verteilt. Das ist eine Näherung.",
+    "proratedShort": "anteilig",
+    "item": "Eintrag",
+    "days": "Tage",
+    "costs": "Kosten",
+    "insufficient": "Unzureichende Daten",
+    "sortNote": "Provisionen enthalten Plattformgebühren. Kosten umfassen Energie, variable Ausgaben und zugerechnete Fixkosten."
+  },
+  "goals": {
+    "title": "Finanzielle Ziele",
+    "daily": "Tagesziel",
+    "monthly": "Monatsziel",
+    "goal": "Ziel",
+    "dailyProgress": "Tagesziel",
+    "monthlyProgress": "Monatsziel",
+    "monthStatus": "Wo stehen Sie diesen Monat?",
+    "actual": "Tatsächlicher Gewinn",
+    "projected": "Hochrechnung Monatsende",
+    "projectionMethod": "Hochrechnungsmethode",
+    "pace": "Aktuelles Tempo",
+    "planned": "Geplante Tage",
+    "paceHelp": "Basierend auf Ihrem Tempo: {{worked}} Arbeitstage von {{elapsed}} vergangenen Tagen.",
+    "plannedHelp": "Basierend auf {{planned}} geplanten Arbeitstagen im Monat.",
+    "projectionLine": "Hochrechnung zum Monatsende: {{amount}}.",
+    "projectionDisclaimer": "Eine Hochrechnung ist kein garantiertes Einkommen.",
+    "onTrack": "Auf Kurs: {{amount}} über dem hochgerechneten Ziel.",
+    "behind": "Im Rückstand: Bei diesem Tempo würden {{amount}} fehlen.",
+    "neededPerDay": "Nötig wären etwa {{amount}} pro Tag an den verbleibenden {{days}} Tagen.",
+    "noGoal": "Legen Sie ein Monatsziel fest, um Ihren Fortschritt zu verfolgen.",
+    "settings": "Meine Ziele"
+  },
+  "tax": {
+    "title": "Steuerrücklage (Schätzung)",
+    "before": "Gewinn vor Rücklage",
+    "provision": "Geschätzte Rücklage",
+    "after": "Verbleibend nach Rücklage",
+    "notConfigured": "Nicht eingerichtet",
+    "rate": "Rücklagesatz",
+    "rateHint": "Legen Sie ihn selbst oder mit Ihrem Steuerberater fest. Es wird kein nationaler Satz automatisch angewendet.",
+    "note": "Status und Quelle des Satzes",
+    "noteHint": "z. B. Kleinunternehmer, Satz laut Steuerberater 2026.",
+    "disclaimer": "Diese Schätzung ersetzt keine Steuerberatung und ist keine offizielle Steuerberechnung."
+  },
+  "reports": {
+    "title": "Berichte und Exporte",
+    "kind": "Berichtsart",
+    "kinds": {
+      "day": "Täglich",
+      "week": "Wöchentlich",
+      "month": "Monatlich",
+      "year": "Jährlich",
+      "custom": "Eigener Zeitraum"
+    },
+    "reference": "Stichtag",
+    "from": "Von",
+    "to": "Bis",
+    "separator": "CSV-Trennzeichen",
+    "separatorHint": "„;“ für Excel auf Deutsch, Französisch, Portugiesisch.",
+    "pdf": "PDF (drucken)",
+    "pdfHint": "PDF: Wählen Sie im Druckdialog Ihres Browsers „Als PDF speichern“.",
+    "summary": "Übersicht",
+    "energy": "Kraftstoff / Energie",
+    "energySource": "Energiequelle",
+    "estimated": "Enthält Schätzungen",
+    "issues": "Zu prüfen",
+    "estimatedDays": "Tage mit Schätzungen",
+    "containsEstimates": "Dieser Bericht enthält geschätzte Werte (Kraftstoff, Provisionen oder unbestätigte Auszahlungen).",
+    "byPlatform": "Nach Plattform",
+    "byVehicle": "Nach Fahrzeug",
+    "byCategory": "Nach Ausgabenkategorie",
+    "src": {
+      "estimated": "Geschätzt",
+      "actual": "Tatsächlich",
+      "missing": "Fehlt"
+    }
+  },
+  "alerts": {
+    "title": "Hinweise",
+    "prefs": "Hinweise",
+    "inAppOnly": "Hinweise werden in der App angezeigt. Push- und E-Mail-Benachrichtigungen sind noch nicht verfügbar.",
+    "dailyReminder": "Sie haben den heutigen Tag noch nicht erfasst.",
+    "dailyGoalReached": "Glückwunsch, Tagesziel erreicht!",
+    "monthlyGoalBehind": "Bei diesem Tempo würden {{gap}} zum Monatsziel fehlen.",
+    "unusualExpense": "Ungewöhnliche Ausgabe: {{category}} über {{amount}} am {{date}}.",
+    "hourlyDecline": "Ihr Stundengewinn ist in den letzten 7 Tagen um {{pct}} % gesunken.",
+    "maintenanceDue": "Wartung für {{vehicle}} steht an (in etwa {{km}} km).",
+    "documentExpiry": "{{doc}} für {{vehicle}}: fällig am {{date}}.",
+    "docs": {
+      "insurance": "Versicherung",
+      "documents": "Fahrzeugdokumente"
+    }
+  },
+  "alertNames": {
+    "dailyReminder": "Tägliche Erinnerung",
+    "unusualExpense": "Ungewöhnliche Ausgaben",
+    "dailyGoalReached": "Tagesziel erreicht",
+    "monthlyGoalBehind": "Monatsziel im Rückstand",
+    "hourlyDecline": "Sinkende Stundenrentabilität",
+    "maintenanceDue": "Wartung fällig",
+    "documentExpiry": "Versicherung / Dokumente fällig"
+  },
+  "fleet": {
+    "title": "Flottenverwaltung",
+    "subtitle": "Mehrere Fahrer, mehrere Fahrzeuge, konsolidierte Berichte.",
+    "status": "Die Manager-Oberfläche ist noch nicht verfügbar.",
+    "readyTitle": "Serverseitig bereits vorhanden",
+    "r1": "Organisationen und Rollen (Eigentümer, Manager, Fahrer).",
+    "r2": "Ausdrückliche, widerrufliche Zustimmung des Fahrers vor jeder Datenfreigabe.",
+    "r3": "Zugriffsregeln (RLS): Ein Manager sieht nur zustimmende Fahrer seiner Flotte, nur lesend.",
+    "nextTitle": "Nächste Schritte",
+    "n1": "Fahrer einladen",
+    "n2": "Konsolidierte Übersicht",
+    "n3": "Rentabilitätsvergleich der Flottenfahrzeuge",
+    "n4": "Flottenberichte"
+  },
+  "admin": {
+    "title": "Verwaltung",
+    "status": "Die Bearbeitungskonsole (Länder, Währungen, Plattformen, Übersetzungen, Abonnements) ist in Entwicklung. Tabellen und Zugriffsrechte sind bereit.",
+    "needsAccount": "Die Verwaltung erfordert ein angemeldetes Konto mit Administratorrolle, die serverseitig vergeben wird.",
+    "denied": "Zugriff verweigert: Ihr Konto hat keine Administratorrolle.",
+    "stats": "Aggregierte Statistiken",
+    "countries": "Eingerichtete Länder",
+    "platforms": "Plattformkatalog",
+    "noTariffs": "Es sind keine offiziellen Provisionssätze oder Kraftstoffpreise gespeichert. Jeder hinzugefügte Richtwert muss datiert und mit Quelle versehen sein."
+  }
+}
