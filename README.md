@@ -12,7 +12,7 @@ DrivePro est une application web responsive, pensée d'abord pour le téléphone
 | **Gestion de flotte** : invitations par lien, consentement du chauffeur révocable, tableau de bord consolidé, rentabilité des véhicules, export CSV | ✅ testée de bout en bout |
 | **Notifications** : centre de notifications, résumés hebdomadaires et mensuels, rappel quotidien en push (fonction Edge + service worker) | ✅ testées de bout en bout (hors livraison par les services push réels) |
 | **Administration** : statistiques agrégées, utilisateurs (admin, suspension, plan), référentiels, prix indicatifs sourcés, traductions, journal d'audit | ✅ testée de bout en bout |
-| Saisie de la journée (plusieurs plateformes, brut/net, bonus et pourboires, énergie estimée ou réelle) | ✅ |
+| Saisie de la journée simplifiée : début, fin et pause (temps calculé automatiquement), puis par plateforme le chiffre d'affaires et la commission ; carburant saisi en dépense | ✅ |
 | Véhicules (voiture, moto, électrique), plateformes, dépenses, charges fixes mensuelles | ✅ |
 | Tableau de bord, historique filtrable, calendrier, statistiques (7 j, 30 j, mois, 12 mois) | ✅ |
 | Comparateur plateformes et véhicules, objectifs, provision fiscale | ✅ |

@@ -394,8 +394,8 @@
     "payoutStatus": "Payout",
     "onlyNetKnown": "I only know the amount paid out",
     "onlyNetKnownHint": "Gross turnover will be unknown and commissions treated as already deducted.",
-    "gross": "Gross fares",
-    "commission": "Commission withheld",
+    "gross": "Turnover for the day",
+    "commission": "Platform commission",
     "commissionEstimate": "Empty: estimate at {{pct}} % = {{amount}}.",
     "commissionDerived": "Empty: derived from the payout = {{amount}}.",
     "commissionUnknownHint": "Empty and no rate configured: commission unknown (0).",
@@ -422,7 +422,10 @@
     "savedTitle": "Day saved",
     "backToDashboard": "Back to dashboard",
     "noPlatforms": "Add your platforms first to find them here:",
-    "saveFailed": "Saving failed; your entries are still on screen. Check your connection and try again. ({{message}})"
+    "saveFailed": "Saving failed; your entries are still on screen. Check your connection and try again. ({{message}})",
+    "commissionHint": "Amount the platform took for the day.",
+    "workedTime": "Working time",
+    "workedTimeMissing": "enter start and end"
   },
   "payout": {
     "estimated": "Estimated",

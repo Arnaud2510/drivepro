@@ -83,6 +83,11 @@ describe('edge cases', () => {
     expect(r.issues).toContain('noDistance');
   });
 
+  it('actual fuel mode: missing kilometres is not an issue', () => {
+    const r = computeDay(day({ odoStart: null, odoEnd: null, energyMode: 'actual' }), ctx);
+    expect(r.issues).not.toContain('noDistance');
+  });
+
   it('day without hours: hourly ratio is null (insufficient data)', () => {
     const r = computeDay(day({ startTime: null, endTime: null }), ctx);
     expect(r.hours).toBeNull();

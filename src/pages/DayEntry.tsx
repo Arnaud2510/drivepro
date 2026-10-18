@@ -1,20 +1,32 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Copy, Plus, Trash2, CheckCircle2 } from 'lucide-react';
+import { Copy, Plus, Trash2, CheckCircle2, Clock } from 'lucide-react';
 import { useStore } from '../data/store';
 import { newId } from '../data/repository';
-import type { Earning, EnergyMode, Expense, WorkDay } from '../domain/types';
-import { computeDay, fixedShareForDay } from '../lib/finance/engine';
+import type { Earning, Expense, UserPlatform, WorkDay } from '../domain/types';
+import { computeDay, computeEarning, dayHours, fixedShareForDay } from '../lib/finance/engine';
 import { useFormat, useToday } from '../components/hooks';
-import { Badge, Button, Card, Checkbox, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, Toggle, useMoney } from '../components/ui';
+import { Badge, Button, Card, Input, Money, MoneyInput, Notice, NumberInput, PageHeader, Select, useMoney } from '../components/ui';
 import { useCatalog } from '../data/catalog';
 import { useConfirm } from '../components/confirm';
 
 const blankEarning = (platformId: string | null): Earning => ({
   id: newId(), platformId, label: '', grossKnown: true, gross: null, commission: null, otherFees: 0,
-  bonus: 0, bonusIncluded: false, tips: 0, tipsIncluded: false, netPaid: null, payoutStatus: 'pending',
+  bonus: 0, bonusIncluded: false, tips: 0, tipsIncluded: false, netPaid: null, payoutStatus: 'received',
 });
+
+// The form only asks for the day's turnover and the platform commission. Older entries
+// (net only, bonus, tips, other fees) are folded into those two fields without changing the profit.
+const simplifyEarning = (e: Earning, platform: UserPlatform | undefined): Earning => {
+  const r = computeEarning(e, platform);
+  const known = r.commissionSource === 'actual' || r.commissionSource === 'derived' || r.commissionSource === 'included';
+  return {
+    ...e, grossKnown: true, gross: e.gross == null && e.netPaid == null ? null : r.revenue,
+    commission: known ? r.commission + r.otherFees : null, otherFees: 0,
+    bonus: 0, bonusIncluded: false, tips: 0, tipsIncluded: false, netPaid: null, payoutStatus: 'received',
+  };
+};
 
 export function DayEntry() {
   const { t } = useTranslation();
@@ -34,15 +46,16 @@ export function DayEntry() {
 
   const fresh = (): WorkDay => {
     const vehicleId = lastDay?.vehicleId ?? activeVehicles[0]?.id ?? null;
-    const lastOdo = vehicleId ? Math.max(0, ...data.days.filter((d) => d.vehicleId === vehicleId && d.date < date).map((d) => d.odoEnd ?? 0)) : 0;
     return {
       id: newId(), date, startTime: null, endTime: null, breakMinutes: 0, hoursOverride: null, vehicleId,
-      odoStart: lastOdo || data.vehicles.find((v) => v.id === vehicleId)?.odometer || null, odoEnd: null, distanceKm: null, personalKm: 0,
-      trips: null, deliveries: null, energyMode: profile?.defaultEnergyMode ?? 'estimated',
+      odoStart: null, odoEnd: null, distanceKm: null, personalKm: 0,
+      // Fuel is whatever the driver enters as an expense: no kilometre-based estimate.
+      trips: null, deliveries: null, energyMode: 'actual',
       earnings: activePlatforms.length ? [blankEarning(activePlatforms[0].id)] : [blankEarning(null)], notes: '',
     };
   };
-  const [day, setDay] = useState<WorkDay>(() => existing ?? fresh());
+  const load = (d: WorkDay): WorkDay => ({ ...d, earnings: d.earnings.map((e) => simplifyEarning(e, data.platforms.find((p) => p.id === e.platformId))) });
+  const [day, setDay] = useState<WorkDay>(() => (existing ? load(existing) : fresh()));
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -52,12 +65,15 @@ export function DayEntry() {
   useEffect(() => {
     // The day we just saved becomes `existing`: keep the form and its confirmation.
     if (existing && existing.id === day.id) return;
-    setDay(existing ?? fresh());
+    setDay(existing ? load(existing) : fresh());
     setSaved(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, existing?.id]);
 
   const set = (patch: Partial<WorkDay>) => setDay((d) => ({ ...d, ...patch }));
+  // Hours always come from start, end and break.
+  const setTime = (patch: Partial<WorkDay>) => set({ ...patch, hoursOverride: null });
+  const hours = dayHours({ ...day, hoursOverride: null });
   const setEarning = (id: string, patch: Partial<Earning>) => setDay((d) => ({ ...d, earnings: d.earnings.map((e) => (e.id === id ? { ...e, ...patch } : e)) }));
   const dayExpenses = data.expenses.filter((e) => e.date === date);
   const vehicle = data.vehicles.find((v) => v.id === day.vehicleId);
@@ -82,7 +98,6 @@ export function DayEntry() {
     setSaveError(null);
     try {
       await upsert('days', day);
-      if (vehicle && day.odoEnd && (vehicle.odometer ?? 0) < day.odoEnd) await upsert('vehicles', { ...vehicle, odometer: day.odoEnd });
       setSaved(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
@@ -103,7 +118,7 @@ export function DayEntry() {
   }
 
   const issueTone = (i: string) => (['odometerInverted', 'netPaidMismatch'].includes(i) ? 'loss' : 'warn');
-  const energyLabel = vehicle?.fuelType === 'electric' ? t('day.energyCharging') : t('day.energyFuel');
+  const shownIssues = result.issues.filter((i) => !['commissionEstimated', 'payoutNotReceived', 'noDistance', 'odometerInverted'].includes(i));
 
   return (
     <div className="space-y-5">
@@ -124,8 +139,7 @@ export function DayEntry() {
                     endTime: lastDay.endTime,
                     breakMinutes: lastDay.breakMinutes,
                     vehicleId: lastDay.vehicleId,
-                    energyMode: lastDay.energyMode,
-                    earnings: lastDay.earnings.map((e) => ({ ...blankEarning(e.platformId), grossKnown: e.grossKnown, bonusIncluded: e.bonusIncluded, tipsIncluded: e.tipsIncluded })),
+                    earnings: lastDay.earnings.map((e) => blankEarning(e.platformId)),
                   })
                 }
               >
@@ -163,28 +177,14 @@ export function DayEntry() {
       {!activePlatforms.length && <Notice>{t('day.noPlatforms')} <Link to="/app/platforms" className="underline">{t('nav.platforms')}</Link></Notice>}
 
       <Card title={t('day.general')}>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Input label={t('day.start')} type="time" value={day.startTime ?? ''} onChange={(e) => set({ startTime: e.target.value || null })} />
-          <Input label={t('day.end')} type="time" value={day.endTime ?? ''} onChange={(e) => set({ endTime: e.target.value || null })} />
-          <NumberInput label={t('day.break')} suffix="min" value={day.breakMinutes} onChange={(v) => set({ breakMinutes: v ?? 0 })} />
-          <NumberInput label={t('day.activeHours')} suffix="h" max={24} value={day.hoursOverride} onChange={(v) => set({ hoursOverride: v })} hint={t('day.activeHoursHint')} />
-          <div className="col-span-2">
-            <Select label={t('day.vehicle')} value={day.vehicleId ?? ''} onChange={(e) => set({ vehicleId: e.target.value || null })}>
-              <option value="">{t('day.noVehicle')}</option>
-              {activeVehicles.map((v) => (
-                <option key={v.id} value={v.id}>{v.name}</option>
-              ))}
-            </Select>
-          </div>
-          <NumberInput label={t('day.trips')} value={day.trips} onChange={(v) => set({ trips: v })} />
-          <NumberInput label={t('day.deliveries')} value={day.deliveries} onChange={(v) => set({ deliveries: v })} />
-          <NumberInput label={t('day.odoStart')} suffix="km" value={day.odoStart} onChange={(v) => set({ odoStart: v })} />
-          <NumberInput label={t('day.odoEnd')} suffix="km" value={day.odoEnd} onChange={(v) => set({ odoEnd: v })} />
-          <NumberInput label={t('day.distanceDirect')} suffix="km" value={day.distanceKm} onChange={(v) => set({ distanceKm: v })} hint={t('day.distanceDirectHint')} />
-          <NumberInput label={t('day.personalKm')} suffix="km" value={day.personalKm} onChange={(v) => set({ personalKm: v ?? 0 })} />
+        <div className="grid grid-cols-3 gap-3">
+          <Input label={t('day.start')} type="time" value={day.startTime ?? ''} onChange={(e) => setTime({ startTime: e.target.value || null })} />
+          <Input label={t('day.end')} type="time" value={day.endTime ?? ''} onChange={(e) => setTime({ endTime: e.target.value || null })} />
+          <NumberInput label={t('day.break')} suffix="min" value={day.breakMinutes} onChange={(v) => setTime({ breakMinutes: v ?? 0 })} />
         </div>
-        <p className="mt-3 text-sm text-slate-600">
-          {t('day.computed')}: <strong>{f.hours(result.hours)}</strong> · <strong>{f.km(result.businessKm)}</strong> {t('day.businessKm')}
+        <p className="mt-3 text-sm text-slate-600" aria-live="polite">
+          <Clock className="mr-1.5 inline h-4 w-4 align-[-3px] text-brand-700" aria-hidden />
+          {t('day.workedTime')}: <strong className="text-brand-900">{hours != null ? f.hours(hours) : t('day.workedTimeMissing')}</strong>
         </p>
       </Card>
 
@@ -203,99 +203,41 @@ export function DayEntry() {
             return (
               <fieldset key={e.id} className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
                 <legend className="sr-only">{f.platformName(e.platformId)}</legend>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <div className="col-span-2">
-                    <Select label={t('day.platform')} value={e.platformId ?? ''} onChange={(ev) => setEarning(e.id, { platformId: ev.target.value || null })}>
-                      {data.platforms.filter((p) => p.active || p.id === e.platformId).map((p) => (
-                        <option key={p.id} value={p.id}>{p.name}</option>
-                      ))}
-                      <option value="">{t('day.directRides')}</option>
-                    </Select>
-                  </div>
-                  <Select label={t('day.payoutStatus')} value={e.payoutStatus} onChange={(ev) => setEarning(e.id, { payoutStatus: ev.target.value as Earning['payoutStatus'] })}>
-                    {(['estimated', 'pending', 'received'] as const).map((s) => (
-                      <option key={s} value={s}>{t(`payout.${s}`)}</option>
-                    ))}
-                  </Select>
-                  <div className="flex items-end justify-end">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2 flex items-end gap-2">
+                    <div className="flex-1">
+                      <Select label={t('day.platform')} value={e.platformId ?? ''} onChange={(ev) => setEarning(e.id, { platformId: ev.target.value || null })}>
+                        {data.platforms.filter((p) => p.active || p.id === e.platformId).map((p) => (
+                          <option key={p.id} value={p.id}>{p.name}</option>
+                        ))}
+                        <option value="">{t('day.directRides')}</option>
+                      </Select>
+                    </div>
                     {day.earnings.length > 1 && (
                       <Button variant="ghost" aria-label={t('common.delete')} onClick={() => set({ earnings: day.earnings.filter((x) => x.id !== e.id) })}>
                         <Trash2 className="h-4 w-4" aria-hidden />
                       </Button>
                     )}
                   </div>
-                  <div className="col-span-2 sm:col-span-4">
-                    <Checkbox checked={!e.grossKnown} onChange={(v) => setEarning(e.id, { grossKnown: !v })} label={t('day.onlyNetKnown')} hint={t('day.onlyNetKnownHint')} />
-                  </div>
-                  {e.grossKnown && (
-                    <>
-                      <MoneyInput label={t('day.gross')} currency={currency} value={e.gross} onChange={(v) => setEarning(e.id, { gross: v })} />
-                      <MoneyInput
-                        label={t('day.commission')}
-                        currency={currency}
-                        value={e.commission}
-                        onChange={(v) => setEarning(e.id, { commission: v })}
-                        hint={
-                          e.commission == null
-                            ? r?.commissionSource === 'estimated'
-                              ? t('day.commissionEstimate', { pct: pf?.commissionPct, amount: fmt(r.commission) })
-                              : r?.commissionSource === 'derived'
-                                ? t('day.commissionDerived', { amount: fmt(r.commission) })
-                                : t('day.commissionUnknownHint')
-                            : undefined
-                        }
-                      />
-                      <MoneyInput label={t('day.otherFees')} currency={currency} value={e.otherFees} onChange={(v) => setEarning(e.id, { otherFees: v ?? 0 })} />
-                    </>
-                  )}
-                  <MoneyInput label={t('day.netPaid')} currency={currency} value={e.netPaid} onChange={(v) => setEarning(e.id, { netPaid: v })} hint={e.grossKnown ? t('day.netPaidHint') : undefined} />
-                  {e.grossKnown && (
-                    <>
-                      <div className="space-y-2">
-                        <MoneyInput label={t('day.bonus')} currency={currency} value={e.bonus} onChange={(v) => setEarning(e.id, { bonus: v ?? 0 })} />
-                        <Checkbox checked={e.bonusIncluded} onChange={(v) => setEarning(e.id, { bonusIncluded: v })} label={t('day.includedInGross')} />
-                      </div>
-                      <div className="space-y-2">
-                        <MoneyInput label={t('day.tips')} currency={currency} value={e.tips} onChange={(v) => setEarning(e.id, { tips: v ?? 0 })} />
-                        <Checkbox checked={e.tipsIncluded} onChange={(v) => setEarning(e.id, { tipsIncluded: v })} label={t('day.includedInGross')} />
-                      </div>
-                    </>
-                  )}
+                  <MoneyInput label={t('day.gross')} currency={currency} value={e.gross} onChange={(v) => setEarning(e.id, { gross: v })} />
+                  <MoneyInput
+                    label={t('day.commission')}
+                    currency={currency}
+                    value={e.commission}
+                    onChange={(v) => setEarning(e.id, { commission: v })}
+                    hint={e.commission == null && r?.commissionSource === 'estimated' ? t('day.commissionEstimate', { pct: pf?.commissionPct, amount: fmt(r.commission) }) : t('day.commissionHint')}
+                  />
                 </div>
                 {r && (
                   <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                    {t('day.lineRevenue')}: <Money value={r.revenue} className="font-semibold" /> · {t('day.lineAfter')}: <Money value={r.afterCommissions} className="font-semibold" />
-                    {r.commissionSource === 'estimated' && <Badge tone="warn">{t('day.commissionIsEstimated')}</Badge>}
-                    {r.grossUnknown && <Badge tone="warn">{t('issues.grossUnknown')}</Badge>}
+                    {t('day.lineAfter')}: <Money value={r.afterCommissions} className="font-semibold" />
+                    {r.commissionSource === 'estimated' && e.gross != null && <Badge tone="warn">{t('day.commissionIsEstimated')}</Badge>}
                   </p>
                 )}
               </fieldset>
             );
           })}
         </div>
-      </Card>
-
-      <Card title={t('day.energy')}>
-        <Toggle<EnergyMode>
-          label={t('settings.energyMode')}
-          value={day.energyMode}
-          onChange={(v) => set({ energyMode: v })}
-          options={[
-            { value: 'estimated', label: t('energyMode.estimated') },
-            { value: 'actual', label: t('energyMode.actual') },
-          ]}
-        />
-        <p className="mt-2 text-sm text-slate-600">{day.energyMode === 'estimated' ? t('day.energyEstimatedHelp') : t('day.energyActualHelp')}</p>
-        <p className="mt-2 text-sm">
-          {energyLabel}: <Money value={result.energy.cost} className="font-semibold" />{' '}
-          {result.energy.source === 'estimated' && result.energy.quantity != null && (
-            <span className="text-slate-500">
-              ({f.km(result.businessKm)} × {vehicle?.consumption} {result.energy.unit}/100 km = {result.energy.quantity.toFixed(2)} {result.energy.unit}) <Badge tone="warn">{t('common.estimated')}</Badge>
-            </span>
-          )}
-          {result.energy.source === 'missing' && <span className="text-warn"> {t('issues.energyEstimateMissing')}</span>}
-        </p>
-        {result.ignoredEnergyExpenses > 0 && <p className="mt-1 text-xs text-slate-500">{t('dashboard.ignoredEnergy', { amount: fmt(result.ignoredEnergyExpenses) })}</p>}
       </Card>
 
       <Card title={t('day.expenses')}>
@@ -336,8 +278,7 @@ export function DayEntry() {
           {[
             ['dashboard.revenue', result.grossRevenue],
             ['dashboard.commissions', -(result.commissions + result.platformFees)],
-            [vehicle?.fuelType === 'electric' ? 'day.energyCharging' : 'day.energyFuel', -result.energy.cost],
-            ['dashboard.variableExpenses', -result.variableExpenses],
+            ['dashboard.variableExpenses', -(result.energy.cost + result.variableExpenses)],
             ['dashboard.fixedShare', -result.fixedShare],
           ].map(([k, v]) => (
             <div key={k as string} className="flex justify-between gap-2 sm:block">
@@ -351,11 +292,11 @@ export function DayEntry() {
           </div>
         </dl>
         <p className="mt-2 text-sm text-slate-600">
-          {f.perHour(result.profitPerHour)} · {f.perKm(result.profitPerKm)} · {t('dashboard.margin')} {f.pct(result.marginPct)}
+          {f.perHour(result.profitPerHour)} · {t('dashboard.margin')} {f.pct(result.marginPct)}
         </p>
-        {result.issues.filter((i) => i !== 'commissionEstimated').length > 0 && (
+        {shownIssues.length > 0 && (
           <ul className="mt-3 flex flex-wrap gap-2">
-            {result.issues.filter((i) => i !== 'commissionEstimated').map((i) => (
+            {shownIssues.map((i) => (
               <li key={i}><Badge tone={issueTone(i)}>{t(`issues.${i}`)}</Badge></li>
             ))}
           </ul>

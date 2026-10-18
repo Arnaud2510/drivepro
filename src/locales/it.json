@@ -394,8 +394,8 @@
     "payoutStatus": "Pagamento",
     "onlyNetKnown": "Conosco solo l'importo versato",
     "onlyNetKnownHint": "Il fatturato lordo sarà sconosciuto e le commissioni considerate già dedotte.",
-    "gross": "Importo lordo delle corse",
-    "commission": "Commissione trattenuta",
+    "gross": "Fatturato della giornata",
+    "commission": "Commissione della piattaforma",
     "commissionEstimate": "Vuoto: stima al {{pct}} % = {{amount}}.",
     "commissionDerived": "Vuoto: ricavata dall'importo versato = {{amount}}.",
     "commissionUnknownHint": "Vuoto e nessuna aliquota configurata: commissione sconosciuta (0).",
@@ -422,7 +422,10 @@
     "savedTitle": "Giornata salvata",
     "backToDashboard": "Torna al cruscotto",
     "noPlatforms": "Aggiungi prima le tue piattaforme per ritrovarle qui:",
-    "saveFailed": "Salvataggio non riuscito; i dati restano sullo schermo. Controlla la connessione e riprova. ({{message}})"
+    "saveFailed": "Salvataggio non riuscito; i dati restano sullo schermo. Controlla la connessione e riprova. ({{message}})",
+    "commissionHint": "Importo trattenuto dalla piattaforma nella giornata.",
+    "workedTime": "Tempo di lavoro",
+    "workedTimeMissing": "inserisci inizio e fine"
   },
   "payout": {
     "estimated": "Stimato",

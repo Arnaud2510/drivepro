@@ -200,7 +200,8 @@ export function computeDay(day: WorkDay, ctx: DayContext): DayResult {
 
   const dist = dayDistance(day);
   if (dist.inverted) issues.add('odometerInverted');
-  if (dist.business === null) issues.add('noDistance');
+  // Distance only matters when fuel is estimated from kilometres.
+  if (dist.business === null && day.energyMode === 'estimated') issues.add('noDistance');
   const hours = dayHours(day);
   if (hours === null) issues.add('noHours');
   if (day.earnings.length === 0) issues.add('noRevenue');

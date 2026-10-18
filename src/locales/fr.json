@@ -394,8 +394,8 @@
     "payoutStatus": "Versement",
     "onlyNetKnown": "Je connais seulement le montant versé",
     "onlyNetKnownHint": "Le chiffre d'affaires brut sera inconnu et les commissions considérées comme déjà déduites.",
-    "gross": "Montant brut des courses",
-    "commission": "Commission prélevée",
+    "gross": "Chiffre d'affaires de la journée",
+    "commission": "Commission de la plateforme",
     "commissionEstimate": "Vide : estimation à {{pct}} % = {{amount}}.",
     "commissionDerived": "Vide : déduite du montant versé = {{amount}}.",
     "commissionUnknownHint": "Vide et aucun taux configuré : commission inconnue (0).",
@@ -422,7 +422,10 @@
     "savedTitle": "Journée enregistrée",
     "backToDashboard": "Retour au tableau de bord",
     "noPlatforms": "Ajoutez d'abord vos plateformes pour les retrouver ici :",
-    "saveFailed": "L'enregistrement a échoué, vos saisies sont conservées à l'écran. Vérifiez votre connexion et réessayez. ({{message}})"
+    "saveFailed": "L'enregistrement a échoué, vos saisies sont conservées à l'écran. Vérifiez votre connexion et réessayez. ({{message}})",
+    "commissionHint": "Montant prélevé par la plateforme sur la journée.",
+    "workedTime": "Temps de travail",
+    "workedTimeMissing": "renseignez le début et la fin"
   },
   "payout": {
     "estimated": "Estimé",

@@ -34,9 +34,9 @@ export function Onboarding() {
   async function finish() {
     setSaving(true);
     try {
-      for (const [id, pct] of Object.entries(selected)) {
+      for (const id of Object.keys(selected)) {
         const cat = PLATFORM_CATALOG.find((c) => c.id === id);
-        await upsert('platforms', { id: newId(), name: cat?.name ?? id, catalogId: cat ? id : null, commissionPct: pct, notes: '', active: true });
+        await upsert('platforms', { id: newId(), name: cat?.name ?? id, catalogId: cat ? id : null, commissionPct: null, notes: '', active: true });
       }
       if (veh.name.trim()) {
         const v: Vehicle = {
@@ -189,21 +189,6 @@ export function Onboarding() {
                   {t('common.add')}
                 </Button>
               </div>
-              {Object.keys(selected).length > 0 && (
-                <div className="space-y-3 border-t border-slate-200 pt-4">
-                  <p className="text-sm text-slate-600">{t('onboarding.commissionHint')}</p>
-                  {Object.entries(selected).map(([id, pct]) => (
-                    <NumberInput
-                      key={id}
-                      label={`${PLATFORM_CATALOG.find((c) => c.id === id)?.name ?? id} — ${t('platforms.commissionPct')}`}
-                      suffix="%"
-                      max={100}
-                      value={pct}
-                      onChange={(v) => setSelected((s) => ({ ...s, [id]: v }))}
-                    />
-                  ))}
-                </div>
-              )}
             </div>
           )}
           {step === 3 && (

@@ -394,8 +394,8 @@
     "payoutStatus": "Pago",
     "onlyNetKnown": "Solo conozco el importe abonado",
     "onlyNetKnownHint": "La facturación bruta será desconocida y las comisiones se considerarán ya deducidas.",
-    "gross": "Importe bruto de los viajes",
-    "commission": "Comisión retenida",
+    "gross": "Facturación del día",
+    "commission": "Comisión de la plataforma",
     "commissionEstimate": "Vacío: estimación al {{pct}} % = {{amount}}.",
     "commissionDerived": "Vacío: deducida del importe abonado = {{amount}}.",
     "commissionUnknownHint": "Vacío y sin tasa configurada: comisión desconocida (0).",
@@ -422,7 +422,10 @@
     "savedTitle": "Jornada guardada",
     "backToDashboard": "Volver al panel",
     "noPlatforms": "Añade primero tus plataformas para encontrarlas aquí:",
-    "saveFailed": "No se pudo guardar; tus datos siguen en pantalla. Comprueba tu conexión e inténtalo de nuevo. ({{message}})"
+    "saveFailed": "No se pudo guardar; tus datos siguen en pantalla. Comprueba tu conexión e inténtalo de nuevo. ({{message}})",
+    "commissionHint": "Importe que la plataforma se quedó en el día.",
+    "workedTime": "Tiempo de trabajo",
+    "workedTimeMissing": "indique el inicio y el fin"
   },
   "payout": {
     "estimated": "Estimado",

@@ -394,8 +394,8 @@
     "payoutStatus": "Auszahlung",
     "onlyNetKnown": "Ich kenne nur den ausgezahlten Betrag",
     "onlyNetKnownHint": "Der Bruttoumsatz ist dann unbekannt und die Provisionen gelten als bereits abgezogen.",
-    "gross": "Bruttofahrpreise",
-    "commission": "Einbehaltene Provision",
+    "gross": "Tagesumsatz",
+    "commission": "Provision der Plattform",
     "commissionEstimate": "Leer: Schätzung zu {{pct}} % = {{amount}}.",
     "commissionDerived": "Leer: aus der Auszahlung abgeleitet = {{amount}}.",
     "commissionUnknownHint": "Leer und kein Satz hinterlegt: Provision unbekannt (0).",
@@ -422,7 +422,10 @@
     "savedTitle": "Tag gespeichert",
     "backToDashboard": "Zurück zur Übersicht",
     "noPlatforms": "Fügen Sie zuerst Ihre Plattformen hinzu, um sie hier zu finden:",
-    "saveFailed": "Speichern fehlgeschlagen; Ihre Eingaben bleiben erhalten. Prüfen Sie die Verbindung und versuchen Sie es erneut. ({{message}})"
+    "saveFailed": "Speichern fehlgeschlagen; Ihre Eingaben bleiben erhalten. Prüfen Sie die Verbindung und versuchen Sie es erneut. ({{message}})",
+    "commissionHint": "Betrag, den die Plattform für den Tag einbehalten hat.",
+    "workedTime": "Arbeitszeit",
+    "workedTimeMissing": "Beginn und Ende eingeben"
   },
   "payout": {
     "estimated": "Geschätzt",

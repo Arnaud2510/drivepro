@@ -42,10 +42,8 @@ async function enterDay(p, date, gross) {
   await p.goto(`${APP}/app/day/${date}`);
   await p.getByLabel('Début', { exact: true }).fill('08:00');
   await p.getByLabel('Fin', { exact: true }).fill('18:00');
-  await p.getByLabel(/Compteur début/).fill('1000');
-  await p.getByLabel(/Compteur fin/).fill('1200');
-  await p.getByLabel(/Montant brut des courses/).fill(String(gross));
-  await p.getByLabel(/Commission prélevée/).fill(String(gross / 5));
+  await p.getByLabel(/Chiffre d'affaires de la journée/).fill(String(gross));
+  await p.getByLabel(/Commission de la plateforme/).fill(String(gross / 5));
   await p.getByRole('button', { name: /Terminer ma journée|Mettre à jour/ }).click();
   await p.getByText('Journée enregistrée').waitFor();
 }
