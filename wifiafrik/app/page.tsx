@@ -1,51 +1,9 @@
 import Link from "next/link";
 import { Wifi } from "lucide-react";
 import AfricaMap from "@/components/AfricaMap";
-import PlanCard, { type Plan } from "@/components/PlanCard";
-
-const PLANS: readonly Plan[] = [
-  {
-    id: "semaine",
-    label: "SEMAINE",
-    title: "5Go",
-    detail: "Valable 7 jours",
-    priceFcfa: 2500,
-    accent: "orange",
-    icon: "calendar",
-  },
-  {
-    id: "mois",
-    label: "MOIS",
-    title: "10Go",
-    detail: "Valable 30 jours",
-    priceFcfa: 5000,
-    accent: "blue",
-    icon: "calendar",
-  },
-  {
-    id: "illimite",
-    label: "ILLIMITÉ",
-    title: "Hotspot illimité",
-    detail: "Valable 30 jours",
-    priceFcfa: 12000,
-    accent: "orange",
-    icon: "infinity",
-  },
-];
-
-/** Dégradé partagé par les icônes Lucide (classe .wa-neon-icon). */
-function IconGradientDefs() {
-  return (
-    <svg aria-hidden="true" focusable="false" width="0" height="0" className="absolute">
-      <defs>
-        <linearGradient id="wa-icon-gradient" gradientUnits="userSpaceOnUse" x1="2" y1="2" x2="22" y2="22">
-          <stop offset="0.15" stopColor="#FF6B00" />
-          <stop offset="0.9" stopColor="#2563EB" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
+import IconGradientDefs from "@/components/IconGradientDefs";
+import PlanCard from "@/components/PlanCard";
+import { PLANS } from "@/lib/plans";
 
 export default function HomePage() {
   return (
