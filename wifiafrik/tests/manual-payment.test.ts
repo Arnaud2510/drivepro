@@ -17,3 +17,14 @@ describe("configuration du paiement manuel", () => {
     expect(normalizePayerReference("abc")).toBeNull();
   });
 });
+
+describe("diagnostic de configuration Supabase", () => {
+  it("signale les variables absentes ou mal formées", async () => {
+    const { orderStoreConfigProblems } = await import("@/lib/orders");
+    expect(orderStoreConfigProblems({})).toHaveLength(2);
+    expect(orderStoreConfigProblems({ SUPABASE_URL: "rwuaznygtoifzqggvlnr.supabase.co", SUPABASE_SERVICE_ROLE_KEY: "k" })).toEqual([
+      "SUPABASE_URL doit ressembler à https://xxxx.supabase.co (sans espace ni chemin).",
+    ]);
+    expect(orderStoreConfigProblems({ SUPABASE_URL: " https://abc.supabase.co ", SUPABASE_SERVICE_ROLE_KEY: "k" })).toEqual([]);
+  });
+});

@@ -223,11 +223,23 @@ export class SupabaseOrderStore implements OrderStore {
 
 let store: SupabaseOrderStore | null = null;
 
+/** Noms des variables de connexion à Supabase absentes ou mal formées (pour un diagnostic sans secret). */
+export function orderStoreConfigProblems(env: Readonly<Record<string, string | undefined>> = process.env): string[] {
+  const problems: string[] = [];
+  const url = env.SUPABASE_URL?.trim();
+  if (!url) problems.push("SUPABASE_URL est absente.");
+  else if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url))
+    problems.push("SUPABASE_URL doit ressembler à https://xxxx.supabase.co (sans espace ni chemin).");
+  if (!env.SUPABASE_SERVICE_ROLE_KEY?.trim()) problems.push("SUPABASE_SERVICE_ROLE_KEY est absente.");
+  return problems;
+}
+
 export function orderStore(): OrderStore {
   if (store) return store;
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error("SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY doivent être définis.");
+  const problems = orderStoreConfigProblems();
+  if (problems.length > 0) throw new Error(`Configuration Supabase incomplète : ${problems.join(" ")}`);
+  const url = process.env.SUPABASE_URL!.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!.trim();
   store = new SupabaseOrderStore(
     createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } }),
   );
