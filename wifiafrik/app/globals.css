@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --wa-black: #000000;
+  --wa-orange: #ff6b00;
+  --wa-blue: #2563eb;
+  --wa-white: #ffffff;
+  --wa-muted: #a1a1aa;
+}
+
+html {
+  background-color: var(--wa-black);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--wa-black);
+  overflow-x: clip;
+}
+
+@layer components {
+  /* Icônes Lucide : trait en dégradé orange → bleu (défini dans <IconGradientDefs />). */
+  .wa-neon-icon {
+    stroke: url(#wa-icon-gradient);
+    filter: drop-shadow(0 0 3px rgb(255 107 0 / 0.55))
+      drop-shadow(0 0 6px rgb(37 99 235 / 0.35));
+  }
+
+  .wa-fade-up {
+    animation: wa-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+/* ---------- Carte Afrique ---------- */
+
+.wa-map-glow {
+  animation: wa-glow 4.5s ease-in-out infinite;
+}
+
+.wa-map-node-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wa-node 3.2s ease-out infinite;
+}
+
+.wa-map-flow {
+  stroke-dasharray: 3 97;
+  animation: wa-flow 5s linear infinite;
+}
+
+@keyframes wa-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes wa-node {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@keyframes wa-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes wa-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .wa-map-flow,
+  .wa-map-node-halo {
+    display: none;
+  }
+}
