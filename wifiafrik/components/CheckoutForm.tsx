@@ -10,6 +10,8 @@ import type { Country } from "@/lib/countries";
 interface CheckoutFormProps {
   planId: string;
   countries: readonly Country[];
+  /** Paiement manuel : moyens Mobile Money proposés (sinon paiement en ligne CinetPay). */
+  manualMethods?: readonly { id: string; label: string }[];
 }
 
 const INPUT =
@@ -56,7 +58,7 @@ function Field({
   );
 }
 
-function SubmitButton() {
+function SubmitButton({ manual }: { manual: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button
@@ -67,19 +69,20 @@ function SubmitButton() {
       {pending ? (
         <>
           <Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" />
-          Redirection vers le paiement…
+          {manual ? "Enregistrement…" : "Redirection vers le paiement…"}
         </>
       ) : (
         <>
           <Lock aria-hidden="true" className="h-5 w-5" strokeWidth={2.5} />
-          Payer maintenant
+          {manual ? "Valider ma commande" : "Payer maintenant"}
         </>
       )}
     </button>
   );
 }
 
-export default function CheckoutForm({ planId, countries }: CheckoutFormProps) {
+export default function CheckoutForm({ planId, countries, manualMethods }: CheckoutFormProps) {
+  const manual = manualMethods !== undefined;
   const [state, formAction] = useFormState<CheckoutFormState, FormData>(submitCheckout, {});
   const [countryCode, setCountryCode] = useState(countries.length === 1 ? countries[0].code : "");
   const country = countries.find((c) => c.code === countryCode);
@@ -89,7 +92,7 @@ export default function CheckoutForm({ planId, countries }: CheckoutFormProps) {
     <form action={formAction} noValidate className="flex flex-col gap-4">
       <input type="hidden" name="planId" value={planId} />
 
-      <Field name="country" label="Pays de paiement" error={errors.country}>
+      <Field name="country" label={manual ? "Votre pays" : "Pays de paiement"} error={errors.country}>
         {(props) => (
           <div className="relative">
             <select
@@ -134,9 +137,15 @@ export default function CheckoutForm({ planId, countries }: CheckoutFormProps) {
 
       <Field
         name="phone"
-        label="Téléphone (facultatif)"
+        label={manual ? "Numéro Mobile Money" : "Téléphone (facultatif)"}
         error={errors.phone}
-        hint={country ? `Numéro ${country.name} (${country.callingCode}), utile pour le Mobile Money.` : undefined}
+        hint={
+          manual
+            ? "Le numéro depuis lequel vous allez payer : il permet de retrouver votre paiement."
+            : country
+              ? `Numéro ${country.name} (${country.callingCode}), utile pour le Mobile Money.`
+              : undefined
+        }
       >
         {(props) => (
           <input
@@ -147,9 +156,32 @@ export default function CheckoutForm({ planId, countries }: CheckoutFormProps) {
             autoComplete="tel"
             placeholder={country ? `${country.callingCode} …` : undefined}
             maxLength={20}
+            required={manual}
           />
         )}
       </Field>
+
+      {manualMethods && (
+        <fieldset aria-describedby={errors.paymentMethod ? "checkout-paymentMethod-error" : undefined}>
+          <legend className="mb-1.5 block text-sm font-medium text-zinc-300">Moyen de paiement</legend>
+          <div className="grid grid-cols-2 gap-3">
+            {manualMethods.map((m) => (
+              <label
+                key={m.id}
+                className="relative flex h-12 cursor-pointer items-center justify-center rounded-xl border border-white/15 bg-black px-3 text-center text-sm font-semibold text-white transition-colors has-[:checked]:border-[#FF6B00] has-[:checked]:bg-[#FF6B00]/10 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-white"
+              >
+                <input type="radio" name="paymentMethod" value={m.id} required className="sr-only" />
+                {m.label}
+              </label>
+            ))}
+          </div>
+          {errors.paymentMethod && (
+            <p id="checkout-paymentMethod-error" className="mt-1.5 text-sm text-red-400">
+              {errors.paymentMethod}
+            </p>
+          )}
+        </fieldset>
+      )}
 
       {state.message && (
         <p role="alert" className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
@@ -158,9 +190,11 @@ export default function CheckoutForm({ planId, countries }: CheckoutFormProps) {
       )}
 
       <div className="mt-2">
-        <SubmitButton />
+        <SubmitButton manual={manual} />
         <p className="mt-3 text-center text-xs text-zinc-500">
-          Paiement sécurisé par CinetPay : Mobile Money (Orange, MTN, Moov, Wave) ou carte bancaire, selon votre pays.
+          {manual
+            ? "À l'étape suivante, vous verrez le numéro auquel envoyer le paiement et votre référence de commande."
+            : "Paiement sécurisé par CinetPay : Mobile Money (Orange, MTN, Moov, Wave) ou carte bancaire, selon votre pays."}
         </p>
       </div>
     </form>
