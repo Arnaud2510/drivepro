@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CheckCircle2, Clock, XCircle, type LucideIcon } from "lucide-react";
+import { CheckCircle2, Clock, Smartphone, XCircle, type LucideIcon } from "lucide-react";
+import CopyButton from "@/components/CopyButton";
+import DeclarePaymentForm from "@/components/DeclarePaymentForm";
 import IconGradientDefs from "@/components/IconGradientDefs";
 import OrderStatusRefresher from "@/components/OrderStatusRefresher";
 import PlanCard from "@/components/PlanCard";
 import { clientFor } from "@/lib/cinetpay";
-import { isOrderId, orderStore, type Order, type OrderStatus } from "@/lib/orders";
+import { findManualMethod, manualPaymentHolder } from "@/lib/manual-payment";
+import { isOrderId, orderStore, type Order } from "@/lib/orders";
 import { syncOrder, siteUrl } from "@/lib/payments";
 import { PLANS } from "@/lib/plans";
 
@@ -17,32 +20,52 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const STATUS_UI: Record<OrderStatus, { icon: LucideIcon; title: string; text: string; tone: string }> = {
+type ViewKey = "paid" | "failed" | "online_pending" | "manual_pending" | "manual_declared";
+
+const VIEWS: Record<ViewKey, { icon: LucideIcon; title: string; text: string; tone: string }> = {
   paid: {
     icon: CheckCircle2,
     title: "Paiement confirmé",
     text: "Merci ! Votre paiement a bien été reçu.",
     tone: "text-emerald-400",
   },
-  pending: {
+  online_pending: {
     icon: Clock,
     title: "Paiement en cours de confirmation",
     text: "Validez le paiement sur votre téléphone si cela vous est demandé. Cette page se met à jour automatiquement.",
     tone: "text-[#FF6B00]",
   },
+  manual_pending: {
+    icon: Smartphone,
+    title: "Finalisez votre paiement",
+    text: "Envoyez le montant par Mobile Money, puis indiquez la référence de la transaction ci-dessous.",
+    tone: "text-[#FF6B00]",
+  },
+  manual_declared: {
+    icon: Clock,
+    title: "Paiement en cours de vérification",
+    text: "Merci ! Nous vérifions la réception de votre paiement. Revenez sur cette page pour suivre votre commande.",
+    tone: "text-[#3B82F6]",
+  },
   failed: {
     icon: XCircle,
     title: "Paiement non abouti",
-    text: "Aucun montant n'a été validé pour cette commande. Vous pouvez réessayer.",
+    text: "Le paiement de cette commande n'a pas pu être confirmé. Vous pouvez passer une nouvelle commande.",
     tone: "text-red-400",
   },
 };
+
+function viewFor(order: Order): ViewKey {
+  if (order.status === "paid" || order.status === "failed") return order.status;
+  if (order.paymentProvider === "cinetpay") return "online_pending";
+  return order.status === "declared" ? "manual_declared" : "manual_pending";
+}
 
 async function loadOrder(id: string): Promise<Order | null> {
   if (!isOrderId(id)) return null;
   const store = orderStore();
   const order = await store.getById(id);
-  if (!order || order.status !== "pending") return order;
+  if (!order || order.status !== "pending" || order.paymentProvider !== "cinetpay") return order;
   try {
     return await syncOrder({ store, clientFor, siteUrl: siteUrl() }, order);
   } catch (error) {
@@ -52,13 +75,28 @@ async function loadOrder(id: string): Promise<Order | null> {
   }
 }
 
+function InfoRow({ label, value, copyLabel }: { label: string; value: string; copyLabel?: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3 py-3">
+      <div className="min-w-0">
+        <dt className="text-xs text-zinc-500">{label}</dt>
+        <dd className="mt-0.5 break-all text-base font-bold text-white">{value}</dd>
+      </div>
+      {copyLabel && <CopyButton value={value} label={copyLabel} />}
+    </div>
+  );
+}
+
 export default async function OrderPage({ params }: { params: { id: string } }) {
   const order = await loadOrder(params.id);
   if (!order) notFound();
 
   const plan = PLANS.find((p) => p.id === order.planId);
-  const ui = STATUS_UI[order.status];
+  const view = viewFor(order);
+  const ui = VIEWS[view];
   const Icon = ui.icon;
+  const method = view === "manual_pending" ? findManualMethod(order.paymentMethod) : undefined;
+  const holder = manualPaymentHolder();
 
   return (
     <main className="min-h-dvh bg-black">
@@ -78,10 +116,52 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
           <Icon aria-hidden="true" className={`h-16 w-16 ${ui.tone} drop-shadow-[0_0_14px_currentColor]`} strokeWidth={1.75} />
           <h1 className="mt-5 text-[clamp(1.5rem,6.5vw,1.875rem)] font-extrabold leading-tight text-white">{ui.title}</h1>
           <p className="mt-3 max-w-sm text-zinc-400">{ui.text}</p>
-          <p className="mt-4 text-xs text-zinc-500">Référence : {order.merchantTransactionId}</p>
+          {view !== "manual_pending" && (
+            <p className="mt-4 text-xs text-zinc-500">Référence : {order.merchantTransactionId}</p>
+          )}
         </section>
 
-        {order.status === "pending" && <OrderStatusRefresher />}
+        {view === "online_pending" && <OrderStatusRefresher />}
+
+        {view === "manual_pending" && (
+          <section aria-labelledby="pay-title" className="mt-8">
+            <div className="rounded-2xl border border-[#FF6B00]/55 bg-black p-4 shadow-[0_0_24px_-6px_rgba(255,107,0,0.45)] sm:p-5">
+              <h2 id="pay-title" className="text-sm font-bold uppercase tracking-wide text-[#FF6B00]">
+                1. Envoyez le paiement
+              </h2>
+              {method ? (
+                <dl className="mt-1 divide-y divide-white/10">
+                  <InfoRow label="Moyen de paiement" value={method.label} />
+                  <InfoRow label="Numéro destinataire" value={method.number} copyLabel="le numéro" />
+                  {holder && <InfoRow label="Au nom de" value={holder} />}
+                  <InfoRow label="Montant exact" value={`${order.amount} FCFA`} copyLabel="le montant" />
+                  <InfoRow label="Référence de commande (en motif si possible)" value={order.merchantTransactionId} copyLabel="la référence" />
+                </dl>
+              ) : (
+                <p className="mt-3 text-sm text-zinc-400">
+                  Ce moyen de paiement n&apos;est plus disponible. Passez une nouvelle commande.
+                </p>
+              )}
+            </div>
+
+            {method && (
+              <div className="mt-6">
+                <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-[#3B82F6]">2. Confirmez votre paiement</h2>
+                <DeclarePaymentForm orderId={order.id} />
+              </div>
+            )}
+
+            <p className="mt-4 text-center text-xs text-zinc-500">
+              Gardez le lien de cette page : il vous permet de suivre votre commande.
+            </p>
+          </section>
+        )}
+
+        {view === "manual_declared" && order.payerReference && (
+          <p className="mt-4 text-center text-sm text-zinc-400">
+            Référence de transaction indiquée : <span className="font-semibold text-white">{order.payerReference}</span>
+          </p>
+        )}
 
         {plan && (
           <section aria-label="Forfait commandé" className="mt-8">
@@ -90,20 +170,22 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
         )}
 
         <div className="mt-8">
-          {order.status === "failed" ? (
+          {view === "failed" ? (
             <Link
               href={`/checkout?plan=${encodeURIComponent(order.planId)}`}
               className="flex h-14 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-[#FF6B00] to-[#2563EB] px-4 text-lg font-bold text-white outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.98]"
             >
-              Réessayer le paiement
+              Passer une nouvelle commande
             </Link>
           ) : (
-            <Link
-              href="/"
-              className="flex h-14 w-full items-center justify-center rounded-2xl border border-white/15 px-4 text-base font-semibold text-white outline-none hover:border-[#2563EB] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.98]"
-            >
-              Retour à l&apos;accueil
-            </Link>
+            view !== "manual_pending" && (
+              <Link
+                href="/"
+                className="flex h-14 w-full items-center justify-center rounded-2xl border border-white/15 px-4 text-base font-semibold text-white outline-none hover:border-[#2563EB] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.98]"
+              >
+                Retour à l&apos;accueil
+              </Link>
+            )
           )}
         </div>
       </div>

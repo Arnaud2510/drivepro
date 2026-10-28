@@ -3,7 +3,7 @@ import { randomBytes, timingSafeEqual } from "node:crypto";
 import { orderStatusFromCinetPay, type CinetPayClient } from "./cinetpay";
 import type { CheckoutValues } from "./checkout-validation";
 import type { CountryCode } from "./countries";
-import type { Order, OrderStore } from "./orders";
+import type { FinalOrderStatus, Order, OrderStore } from "./orders";
 
 export interface PaymentDeps {
   store: OrderStore;
@@ -42,6 +42,8 @@ export async function startCheckout(deps: PaymentDeps, values: CheckoutValues): 
     customerLastName: values.lastName,
     customerEmail: values.email,
     customerPhone: values.phone,
+    paymentProvider: "cinetpay",
+    paymentMethod: null,
   });
 
   const returnUrl = `${deps.siteUrl}/commande/${order.id}`;
@@ -132,4 +134,39 @@ export function siteUrl(): string {
   const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (vercel) return `https://${vercel}`;
   throw new Error("SITE_URL doit être défini (URL publique utilisée par CinetPay pour les retours et notifications).");
+}
+
+// ---------- Paiement manuel par Mobile Money ----------
+
+/** Crée une commande à régler par Mobile Money ; le client voit ensuite les instructions sur /commande/<id>. */
+export async function createManualOrder(store: OrderStore, values: CheckoutValues): Promise<Order> {
+  if (!values.paymentMethod) throw new PaymentError("Moyen de paiement manquant.");
+  return store.create({
+    merchantTransactionId: newMerchantTransactionId(),
+    planId: values.plan.id,
+    amount: values.plan.priceFcfa,
+    currency: values.country.currency,
+    country: values.country.code,
+    customerFirstName: values.firstName,
+    customerLastName: values.lastName,
+    customerEmail: values.email,
+    customerPhone: values.phone,
+    paymentProvider: "manual",
+    paymentMethod: values.paymentMethod,
+  });
+}
+
+/** Le client déclare avoir payé : la commande attend la vérification d'un administrateur. */
+export async function declareManualPayment(store: OrderStore, orderId: string, payerReference: string): Promise<Order> {
+  const order = await store.getById(orderId);
+  if (!order || order.paymentProvider !== "manual") throw new PaymentError("Commande introuvable.");
+  if (order.status !== "pending") return order;
+  return (await store.declare(order.id, payerReference)) ?? (await store.getById(order.id)) ?? order;
+}
+
+/** Décision de l'administrateur après vérification du paiement reçu sur son téléphone. */
+export async function reviewManualPayment(store: OrderStore, orderId: string, decision: FinalOrderStatus): Promise<Order | null> {
+  const order = await store.getById(orderId);
+  if (!order || order.paymentProvider !== "manual") return null;
+  return store.settle(order.id, decision);
 }

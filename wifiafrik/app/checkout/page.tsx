@@ -7,13 +7,14 @@ import IconGradientDefs from "@/components/IconGradientDefs";
 import PlanCard from "@/components/PlanCard";
 import { enabledCountries } from "@/lib/cinetpay";
 import { COUNTRIES } from "@/lib/countries";
+import { manualPaymentMethods, paymentMode } from "@/lib/manual-payment";
 import { PLANS } from "@/lib/plans";
 
 export const metadata: Metadata = {
   title: "Paiement · WifiAfrik",
 };
 
-// Les pays disponibles dépendent des variables d'environnement du serveur.
+// Le mode de paiement, les pays et les moyens proposés dépendent des variables d'environnement du serveur.
 export const dynamic = "force-dynamic";
 
 export default function CheckoutPage({ searchParams }: { searchParams: { plan?: string | string[] } }) {
@@ -21,8 +22,11 @@ export default function CheckoutPage({ searchParams }: { searchParams: { plan?: 
   const plan = PLANS.find((p) => p.id === planId);
   if (!plan) notFound();
 
+  const manual = paymentMode() === "manual";
+  const manualMethods = manual ? manualPaymentMethods().map(({ id, label }) => ({ id, label })) : undefined;
   const enabled = new Set(enabledCountries());
-  const countries = COUNTRIES.filter((c) => enabled.has(c.code));
+  const countries = manual ? COUNTRIES : COUNTRIES.filter((c) => enabled.has(c.code));
+  const available = countries.length > 0 && (!manualMethods || manualMethods.length > 0);
 
   return (
     <main className="min-h-dvh bg-black">
@@ -50,8 +54,8 @@ export default function CheckoutPage({ searchParams }: { searchParams: { plan?: 
         </section>
 
         <section aria-label="Vos informations" className="mt-8">
-          {countries.length > 0 ? (
-            <CheckoutForm planId={plan.id} countries={countries} />
+          {available ? (
+            <CheckoutForm planId={plan.id} countries={countries} manualMethods={manualMethods} />
           ) : (
             <p role="status" className="rounded-xl border border-white/15 px-4 py-3 text-center text-sm text-zinc-400">
               Le paiement en ligne n&apos;est pas encore disponible. Revenez bientôt.
