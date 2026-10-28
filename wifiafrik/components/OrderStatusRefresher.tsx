@@ -3,24 +3,28 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const INTERVAL_MS = 4000;
-const MAX_ATTEMPTS = 15;
+interface OrderStatusRefresherProps {
+  /** Délai entre deux vérifications. */
+  intervalMs?: number;
+  /** Nombre de vérifications avant de proposer une vérification manuelle. */
+  maxAttempts?: number;
+}
 
-/** Recharge la page serveur tant que le paiement est en attente (environ 1 minute au maximum). */
-export default function OrderStatusRefresher() {
+/** Recharge la page serveur tant que le paiement n'a pas de statut final. */
+export default function OrderStatusRefresher({ intervalMs = 4000, maxAttempts = 15 }: OrderStatusRefresherProps) {
   const router = useRouter();
   const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
-    if (attempts >= MAX_ATTEMPTS) return;
+    if (attempts >= maxAttempts) return;
     const timer = setTimeout(() => {
       router.refresh();
       setAttempts((n) => n + 1);
-    }, INTERVAL_MS);
+    }, intervalMs);
     return () => clearTimeout(timer);
-  }, [attempts, router]);
+  }, [attempts, intervalMs, maxAttempts, router]);
 
-  if (attempts < MAX_ATTEMPTS) return null;
+  if (attempts < maxAttempts) return null;
   return (
     <p className="mt-4 text-center text-sm text-zinc-400">
       La confirmation prend plus de temps que prévu.{" "}

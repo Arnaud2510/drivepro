@@ -223,13 +223,21 @@ export class SupabaseOrderStore implements OrderStore {
 
 let store: SupabaseOrderStore | null = null;
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const { protocol } = new URL(value);
+    return protocol === "https:" || protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
 /** Noms des variables de connexion à Supabase absentes ou mal formées (pour un diagnostic sans secret). */
 export function orderStoreConfigProblems(env: Readonly<Record<string, string | undefined>> = process.env): string[] {
   const problems: string[] = [];
   const url = env.SUPABASE_URL?.trim();
   if (!url) problems.push("SUPABASE_URL est absente.");
-  else if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url))
-    problems.push("SUPABASE_URL doit ressembler à https://xxxx.supabase.co (sans espace ni chemin).");
+  else if (!isHttpUrl(url)) problems.push("SUPABASE_URL doit être une adresse complète, ex. https://xxxx.supabase.co.");
   if (!env.SUPABASE_SERVICE_ROLE_KEY?.trim()) problems.push("SUPABASE_SERVICE_ROLE_KEY est absente.");
   return problems;
 }
