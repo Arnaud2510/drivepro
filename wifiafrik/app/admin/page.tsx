@@ -234,7 +234,8 @@ export default async function AdminPage({ searchParams }: { searchParams: { erre
 
       <p className="mt-4 rounded-xl border border-white/10 px-4 py-3 text-sm text-zinc-400">
         Avant de valider, vérifiez sur votre téléphone que le montant exact a bien été reçu et que la référence de
-        transaction correspond.
+        transaction correspond, puis envoyez l&apos;eSIM au client. Dès la validation, sa page de commande affiche
+        « Votre eSIM a été livrée et est activée ».
       </p>
 
       <OrderSection title="Paiements à vérifier" orders={declared} empty="Aucun paiement à vérifier." />
