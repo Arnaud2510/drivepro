@@ -46,4 +46,5 @@ export async function reviewPayment(formData: FormData): Promise<void> {
   if (typeof orderId !== "string" || (decision !== "paid" && decision !== "failed")) return;
   await reviewManualPayment(orderStore(), orderId, decision);
   revalidatePath("/admin");
+  revalidatePath(`/commande/${orderId}`);
 }

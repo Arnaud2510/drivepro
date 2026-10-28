@@ -249,7 +249,11 @@ export function orderStore(): OrderStore {
   const url = process.env.SUPABASE_URL!.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY!.trim();
   store = new SupabaseOrderStore(
-    createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } }),
+    createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+      // Next.js met en cache les fetch() par défaut : un statut de commande doit toujours être relu en base.
+      global: { fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }) },
+    }),
   );
   return store;
 }
