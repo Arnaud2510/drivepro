@@ -192,12 +192,30 @@ export default async function AdminPage({ searchParams }: { searchParams: { erre
     );
   }
 
-  const store = orderStore();
-  const [declared, pending, done] = await Promise.all([
-    store.list(["declared"], 100),
-    store.list(["pending"], 50),
-    store.list(["paid", "failed"], 20),
-  ]);
+  let declared: Order[], pending: Order[], done: Order[];
+  try {
+    const store = orderStore();
+    [declared, pending, done] = await Promise.all([
+      store.list(["declared"], 100),
+      store.list(["pending"], 50),
+      store.list(["paid", "failed"], 20),
+    ]);
+  } catch (error) {
+    // Page réservée à l'administrateur connecté : on affiche la cause (jamais de valeur secrète).
+    console.error("[admin] lecture des commandes impossible", error);
+    return (
+      <Shell>
+        <h1 className="mt-10 text-xl font-extrabold text-white">Base de données inaccessible</h1>
+        <p role="alert" className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          {(error as Error).message}
+        </p>
+        <p className="mt-4 text-sm text-zinc-400">
+          Vérifiez SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY dans Vercel (Settings → Environment Variables) pour
+          l&apos;environnement Production, puis redéployez.
+        </p>
+      </Shell>
+    );
+  }
 
   return (
     <Shell>
